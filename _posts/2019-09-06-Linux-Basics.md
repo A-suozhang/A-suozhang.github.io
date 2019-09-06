@@ -1,7 +1,7 @@
 ---
 layout:     post                    # 使用的布局（不需要改）
 title:      Linux基础               # 标题 
-subtitle:   学不会Linus的哲学，学得会Linus的喷人     #副标题
+subtitle:   学不会Linux的哲学，学得会Linus的喷人     #副标题
 date:       2019-09-06              # 时间
 author:     tianchen                      # 作者
 header-img:     #这篇文章标题背景图片
