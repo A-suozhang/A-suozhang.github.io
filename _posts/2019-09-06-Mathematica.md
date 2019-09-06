@@ -66,7 +66,7 @@ tags:                             #标签
     ```
     * **Manipulate**
     ```Manipulate[Plot[Sin[x (1 + a x)], {x, 0, 6}], {a, 0, 2}]```
-    ```Manipulate[Plot[Sin[a x + b], {x, 0, 6}], {{a, 2(初值), "Multiplier"}, 1, 4（范围）}, {{b, 4, "Phase Parameter"}, 0, 10}]```
+    ```Manipulate[Plot[Sin[a x + b], {x, 0, 6}], {a, 2(初值), "Multiplier"}, 1, 4（范围）}, {{b, 4, "Phase Parameter"}, 0, 10}]```
      
 ## List
 * 核心数据结构，Mat与Tensor都可以由list嵌套而来
