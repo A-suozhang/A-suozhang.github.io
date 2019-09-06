@@ -6,7 +6,8 @@ date:       2019-09-06              # 时间
 author:     tianchen                      # 作者
 header-img:     #这篇文章标题背景图片
 catalog: true                       # 是否归档
-tags:                               #标签
+tags:    
+    - 常用                           #标签
     - 学习笔记
     - Linux
     - 环境配置
