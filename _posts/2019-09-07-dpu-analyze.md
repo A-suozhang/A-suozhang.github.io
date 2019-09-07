@@ -19,6 +19,8 @@ tags:                               #标签
 ## DPU设备树配置
 1. 在完成petalinux的--get-hw=description的conig之后
    * 在petalinux项目目录下的 ./metauser/recipes-bsp/device-tree目录下有 device-tree.bbapend文件(描述了编译设备树所有索引),将其内容改为
+
+
 ```
 FILESEXTRAPATHS_prepend := "${THISDIR}/files:"
 
@@ -26,9 +28,13 @@ SRC_URI += "file://system-user.dtsi \
 	    file://dpu.dtsi"                        // 这一行是后来加入的,表示要索引当前目录下./files中的dpu.dtsi
 
 ```
+
+
 > 这样的方式本质上是在system-user.dtsi的对应节点下加上了dpu的内容,这样更加清晰
 
-2. dpu.dtsi的位置在刚才目录下的./files/dpu.dtsi中,内容为
+1. dpu.dtsi的位置在刚才目录下的./files/dpu.dtsi中,内容为
+
+
 ```
 / {
         amba{
@@ -55,6 +61,8 @@ SRC_URI += "file://system-user.dtsi \
 	};
 };
 ```
+
+
 * 设备树的内容与我们的Vivado Design有着直接关系(本质上就是那个中断号)
 * 查询[dpu数据手册]()可知,主要需要修改的是地址和设备号码
     * 其中 base-addr需要与Vivado Design中的Address对应,也就是这里
