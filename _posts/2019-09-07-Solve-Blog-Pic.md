@@ -25,5 +25,6 @@ tags:                               #标签
 ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20190907135232.png)
 
 ## etc
-* 设置着突然token没了??
-* 新的  d3da7819d4488b1382259bcdd6d0aafe959c8808
+* 设置着突然token没了?? *问题所在是一个Token只能有有一台机器,否则会被清空*
+* Ubuntu d5cf21946ceeba31353675301ba01af475b0a804
+* Win 150f6162a0c463b32517911b3cd38a0fa25b9700
