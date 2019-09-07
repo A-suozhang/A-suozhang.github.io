@@ -61,14 +61,17 @@ SRC_URI += "file://system-user.dtsi \
 };
 ```
 
+![](https://github.com/A-suozhang/MyPicBed/blob/master//img/triangles-1430105_960_720.png)
 
 * 设备树的内容与我们的Vivado Design有着直接关系(本质上就是那个中断号)
 * 查询[dpu数据手册]()可知,主要需要修改的是地址和设备号码
     * 其中 base-addr需要与Vivado Design中的Address对应,也就是这里
-    ![](https://github.com/A-suozhang/MyPicBed/blob/master/img/20190907113921.png)
+
+    ![](https://github.com/A-suozhang/MyPicBed/blob/master//img/20190907113921.png)
+
     * dpucore的数目与平台有关 (ZCU102是两个)
     * interrupts中的6个数,每3个为一组,两边的0x0和0x1是固定值,内部的106与107则是dpu所对应的中断号
-      * ![](https://github.com/A-suozhang/MyPicBed/blob/master/img/20190907114224.png)
+      * ![](https://github.com/A-suozhang/MyPicBed/blob/master//img/20190907114224.png)
       * 如图可见,dpu以及其附属模块给出了一个位宽为7的中断信号接到了PS上
       * ![](https://github.com/A-suozhang/MyPicBed/blob/master/img/20190907114517.png)
       * 这里是那个7位中断信号的内部结构,可以看到,两个dpu核的中断接到了7位信号的[3:2]位,而softmax的中断被接到了最高位
