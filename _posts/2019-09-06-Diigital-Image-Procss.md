@@ -4,7 +4,7 @@ title:      数字图像处理笔记               # 标题
 subtitle:   好好学习，天天睡觉     #副标题
 date:       2019-09-06              # 时间
 author:     tianchen                      # 作者
-header-img: img/404-bg.jpg   #这篇文章标题背景图片
+header-img: https://github.com/A-suozhang/MyPicBed/raw/master/img/20190907184926.png   #这篇文章标题背景图片
 catalog: true                       # 是否归档
 tags:                               #标签
     - 学习笔记
