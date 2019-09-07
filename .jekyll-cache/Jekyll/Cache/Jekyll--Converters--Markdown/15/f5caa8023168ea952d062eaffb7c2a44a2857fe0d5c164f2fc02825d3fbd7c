@@ -1,0 +1,273 @@
+I"$<h1 id="mathematica">Mathematica</h1>
+<ul>
+  <li>记录下一些常用语法，希望这样使用更加熟练起来…（虽然估计每次用起来都是现场查文档）</li>
+  <li>Mathematica的文档很好用
+    <ul>
+      <li>guide/</li>
+      <li>tutorial/</li>
+    </ul>
+  </li>
+  <li>或者是查询  <a href="https://reference.wolfram.com/">网络资料</a></li>
+</ul>
+
+<h2 id="总体">总体</h2>
+<ul>
+  <li>数据类型
+    <ul>
+      <li>某一个变量的a[[0]]代表了这个变量的类型</li>
+      <li>（由于Mathematica是函数式编程，弱化了数据类型的概念）</li>
+    </ul>
+  </li>
+  <li>Expression // Function    (斜杠不要打反了…)
+    <ul>
+      <li>等价于Function[Expression]</li>
+    </ul>
+  </li>
+  <li>% 指代上一个结果</li>
+  <li>强制结束 Alt+. (当运行卡住的时候)</li>
+  <li>清除所有变量
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  Clear["Global`*"]
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<h2 id="函数">函数</h2>
+<ul>
+  <li>纯函数
+    <ul>
+      <li>“#”表示自变量，末尾加上&amp;
+        <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  f = #^2&amp;
+</code></pre></div>        </div>
+      </li>
+    </ul>
+  </li>
+  <li>Function[]定义函数
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  Function[u, 3 + u][x]
+  (3 + #) &amp;[x]    // &amp; 指代函数
+
+  Function[{u, v}, u^2 + v^4][x, y]
+  (#1^2 + #2^4) &amp;[x, y]
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<h2 id="绘图">绘图</h2>
+<ul>
+  <li>基础绘图
+    <ul>
+      <li><a href="">guide/DataVisualization</a></li>
+      <li>Plot[{f1,f2},{x,xmin,xmax}]
+        <ul>
+          <li>PlotLabels</li>
+          <li>Filling</li>
+          <li>PlotStyle</li>
+          <li>PlotLegends</li>
+          <li>更多的参考文档中plot目录下的选项</li>
+        </ul>
+      </li>
+      <li>ListPlot[{l}]
+        <ul>
+          <li>ListLinePlot</li>
+        </ul>
+      </li>
+      <li>ArrayPlot</li>
+      <li>MatrixPlot</li>
+    </ul>
+  </li>
+  <li>动态绘图
+    <ul>
+      <li><a href="">tutorial/IntroductionToManipulate</a></li>
+      <li>Slider (如果只是需要画图的话建议用Manipulate)
+        <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  {Slider[Dynamic[x]], Dynamic[Plot[Sin[10 y x], {y, 0, 2 Pi}]]}
+</code></pre></div>        </div>
+      </li>
+      <li><strong>Manipulate</strong>
+  <code class="highlighter-rouge">Manipulate[Plot[Sin[x (1 + a x)], {x, 0, 6}], {a, 0, 2}]</code>
+  <code class="highlighter-rouge">Manipulate[Plot[Sin[a x + b], {x, 0, 6}], {a, 2(初值), "Multiplier"}, 1, 4（范围）}, {b, 4, "Phase Parameter"}, 0, 10}]</code></li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="list">List</h2>
+<ul>
+  <li>核心数据结构，Mat与Tensor都可以由list嵌套而来</li>
+  <li>Apply把list的头部编程新的</li>
+  <li>Map将表达式对list的每一个元素做</li>
+  <li>可以利用Sequence将list变为seq，便于作为函数的输入</li>
+</ul>
+
+<h3 id="构造list">构造List</h3>
+<ul>
+  <li>Range[Min,Max,Step]
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  Range[0., 1., .1]
+</code></pre></div>    </div>
+  </li>
+  <li>Apply[f,N(num of elements)]
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  Array[2^# &amp;, 4]
+</code></pre></div>    </div>
+  </li>
+  <li>Table[]
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  Table[2^i, {i, -4, 4}]
+</code></pre></div>    </div>
+  </li>
+  <li>ConstantArray[a,{i,j,k}]</li>
+</ul>
+
+<h3 id="list运算">List运算</h3>
+<ul>
+  <li>Length获得长度</li>
+  <li>list可以直接作为元素参与运算
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  {3, 5, 1}^2 + 1
+</code></pre></div>    </div>
+  </li>
+  <li>也可以直接塞入一些数学函数，比如Sin[],Exp[]</li>
+  <li>Part操作支持</li>
+  <li>也支持Append</li>
+  <li>Join可以完成concat
+    <ul>
+      <li>直接Join[l1,l2,l3]是在dim1上 （横着concat）</li>
+      <li>Join[l1,l2,2]是在dim2上 （竖着concat）</li>
+      <li>注意一下定义前面变量的时候不要MatrixForm了，对Dim有影响</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="迭代器">迭代器</h2>
+<ul>
+  <li>Table
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  Table[f[i],{i,0,10}]
+</code></pre></div>    </div>
+  </li>
+  <li>Array
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  Array[f,{i,j}] // 如果函数的自变量小于后面的维度，多余的维度被舍弃
+</code></pre></div>    </div>
+  </li>
+  <li>Map
+    <ul>
+      <li>将 f 应用到 expr 中第一层的每个元素.
+        <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  Map[f,{a,b,c,d}]
+  f/@{a,b,c,d}
+</code></pre></div>        </div>
+      </li>
+    </ul>
+  </li>
+  <li>Apply
+  ```
+  Apply[f,{a,b,c,d}]
+  f@@{a,b,c,d}
+    <ul>
+      <li>Map与Apply的区别
+  <code class="highlighter-rouge">f /@ { 1,2  , 2, 3}</code>
+  <code class="highlighter-rouge">&gt;&gt;&gt; {  1, 8  , 8, 27} // 更符合常规认知</code>
+  <code class="highlighter-rouge">f @@ {  1, 2, 3, 4  ,   2, 3, 3  , 3}</code>
+  <code class="highlighter-rouge">&gt;&gt;&gt; {1, 8, 27, 64}  //其实是将{1,2,3,4}作为函数的第一个参数输入了，{2,3,3}被作为第二个参数</code></li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="获取数据">获取数据</h2>
+<ul>
+  <li>Directory[] 获取当前目录
+    <ul>
+      <li>SetDirectory[] 设置目录 （目录要加引号，正反斜杠都可以）</li>
+    </ul>
+  </li>
+  <li>Import[file_dir,”Data”] 这样返回的是一个List
+    <ul>
+      <li>注意Mathematica的索引从1开始，索引位置0代表的是数据类型</li>
+    </ul>
+  </li>
+  <li>Interpreter （具体使用方式有一些复杂）</li>
+</ul>
+
+<h2 id="数学">数学</h2>
+<ul>
+  <li>Log10/Log2[]</li>
+  <li>Simplify 化简式子</li>
+  <li>Solve 解方程</li>
+</ul>
+
+<h2 id="数据处理">数据处理</h2>
+<h3 id="进制转换">进制转换</h3>
+<ul>
+  <li>参考了Mathematica文档 <a href="">tutorial/DigitsInNumbers</a>
+    <ul>
+      <li>BaseForm: 以N进制展示x
+        <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  BaseFrom[x,N]  
+</code></pre></div>        </div>
+        <ul>
+          <li>可以小数直接转化嗷(不过这里输出的数据是BaseForm形式的，不能简单的做加减运算)
+            <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  BaseForm[1.125,2]
+  &gt;&gt;&gt; 1.001
+</code></pre></div>            </div>
+          </li>
+        </ul>
+      </li>
+      <li>IntegerString
+        <ul>
+          <li>给出进制转换之后的字符串 String
+            <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  IntegerString[256,2]
+</code></pre></div>            </div>
+          </li>
+        </ul>
+      </li>
+      <li>IntegerDigits
+        <ul>
+          <li>给出进制转换之后的各位数字的list
+            <ul>
+              <li>可以输入第三个参数（长度），不够的时候左边添0
+                <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  IntegerDigits[256,2]
+  &gt;&gt;&gt; {1, 0, 0, 0, 0, 0, 0, 0, 0}
+</code></pre></div>                </div>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li>RealDigits
+        <ul>
+          <li>IntegerDigits第一个参数只能是int</li>
+          <li>[1.25,N,L] - 待转换的数，进制，长度</li>
+        </ul>
+      </li>
+      <li>FromDigits: 从二进制序列中恢复原先的数
+        <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  FromDigits[{1, 1, 1, 1, 0, 1}, 2]
+  &gt;&gt;&gt; 61
+</code></pre></div>        </div>
+      </li>
+      <li>N进制数据的表示 N^^1234
+        <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  16^^FE
+  &gt;&gt;&gt; 254
+</code></pre></div>        </div>
+        <h3 id="matrix-manipulation">Matrix Manipulation</h3>
+      </li>
+    </ul>
+  </li>
+  <li>Dimensions[m] 查看</li>
+  <li>Part 索引
+    <ul>
+      <li>[m,行数,列数]</li>
+    </ul>
+  </li>
+  <li>[[]]简化的Part
+    <ul>
+      <li>a[[1;;3]]</li>
+      <li>a[[1;;]]</li>
+    </ul>
+  </li>
+  <li>ArrayReshape[m,{i,j,k}]</li>
+  <li>PadRight/Left/Array  填充不规则数组</li>
+  <li>MatrixForm看上去会比较舒服，但是赋值的时候会把矩阵维度变为{1}</li>
+</ul>
+
+<h2 id="一些奇特功能">一些奇特功能</h2>
+<ul>
+  <li>TCP SOCKET
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>s <span class="o">=</span> SocketConnect[<span class="s2">"169.254.190.51:100"</span><span class="o">]</span>
+Read[s]
+WriteString[s, <span class="s2">"1234"</span><span class="o">]</span>
+Close[s]
+</code></pre></div>    </div>
+  </li>
+</ul>
+:ET

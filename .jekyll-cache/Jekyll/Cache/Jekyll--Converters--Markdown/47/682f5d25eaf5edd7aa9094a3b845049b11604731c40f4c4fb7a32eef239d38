@@ -1,0 +1,332 @@
+I"0<h1 id="ubuntulinux-commands">Ubuntu(Linux) Commands</h1>
+<ul>
+  <li>lsb_release -a 查看<strong>系统</strong>版本</li>
+  <li>uname -a 查看<strong>内核</strong>版本</li>
+  <li>ping google.com
+    <ul>
+      <li>-f 极限检测</li>
+      <li>-s packet_size</li>
+    </ul>
+  </li>
+  <li>lscpu - 查看cpu
+    <ul>
+      <li>top 查看cpu使用率</li>
+    </ul>
+  </li>
+  <li>ps -p $$ (通过查看进程的名字)
+    <ul>
+      <li>用 echo %SHELL (比如在zsh里面也会显示是bash)</li>
+    </ul>
+  </li>
+  <li>tar -zxvf xxx.tag.gz
+    <ul>
+      <li>-jxvf xxx.tar.bz2</li>
+      <li>其实都用　<code class="highlighter-rouge">tar -xvf</code>就行</li>
+      <li>压缩用　<code class="highlighter-rouge">tar -zcvf XXX.tar.gz XXX/</code></li>
+      <li>unzip xxx.zip</li>
+      <li>cpio -idmv &lt; xxx.cpio(解压到当前目录)</li>
+    </ul>
+  </li>
+  <li>vivado -source xxx.tcl</li>
+  <li>退出qemu: CTRL+A + X</li>
+  <li>命令行挂载一系列操作：
+    <ul>
+      <li>sudo fdisk -l 查看自己的盘是/dev/sdx (未挂载的也会看见)</li>
+      <li>df -kh 查看挂载设备的位置</li>
+      <li>sudo mount -t /dev/sdx /mnt
+        <ul>
+          <li>常用的挂载目录 /mnt  /media (在底下可以自己建立文件夹)</li>
+          <li>最后一个参数如果填写自己的目录有会报 Directory Not In /etc/fstab</li>
+        </ul>
+      </li>
+      <li>用完之后umount就好</li>
+    </ul>
+  </li>
+  <li>Ubuntu ssh 获得图形界面
+    <ul>
+      <li>在Server端开启转发X界面
+        <ul>
+          <li>/etc/ssh/sshd_config
+            <ul>
+              <li>保证X11Forwarding为yes</li>
+            </ul>
+          </li>
+          <li>重启一下ssh服务
+            <ul>
+              <li>cd /etc/init.d这个目录下执行 ./ssh restart</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li>client 开启服务
+        <ul>
+          <li>/etc/ssh/ssh_config
+            <ul>
+              <li>ForwardAgent yes</li>
+              <li>ForwardX11 yes</li>
+              <li>ForwardX11Trusted yes</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li>下次登录的时候ssh后面加上 -X/-Y命令</li>
+      <li>在本地（client） xhost +服务器IP</li>
+      <li>然后我就可以了，可能和服务器之前的配置有关系（正常这里还需要修改一下环境变量中的DISPLAY指向 “client’sIP：0.0”）</li>
+      <li>可以用xclock测试是否成功</li>
+    </ul>
+  </li>
+  <li>scp -r IP_HOST:/home/xxx /local_directory
+    <ul>
+      <li>实施证明vscode remote能吊打它</li>
+      <li>好的我收回上面的话　记得这个-r一定要加，不然会不能补全服务器的目录</li>
+    </ul>
+  </li>
+  <li>vscode git 免密码push
+    <ul>
+      <li>在 .git文件夹中的config的url一栏 http://username:passwd@github.xxx.git
+        <ul>
+          <li>注意这里是用户名不能是邮箱，不然会解析错误</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>vscode免密码ssh登录
+    <ul>
+      <li>首先创建秘钥： <code class="highlighter-rouge">ssh-keygen -t rsa -b 4096</code></li>
+      <li>拷贝秘钥到服务器 <code class="highlighter-rouge">ssh-copy-id -i id_rsa.pub ID@IP</code> （如果这里不明确ID默认就是你的本机ID）</li>
+      <li>然后就可以登录了</li>
+    </ul>
+  </li>
+  <li>命令行切换语言
+    <ul>
+      <li>sudo vim /etc/default/locale　把所有的zh_CN改成en_US</li>
+      <li>文件是只读所以必须要sudo，重启或者挂起登录之后生效</li>
+      <li>（需要这个是因为petalinux的qemu居然设置中文会出bug）</li>
+    </ul>
+  </li>
+  <li>建立用户
+    <ul>
+      <li>useradd -s ‘bin/bash’ -m -G adm,sudo %username  (带了sudo权限)</li>
+      <li>passwd %username</li>
+    </ul>
+  </li>
+  <li>换源
+    <ul>
+      <li>/etc/apt/source.list</li>
+    </ul>
+  </li>
+  <li>切换用户
+    <ul>
+      <li>su %username</li>
+    </ul>
+  </li>
+  <li>为文件切换用户
+    <ul>
+      <li>chown %user:%group</li>
+    </ul>
+  </li>
+  <li>网络相关
+    <ul>
+      <li>ifconfig
+        <ul>
+          <li>enps031f6　不是eth0</li>
+        </ul>
+      </li>
+      <li>ip a （IP ADDR）　</li>
+      <li>ip route show</li>
+      <li>ping 8.8.8.8</li>
+      <li><code class="highlighter-rouge">sudo service networking restart</code></li>
+      <li><a href="https://www.tecmint.com/linux-network-configuration-and-troubleshooting-commands/">链接</a></li>
+    </ul>
+  </li>
+  <li>找文件 find
+    <ul>
+      <li><code class="highlighter-rouge">find [Directory] -name 'filename'</code>  这里的filename 超出的部分要加*</li>
+      <li>-iname 以不区分大小写
+        <ul>
+          <li><code class="highlighter-rouge">find: paths must precede expression:</code> 没有打引号导致把*错认为是当前目录的意思</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>ll(ls -l)命令可以查看权限和软链接
+    <ul>
+      <li><code class="highlighter-rouge">cat /var/log/Xorg.0.log | grep EE</code></li>
+      <li>ll与find相比不需要加上　**</li>
+    </ul>
+  </li>
+  <li>寻找缺少的Dependency对应的库
+    <ul>
+      <li><code class="highlighter-rouge">dkpg --search *.so</code></li>
+    </ul>
+  </li>
+  <li>对于一个指令(比如startx)如果需要分析它的过程
+    <ul>
+      <li>在/usr/bin目录寻找该文件</li>
+    </ul>
+  </li>
+  <li><code class="highlighter-rouge">ln -s A B</code>
+    <ul>
+      <li>link　软链接 Create B -&gt; A
+        <ul>
+          <li>AB可以均为目录，把底下所有文件都链接过去</li>
+        </ul>
+      </li>
+      <li>采用-snf 选项进行修改(覆盖)</li>
+    </ul>
+  </li>
+  <li>ps查看进程
+    <ul>
+      <li>args:
+        <ul>
+          <li>-a 等价于-e　列出所有</li>
+          <li>-w　显示加宽</li>
+          <li>-au　包含详细信息</li>
+        </ul>
+      </li>
+      <li><code class="highlighter-rouge">ps -aug | grep xxx</code></li>
+    </ul>
+  </li>
+  <li>查看当前系统的所有服务
+    <ul>
+      <li><em>服务</em>　支持系统运行的一些必要进程的集合，本质还是进程</li>
+      <li><code class="highlighter-rouge">service --status-all　｜ grep running</code></li>
+      <li>但是我们实际上用的不是这个，应该是systemctl
+        <ul>
+          <li><code class="highlighter-rouge">systemctl | grep running</code></li>
+        </ul>
+      </li>
+      <li>查看系统启动时候的服务　<code class="highlighter-rouge">systemctl list-unit-files | grep enabled</code></li>
+      <li>按照资源分配来排序服务  <code class="highlighter-rouge">systemd-cgtop</code></li>
+      <li><code class="highlighter-rouge">pstree</code>层次列出</li>
+      <li>查看某个服务的运行状态<code class="highlighter-rouge">service xxx status</code></li>
+    </ul>
+  </li>
+  <li>生成分辨率
+    <ul>
+      <li><code class="highlighter-rouge">gtf 1920 1080 60 -x</code></li>
+      <li>Modeline “1920x1080_60.00”  172.80  1920 2040 2248 2576  1080 1081 1084 1118  -HSync +Vsync</li>
+    </ul>
+  </li>
+  <li>修改分辨率
+    <ul>
+      <li>如果xrandr有东西　<code class="highlighter-rouge">xrandr -s 1920x1080</code></li>
+    </ul>
+  </li>
+  <li>rsync 命令　带不带“/”　差距很大
+    <ul>
+      <li>一个是复制目录，一个是把目录里面的东西复制过去　(如果搞错了就会把一大堆乱七八糟文件夹直接复制到根目录地下)</li>
+    </ul>
+  </li>
+  <li>通过命令行写文件方式　　<code class="highlighter-rouge">echo "XXX" &gt;&gt; ~/.bashrc</code></li>
+  <li><strong>REGEX</strong> 正则表达式
+    <ul>
+      <li><a href="https://github.com/ziishaned/learn-regex/blob/master/translations/README-cn.md">参考链接</a></li>
+      <li>规则 <a href="https://github.com/ziishaned/learn-regex/blob/master/img/regexp-cn.png?raw=true"></a></li>
+      <li>Re规则和find -name的显著区别有： 对于名字比待匹配字数多出来的不用加*</li>
+      <li>”^”从开始开始匹配  “￥”从末尾开始匹配</li>
+      <li>”.” 任意单个字符  “*“之前的字符出现0或者更多次  “+” 前面的字符&gt;0个的字符 “?”表示前面的字符出现0或者是1次</li>
+      <li>字符集： “[]” 字符种类  “[^]”禁用的字符种类</li>
+      <li>{}量词：  <code class="highlighter-rouge">[0-9]{2,3}</code> 匹配2到3位0~9的数字</li>
+      <li><strong>Examples</strong>
+        <ul>
+          <li><code class="highlighter-rouge">[tT]he</code> -  匹配的是the/The</li>
+          <li><code class="highlighter-rouge">c.+t</code> - c开头t结尾中间有字符</li>
+          <li><code class="highlighter-rouge">[&amp;c]ar</code></li>
+          <li></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>安装并开启ssh服务</li>
+  <li>
+    <p>ldd　$EXEUCATBLE　查看运行文件所用到的动态链接库</p>
+
+    <ul>
+      <li><code class="highlighter-rouge">sudo apt-get install openssh-server</code></li>
+    </ul>
+  </li>
+  <li>OPENCV
+    <ul>
+      <li>查看版本　<code class="highlighter-rouge">pkg-config --modversion opencv</code></li>
+      <li><a href="https://www.cnblogs.com/txg198955/p/5990295.html">卸载</a>
+        <ul>
+          <li>进入Build或者Release目录　<code class="highlighter-rouge">sudo make uninstall</code></li>
+        </ul>
+      </li>
+      <li>多版本共存可以几个版本都源码build，然后进入目录用<code class="highlighter-rouge">make install或者是make uninstall来选择版本</code></li>
+    </ul>
+  </li>
+  <li>grep (Global search for RE &amp; Print)
+    <ul>
+      <li>基本用法： <code class="highlighter-rouge">grep -X MATCH_PATTERN filename1 filename2</code></li>
+      <li>还可以在shell中直接使用 <code class="highlighter-rouge">COMMAND | grep -X XXX</code></li>
+      <li>args
+        <ul>
+          <li>-v 反选(打印除了匹配的)</li>
+          <li>–color=auto</li>
+          <li>-E 使用正则表达式 （或者用egrep）</li>
+          <li>-o 只输出匹配到的内容，而不是整行</li>
+          <li>-n 输出包含行数</li>
+          <li>-i 忽略大小写</li>
+        </ul>
+      </li>
+      <li></li>
+    </ul>
+  </li>
+  <li>rename command
+    <ul>
+      <li>可以使用通配符，也可以使用正则(re)
+        <ul>
+          <li><strong>通配</strong> （默认配置，比如grep默认也是用通配）
+            <ul>
+              <li>？替代单个字符</li>
+              <li>
+                <ul>
+                  <li>替代任意个字符</li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li>由于mv指令不能批量</li>
+      <li><em>template</em>  <code class="highlighter-rouge">rename [-options] "s/oldname/newname" flie</code>
+        <ul>
+          <li>这里的file写成”.”表示当前目录下的所有文件</li>
+        </ul>
+      </li>
+      <li><em>args</em>
+        <ul>
+          <li>-n 测试，并不是实际</li>
+          <li>-v (verbose)</li>
+          <li>-f (force)覆盖本地存在的文件</li>
+        </ul>
+      </li>
+      <li><em>Examples</em>
+        <ul>
+          <li>替换部分： <code class="highlighter-rouge">rename “s/AA/aa/” *</code></li>
+          <li>修改后缀  <code class="highlighter-rouge">rename "s/.html/.php/"</code></li>
+          <li>添加后缀  <code class="highlighter-rouge">rename "s/$/.txt/"</code> // $表示文件末尾</li>
+          <li>删除部分  <code class="highlighter-rouge">rename "s/aa/ /"</code></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>虚拟内存
+    <ul>
+      <li>参考了<a href="https://blog.csdn.net/qq_38701476/article/details/83042668">博客</a></li>
+    </ul>
+  </li>
+  <li>updatedb 用于更新locate指令所调用的数据库
+    <ul>
+      <li>locate命令　比find执行更快</li>
+    </ul>
+  </li>
+  <li>Ubuntu目录下的lost+found/在非正常关机的时候会把一些文件放进这个文件夹供数据恢复用，大小可能有好几个Ｇ
+    <ul>
+      <li>这种情况在板子不把系统shutdown直接断电的时候经常会出现</li>
+    </ul>
+  </li>
+</ul>
+:ET

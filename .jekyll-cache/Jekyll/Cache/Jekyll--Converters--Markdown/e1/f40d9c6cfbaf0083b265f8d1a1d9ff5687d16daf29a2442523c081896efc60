@@ -1,0 +1,13 @@
+I"�<h1 id="正确的在vscode中使用emoji">正确的在Vscode中使用Emoji</h1>
+<h2 id="安装extension---emoji">安装Extension -&gt; “Emoji”</h2>
+<ul>
+  <li><code class="highlighter-rouge">Ctrl+Shift+P</code> -&gt; Input <code class="highlighter-rouge">Emoji:Insert Emoji</code></li>
+  <li>之前的Markdown-Emoji插件没有这个好用</li>
+</ul>
+
+<p>😃😃😃😃😃😃 - Smile</p>
+
+<p>😢😢😢😢😢😢 - Cry</p>
+
+<p>🐎🐎🐎🐎🐎🐎 - Horse</p>
+:ET

@@ -1,0 +1,504 @@
+I"1\<h1 id="定义">定义</h1>
+<ul>
+  <li>Life Long &amp; Online Learning &amp; Incremental  核心在于<strong>可继续的学习</strong>后者加上了在线更新以及内存受限等限制</li>
+  <li>Transfer Learning &amp; Multitasking &amp; Few-shot Learning  主要处理的是数据差异大的问题</li>
+  <li>
+    <p>Continual DNN时代IL的阐发  更加广义地解释IL</p>
+  </li>
+  <li>What’s Different In <strong>Incremental Learning</strong>?
+    <ul>
+      <li>Dynamic</li>
+      <li>Use Data Streaming (Has Internal Temporal Order) - Could Be Used (But Recent Methods Never Used)</li>
+      <li>Adaptive Model Complexity - 例如SVM中的SV数目，NN中的 Hidden Unit数目运行中改变</li>
+      <li>其训练本质和Stochastic的训练方式类似（SGD,especially Batch），区别在于Hyper-param是依据整个数据分布设定的，而这里数据分布未知且变化（Concept Drift）</li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="应用场景">应用场景</h1>
+<ul>
+  <li>
+    <p><strong>使模型更加贴合用户的使用习惯</strong></p>
+  </li>
+  <li>终端
+    <ul>
+      <li>No Connection -&gt; Protect Privact</li>
+      <li>Robotic（Auto-Driving） / IOT设备</li>
+    </ul>
+  </li>
+  <li>云端（Big Data） (上线之后的数据和训练数据差距大们需要Adaptive)
+    <ul>
+      <li>推荐系统</li>
+      <li>数据降维表征处理 Feature Extraction：PCA，Clustering</li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="主要问题研究方向-ranked-by-importance">主要问题（研究方向） <em>Ranked By Importance</em></h1>
+<p>（由于具体的处理方法因对应算法常有改变，本部分的Solution以解决问题的思想为主）</p>
+<h2 id="concept-drift">Concept Drift</h2>
+<ul>
+  <li>最主流解决方案： Ensemble</li>
+  <li>Incremental Learning 中的主要问题之一（有时也别描述为 Unstable-Data ）主要可以分为两类： Virtual &amp; Real
+    <ul>
+      <li>Virtual: 输入数据的Distribution发生改变
+        <ul>
+          <li>与 Class Imbalance 相关
+            <ul>
+              <li><em>采用 Importance Weighting 的思想，对新输入的数据做特殊处理</em></li>
+            </ul>
+          </li>
+          <li>当新 Class 会引入之后，输入数据会突变 —— Novelty（奇异）
+            <ul>
+              <li><em>引入 Novelty Check模块，针对性解决问题</em></li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <table>
+          <tbody>
+            <tr>
+              <td>Real: The P(Y</td>
+              <td>X) Changed</td>
+            </tr>
+          </tbody>
+        </table>
+        <ul>
+          <li>Statistically Detect CD(偏硬核统计方法) - Hoelffding Distance(不太有后续)</li>
+          <li>Ensemble Model(集成学习) 融合不同的分类器 （感觉是靠Robustness硬扛）<br />
+  <strong>目前最有效的处理Concept Drift的方法</strong></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="catastrophic-forgetting">Catastrophic Forgetting</h2>
+<ul>
+  <li>最主流解决方案： 加强学习规则 （Enforce Learning Rules）- Explicit Meta Strategy</li>
+  <li>由于模型的计算量不能无限增大，所以Incremental Learning在接受新知识的同时，也有一个忘记旧知识的过程。“学的越快，忘的也越快”，这里存在一个权衡。（有时该问题也会被叫做 Stability-Plasticly Dilema）</li>
+  <li>目前深度学习中的Catastrophic Forgetting貌似含义和IL中的不太一样，可能有时候更为广义,训练数据和上线之后的实际数的差异大的问题也属于此类,我理解是NN泛化能力不足,Incremental是解决它的方案之一.
+    <ul>
+      <li>在NN中的主流解决方案:    <strong>在Loss中加项去”蒸馏”出老任务的信息并加以保留</strong></li>
+    </ul>
+  </li>
+  <li>在如NN等Connetionist类的模型中比较严重
+    <ul>
+      <li>在新时代处理方式比较多样，在NN领域 有一篇<a href="https://openreview.net/forum?id=BkloRs0qK7">综述文章</a>介绍</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="memory-bottleneck--efficient-memory-model">Memory Bottleneck —— Efficient Memory Model</h2>
+<ul>
+  <li>由于存储有限，所以需要尽量的压缩输入数据</li>
+  <li>主要分为两类 数据表征Explicit/Implicit
+    <ul>
+      <li>Implicit （Example/Prototype Based Methods： Combine Human Coginitive Categories &amp; Numerical Features ）</li>
+      <li>Explicit (经常采用短期记忆的方法，只保留一段时间)</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="meta-parameter-tunning">Meta-Parameter Tunning</h2>
+<ul>
+  <li>由于输入数据Unstable,导致超参数是变量
+    <ul>
+      <li>让模型更加Robust</li>
+      <li>采取Meta-Heuristic的方法去调整超参数（比较困难）</li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="benchmark">Benchmark</h1>
+<blockquote>
+  <p>由于该领域较为宽广，处理的问题与使用算法的跨度都比较大，导致没有一个公认的指标（类似Image Classification 的ILVSR）
+同时，衡量IL的算法的指标维度较多，有一篇<a href="https://www.sciencedirect.com/science/article/pii/S0925231217315928">文章</a>对不同算法进行了比较好的对比(对比了截止2018年的各种SOTA的对比，但是不太有NN相关的)</p>
+</blockquote>
+
+<ul>
+  <li>主要Evaluate的维度有
+    <ul>
+      <li>Accuracy</li>
+      <li>Converge Time</li>
+      <li>Complexity</li>
+      <li>Hyper-Params Optimization</li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote>
+  <p>在NN领域,有另外一篇<a href="https://github.com/GMvandeVen/continual-learning">文章</a>将IL的主要任务进行了区分,并且介绍了后NN时代的主要算法在不同场景下的效果.</p>
+</blockquote>
+
+<h1 id="new-popular-methods">New Popular Methods</h1>
+<ol>
+  <li>LWTA(Local Winner Takes It All) - As An Activation Function     <em>(A little Outdated)</em></li>
+  <li>EWC(Elastic Weight Consolidation) - As Regularization In Loss Function</li>
+  <li>ICaRL(Incremental Classification and Representation Learning) - A Structure Of Representation Learning Using CNN</li>
+  <li>LwF(Learning Without Forgetting)</li>
+  <li>DGR (Deep Generative Replay)</li>
+</ol>
+
+<h1 id="推荐文章">推荐文章</h1>
+<h2 id="1-incremental-on-line-learning-a-review-and-comparison-of-state-of-the-art-algorithms--a-survey-on-pre-nn-sota-methods-for-il">1. Incremental On-line Learning: A Review and Comparison of State of the Art Algorithms  （A Survey On Pre-NN SOTA Methods For IL）</h2>
+<ul>
+  <li><a href="https://www.sciencedirect.com/science/article/pii/S0925231217315928">Link</a></li>
+  <li>Cite：33</li>
+  <li>Rank :   :star::star::star::star:</li>
+  <li>INTRO:   对前NN时代的IL的SOTA方法进行了多维的可靠对比,同时梳理了他们用到的方法</li>
+  <li>Digest:</li>
+</ul>
+
+<h2 id="2-incremental-learning-algorithms-and-applications-old-survey-of-the-field-of-il-2015">2. Incremental learning algorithms and applications (Old Survey Of The Field Of IL 2015)</h2>
+<ul>
+  <li><a href="https://hal.archives-ouvertes.fr/hal-01418129/">Link</a></li>
+  <li>Cite：62</li>
+  <li>Rank : :star::star::star:</li>
+  <li>INTRO: 对整个领域的概况做了详细的梳理，也列举了很多参考文献；缺陷在于年代过于久远</li>
+  <li>Digest：</li>
+</ul>
+
+<h2 id="3-interactive-online-learning-for-obstacle-classification-on-a-mobile-robot">3. Interactive Online Learning for Obstacle Classification on a Mobile Robot</h2>
+<ul>
+  <li><a href="https://ieeexplore.ieee.org/abstract/document/7280610">Link</a></li>
+  <li>Cite: 17</li>
+  <li>Rank: :star::star::star:</li>
+  <li>INTRO: 算是一篇比较完整的文章，多方考虑了各种问题（比如Memory Bound），最后有自然场景的应用落地，核心问题是图像的分类问题，采用了I-LVQ</li>
+  <li>Digest</li>
+</ul>
+
+<hr />
+<p>(以下的文章是与NN有关的IL相关文章,方法与以上的方法差距相对较大,但是思想类似)</p>
+
+<ul>
+  <li>整个领域的发展:
+    <ul>
+      <li>首先以2013年Bengio和Goodfellow那篇文章的研究开始,人们开始研究NN的CF(其实解决了就能Incremental了) 当时已经有了比如LWTA之类的一些尝试,但是不成熟</li>
+      <li>主要流派,归纳来自于(3 Scenario一文,文中对他们的效果也做了对比)
+        <ul>
+          <li>Task-Specific Parts:
+            <ul>
+              <li>XdG:</li>
+              <li>对于每一个Task采取网络的一部分进行处理: (必须Task-Specified)</li>
+            </ul>
+          </li>
+          <li>Regularized Optimization
+            <ul>
+              <li>EWC &amp; SI</li>
+              <li>可以处理Task Unknow的情况</li>
+            </ul>
+          </li>
+          <li>Replay Training Data
+            <ul>
+              <li>Use Old Model To Create New Data’s Presentation – LwF</li>
+              <li>Generate Data To Replay - DGR</li>
+            </ul>
+          </li>
+          <li>Store Old Data As Examples
+            <ul>
+              <li>ICaRL</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li>后面则是各种开花,大家提出各式各样的架构让各种网络Incremental(有些就很玄学了,基于Brain的啊,各种distillatoin的啊,还有Attention机制啊等一些比较花哨的Trick,但是主干基本上还是ICARL的Method)</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="4-an-empirical-investigation-of-catastrophic-forgetting-in-gradient-based-neural-networks">4. An Empirical Investigation of Catastrophic Forgetting in Gradient-Based Neural Networks</h2>
+<ul>
+  <li><a href="https://arxiv.org/abs/1312.6211">link</a></li>
+  <li>Cite: 200+</li>
+  <li>Rank: :star:</li>
+  <li>INTRO: Bengio实验室出的一篇分析论文,主要指出了Dropout训练对于缓解CF的作用,领域开山,意义不是特别大,但是提出的分割数据集方法比较经典(利用Premute分割Mnist1为几个SubTask)</li>
+  <li><a href="https://github.com/goodfeli/forgetting">Code</a></li>
+</ul>
+
+<h2 id="star-5-learning-without-forgetting-eccv-2016">:star: 5. Learning Without Forgetting (ECCV 2016)</h2>
+<ul>
+  <li><a href="https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&amp;arnumber=8107520">link</a></li>
+  <li>Rank: :star::star::star::star::star:</li>
+  <li>INTRO
+    <ul>
+      <li>他们居然自己更新自己的工作还起了一样的名字? <a href="https://link.springer.com/chapter/10.1007/978-3-319-46493-0_37">Old Link</a></li>
+      <li>2016年那一版是领域的开山之作,比较经典,应用面很广,不仅在IL领域,也涉及TF</li>
+      <li>文章内容稍偏杂,分析对比也不止有Incremental Learning</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="star-6--icarl_incremental_classifiercvpr_2017">:star: 6.  iCaRL_Incremental_Classifier(CVPR_2017)</h2>
+<ul>
+  <li><a href="http://openaccess.thecvf.com/content_cvpr_2017/html/Rebuffi_iCaRL_Incremental_Classifier_CVPR_2017_paper.html">link</a></li>
+  <li>Cite: 172</li>
+  <li>Rank: :star::star::star::star::star:</li>
+  <li>INTRO: NN时期的IL的一篇起步的标准文章.采用CNN做Feature Extractor,每一类别给出一个Prototype-Vector以完成分类,给出了一个完整的Workflow,对比如Memory Bound等问题都有所考虑到,之后的文章多有引用</li>
+  <li><a href="https://github.com/srebuffi/iCaRL">Code</a>   Tensorflow</li>
+  <li><a href="https://github.com/donlee90/icarl">Code</a>   PyTorch  (这个代码里面有把cifar变icifar的实现)</li>
+</ul>
+
+<h2 id="star-7-ewc---overcoming-cf-in-nn-nips2017">:star: 7. EWC - Overcoming CF In NN (NIPS2017)</h2>
+<ul>
+  <li><a href="https://www.pnas.org/content/114/13/3521.short">link</a></li>
+  <li>Cite: 541</li>
+  <li>Rank::star::star::star::star::star:</li>
+  <li>INTRO: Deepmind出品,提出了EWC,本质是修改Loss函数加上了约束,让网络在训练新任务的时候尽量保持对原任务重要的参数(有一个弹性机制),文章中对分类和RL任务都做了分析.可实现性强,开山文章,经典.</li>
+  <li><a href="https://github.com/stokesj/EWC">Code</a></li>
+  <li>后续还有一个Online的修改版本   <a href="https://www.pnas.org/content/pnas/early/2018/02/16/1717042115.full.pdf">link</a></li>
+</ul>
+
+<h2 id="8-continual-learning-with-deep-generative-replaynips-2017">8. Continual Learning with Deep Generative Replay(NIPS 2017)</h2>
+<ul>
+  <li><a href="http://papers.nips.cc/paper/6892-continual-learning-with-deep-generative-replay">link</a></li>
+  <li>Cite: 70+</li>
+  <li>Rank: :star::star::star::star:</li>
+  <li>INTRO: mit.paper,后续还有一个Distillation的<a href="https://arxiv.org/abs/1802.00853">版本</a>(借鉴了LwF)</li>
+</ul>
+
+<h2 id="star-10-three-scenarios-for-continual-learning">:star: 10. Three scenarios for continual learning</h2>
+<ul>
+  <li><a href="https://arxiv.org/abs/1904.07734">link</a></li>
+  <li>Cite: 12</li>
+  <li>Rank: :star::star::star::star::star:</li>
+  <li>INTRO: 将目前的IL的场景分成了三类,并选取了主流流派的几种方法进行了对比,还在附录详细讲解了每种算法的具体实现方式,并且有开源代码.(建议可以从这一篇看做综述开始读起)</li>
+  <li><a href="https://github.com/GMvandeVen/continual-learning">Code</a></li>
+</ul>
+
+<h2 id="其他文章">其他文章</h2>
+<ul>
+  <li>A COMPREHENSIVE, APPLICATION-ORIENTED STUDY OF CATASTROPHIC FORGETTING IN DNNS (ICLR 2019)
+    <ul>
+      <li><a href="https://arxiv.org/abs/1905.08101">link</a></li>
+      <li>后NN时代关于IL的一篇Survey，设计了一些Sequential Learning的场景（在Visual Classification任务上）介绍了目前NN领域IL的一些方法,没有上一篇3 Scenario 概括的好</li>
+    </ul>
+  </li>
+  <li>Incremental learning of object detectors without catastrophic forgetting (ICCV 2017; 50 Cite)
+    <ul>
+      <li><a href="http://openaccess.thecvf.com/content_iccv_2017/html/Shmelkov_Incremental_Learning_of_ICCV_2017_paper.html">link</a></li>
+      <li>Object Detcetion的一篇文章</li>
+      <li><a href="https://github.com/kshmelkov/incremental_detectors">Code</a></li>
+    </ul>
+  </li>
+  <li>End2End Incremental Learning(ECCV 2018; Cite 18)
+    <ul>
+      <li><a href="http://openaccess.thecvf.com/content_ECCV_2018/html/Francisco_M._Castro_End-to-End_Incremental_Learning_ECCV_2018_paper.html">link</a></li>
+      <li>在ICaRL基础上完成了End2End</li>
+      <li><a href="https://github.com/fmcp/EndToEndIncrementalLearning">Code</a> in Matlab…</li>
+    </ul>
+  </li>
+  <li>PackNet: Adding Multiple Tasks to a Single Network by Iterative Pruning(CVPR2018; 43 Cite)
+    <ul>
+      <li><a href="http://openaccess.thecvf.com/content_cvpr_2018/html/Mallya_PackNet_Adding_Multiple_CVPR_2018_paper.html">link</a></li>
+      <li>与DeepMind的EWC思路类似,利用Over-Param,通过迭代剪枝实现</li>
+    </ul>
+  </li>
+  <li>Piggyback: Adapting a Single Network to Multiple Tasks by Learning to Mask Weights(ECCV 2018;Cite 16)
+    <ul>
+      <li><a href="https://arxiv.org/abs/1801.06519">link</a></li>
+      <li>与上面一篇思路类似</li>
+    </ul>
+  </li>
+  <li>Reinforced Continual Learning(NIPS2018; 12Cite)
+    <ul>
+      <li><a href="http://papers.nips.cc/paper/7369-reinforced-continual-learning">link</a></li>
+      <li>Rl的一篇文章</li>
+    </ul>
+  </li>
+  <li>Large Scale Incremental Learning (ICCV 2019)
+    <ul>
+      <li><a href="https://arxiv.org/pdf/1905.13260.pdf">link</a></li>
+      <li>比较新的一篇,比较大规模的做IL的</li>
+    </ul>
+  </li>
+  <li>Continual Learning in Deep Neural Network by Using a Kalman Optimiser
+  *<a href="https://arxiv.org/pdf/1905.08119.pdf">link</a>
+    <ul>
+      <li>用卡尔曼滤波的思想去让不同的Param对应不同的Task</li>
+    </ul>
+  </li>
+  <li>Functional Regularisation for Continual Learning
+    <ul>
+      <li><a href="https://arxiv.org/pdf/1901.11356.pdf">link</a></li>
+      <li>Regularization流派的最新论文,已经很偏数理了…</li>
+    </ul>
+  </li>
+  <li>Incremental Learning with Unlabeled Data in the Wild
+    <ul>
+      <li><a href="https://arxiv.org/abs/1903.12648">link</a></li>
+      <li>应用场景很美好,炫技偏多</li>
+    </ul>
+  </li>
+  <li>Continual Learning Using World Models for Pseudo-Rehearsal (2019.6)
+    <ul>
+      <li><a href="https://arxiv.org/abs/1903.02647">link</a></li>
+      <li>Replay机制在RL领域的应用</li>
+    </ul>
+  </li>
+  <li>Learning to Remember: A Synaptic Plasticity Driven Framework for Continual Learning (2019.4)
+    <ul>
+      <li><a href="https://arxiv.org/abs/1904.03137">link</a></li>
+      <li>Generative Replay 里面一篇比较炫技的文章</li>
+    </ul>
+  </li>
+  <li>LIFELONG LEARNING WITHDYNAMICALLY EXPANDABLE NETWORKS (ICLR 2018)
+    <ul>
+      <li>[link])(https://arxiv.org/abs/1708.01547)</li>
+      <li>与主流流派不同的另一种处理办法</li>
+    </ul>
+  </li>
+  <li>Re-evaluating Continual Learning Scenarios: A Categorization and Case for Strong Baselines
+    <ul>
+      <li><a href="https://arxiv.org/abs/1810.12488">link</a></li>
+      <li>另外一篇总结,对比,尝试给出Baseline的文章(对比的方法不是很多,不是特别主流)</li>
+      <li>提出了惊世骇俗的言论: Main Stream 的IL方法和Naive Replay和正则化甚至Adagrad相比没什么优势…</li>
+      <li><a href="https://github.com/GT-RIPL/Continual-Learning-Benchmark">code</a></li>
+    </ul>
+  </li>
+  <li></li>
+</ul>
+
+<h1 id="资源">资源</h1>
+<ol>
+  <li>他人总结的 Incremental Learning Reading List  <a href="https://github.com/xialeiliu/Awesome-Incremental-Learning">Awesome-Incremental-Learning</a></li>
+  <li>比IL更广泛的Continual Learning Benchmark  <a href="https://github.com/GT-RIPL/Continual-Learning-Benchmark">Continual-Learning-Benchmark</a>
+    <ul>
+      <li>另外,这个组同时还写了 3 Scenario 和另外一篇IL的通用方法的论文,算是一个大组</li>
+    </ul>
+  </li>
+  <li>数据集 <a href="https://vlomonaco.github.io/core50/benchmarks.html">CoRe50</a>
+    <ul>
+      <li>很多论文中对数据集的处理方案还是用的Goodfellow文中创造SubTask的方案</li>
+    </ul>
+  </li>
+  <li>前NN时代的IL算法的源码和数据集整理 <a href="https://github.com/vlosing/incrementalLearning">link</a></li>
+  <li>:star: 最近比较流行的集中IL算法的实现与比较 <a href="https://github.com/GMvandeVen/continual-learning">link</a>
+    <ul>
+      <li>包括了 EWC,LwF,ICaRL等主流方法</li>
+      <li>提到了3 IL Sceneerio Paper,对现有的方法做了一个对比</li>
+    </ul>
+  </li>
+  <li>:star: 另外一个目前新兴的IL算法的复现代码 <a href="https://github.com/arthurdouillard/incremental_learning.pytorch">code</a></li>
+</ol>
+
+<h1 id="ppt">PPT</h1>
+<ul>
+  <li>以一个概念介绍开始吧,辨析与其他学习关系,以三个特点结束
+    <ul>
+      <li>Transfer Learning 迁移学习</li>
+      <li>Lifelong/Online Learning 继续学习</li>
+      <li>在NN领域,Incremental经常和Continual混用…(该领域也不太有特别严格的IL,主要是Stream Of Data难以满足)</li>
+    </ul>
+  </li>
+  <li>在NN领域,以解决Image Classification问题开始, 从3 Scenario谈起
+    <ul>
+      <li>3 Scenario: 主要基于Mnist (Permuted Mnist(给出几种固定的Permutatoin,创造出多个与Mnist原先的任务相同难度的任务) &amp;&amp; Split-Mnist(10类分成5个二分问题))
+        <ul>
+          <li>TASK IL: 跨数据集的.比如先Mnist后SVNH,先ImageNet后PASCAL VOC(LwF)</li>
+          <li>Domain-IL  identical: permuted IL (不知道哪种Permutation)
+            <ul>
+              <li>智能体环境决策</li>
+            </ul>
+          </li>
+          <li>CLass IL: split IL (DGR)
+            <ul>
+              <li>新的Classification</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>TimeLine
+    <ul>
+      <li>2013 Bengio/Goodfellow CF (Dropout)</li>
+      <li>2016 LwF</li>
+      <li>2017 (DeepMind) EWC</li>
+      <li>2017 ICaRL</li>
+      <li>2018 DGR 之后基于现有算法做了各种优化</li>
+    </ul>
+  </li>
+  <li>主要做这个的组,以及一些其他活动</li>
+  <li>两个流派
+    <ul>
+      <li>Regularization based (训练技巧)</li>
+      <li>Replay based (改结构)</li>
+    </ul>
+  </li>
+  <li>3个方法的介绍
+    <ul>
+      <li>EWC:</li>
+      <li>LwF:</li>
+      <li>ICaRL:</li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="个人思考">（个人思考）</h1>
+<ul>
+  <li>Incremental问题的思考
+    <ul>
+      <li>Incremetal常与CF相联系,但是CF并不只通过IL解决,同样也可以通过Transfer等方式解决.</li>
+      <li>很多方法的设计依赖网络的Over-Param,与模型压缩矛盾</li>
+      <li>克服CF的核心是如何保留住Old Task的Knowledge
+        <ul>
+          <li>
+            <table>
+              <tbody>
+                <tr>
+                  <td>最Naive的方法就是在Loss上加一个L2范数</td>
+                  <td> </td>
+                  <td>w-w0</td>
+                  <td> </td>
+                </tr>
+              </tbody>
+            </table>
+          </li>
+          <li>EWC就是在这个的基础上加上了Ealstic的机制,让对结果更重要的Weight去拥有更大的”弹性”</li>
+          <li>Advanced一点的方法主要涉及到Distillation</li>
+          <li>ICaRL的思路个人感觉更类似传统NN的方法,类似当时ISVM用的方法
+            <ul>
+              <li>NN其实只做了Representive Learning的特征(表征)选择器</li>
+              <li>最核心的部分还是Prototype-Based(所谓的Weight Vector感觉和ISVM中的Prototype思想一致)的Example Set</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>数据的标注问题，训练需要有Label的数据
+    <ul>
+      <li>在推荐系统等以Human FeedBack作为Label （在自动驾驶中其实也可以把人的行为作为FeedBack，不过没有那么直接）</li>
+      <li>FeedBack的Latency,数据进入之后需要完成动作才能有FeedBack。（其实对于训练来说个人感觉没有那么大所谓，就是对数据的储存提出了要求）</li>
+    </ul>
+  </li>
+  <li>数据集的问题:
+    <ul>
+      <li>Ian GoodFellow的方法,对于一个数据集分出SubTask(利用Permutation)</li>
+      <li>iCifar 对原本数据集的修改</li>
+    </ul>
+  </li>
+  <li>对于 A Stream Of Data的问题:
+    <ul>
+      <li>一些算法更大程度上还是一些训练技巧(比如LwF,EWC)但是他们需要同一时刻所有的Training Samples Present</li>
+      <li>LwF文章里面也提及了,自己不能应对 A Stream Of Data Coming(感觉EWC同样也存在这一问题)</li>
+      <li>目前主流的实现方案是 permuted Mnist,或者更换别的数据集以测试模型对New Task的能力,但是新数据集理论上也是以Mini Batch的形式进来(对终端板上训练能放多少东西存疑)</li>
+      <li>ICaRL理论上是可以处理Streaming Of Data的,但是其缺点在于2Stage,以及对所有样本求平均</li>
+    </ul>
+  </li>
+  <li>Memory Bound的问题:
+    <ul>
+      <li>目前算法只要是Memory有Bound的都拿出来吹自己可实现,还没有落实到具体存储问题</li>
+    </ul>
+  </li>
+  <li>后NN时代基本不太对 新的数据引入而重新设定Hyper-Param进行研究
+    <ul>
+      <li>或许是因为比较耐挫,也或许是因为处理的任务差不多
+  *(一些文章提及到当Task差距很大的时候,效果不好)</li>
+    </ul>
+  </li>
+</ul>
+
+:ET

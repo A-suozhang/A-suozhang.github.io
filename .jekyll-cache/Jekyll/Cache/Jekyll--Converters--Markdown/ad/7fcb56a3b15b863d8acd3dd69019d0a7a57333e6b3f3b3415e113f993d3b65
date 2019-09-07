@@ -1,0 +1,850 @@
+I"��<h1 id="dpu-on-zc102">DPU On ZC102</h1>
+<ul>
+  <li>尝试在ZC102 Evaluation Board上烧录Linux系统的血泪文档</li>
+  <li>摘要
+    <ul>
+      <li>ZC102 Evaluation Board
+        <ul>
+          <li>核心芯片ZU9</li>
+          <li><img src="pics/board.jpg" alt="" /></li>
+          <li>通过SD卡进行启动</li>
+          <li>外接显示器和鼠标键盘自备…</li>
+        </ul>
+      </li>
+      <li>开发环境
+        <ul>
+          <li>Vivado 2019.1 (版本限定)</li>
+          <li>petalinux 2019</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="environment">Environment</h2>
+
+<h3 id="安装vivado">安装Vivado</h3>
+<ol>
+  <li>下载所需版本的Vivado安装文件。官方下载地址: <a href="https://china.xilinx.com/support/download.html">https://china.xilinx.com/support/download.html</a></li>
+  <li>获取license(请各凭本事)。如果从官方购买了板卡，官方通常会提供一份license。</li>
+  <li>运行安装程序，安装过程中根据需要选择版本以及所需组件(在硬盘空间不紧缺的情况下，建议选择System Edition版本，组件用默认选项即可)。安装时间较长。</li>
+  <li>安装完成后，会自动进入Vivado License Manager(如果不小心关掉了，可以之后打开vivado，通过Help-&gt;License Manager进入)。选择Load License项，选择license文件。之后选择View License Status，看到可用的IP列表，即表示加载成功。</li>
+  <li>在命令行执行以下命令将vivado添加到路径中，同时建议将该命令添加到~/.bashrc文件中以便命令行启动时自动添加该路径：
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="nb">source</span> &lt;path-to-vivado&gt;/settings64.sh
+</code></pre></div>    </div>
+  </li>
+  <li>在命令行中运行以下命令开启Vivado:
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>vivado &amp;
+</code></pre></div>    </div>
+  </li>
+</ol>
+
+<ul>
+  <li>注意：不同版本的Vivado并不冲突，只需要设置相应的路径即可完成切换。具有充足空间的服务器可以考虑保留多个版本的Vivado方便兼容不同的工程。</li>
+</ul>
+
+<h3 id="安装petalinux">安装petalinux</h3>
+<p>参考资料：<a href="https://www.xilinx.com/support/documentation/sw_manuals/xilinx2019_1/ug1144-petalinux-tools-reference-guide.pdf">UG1144</a></p>
+<ol>
+  <li>下载所需版本的petalinux。petalinux的版本需要和Vivado的版本对应。官方下载地址: <a href="https://china.xilinx.com/support/download/index.html/content/xilinx/zh/downloadNav/embedded-design-tools.html">https://china.xilinx.com/support/download/index.html/content/xilinx/zh/downloadNav/embedded-design-tools.html</a></li>
+  <li>根据UG1144中的说明安装所需的库。手册中会给出对应操作系统所需要运行的命令行代码。例如对于ubuntu：
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>apt-get <span class="nb">install</span> <span class="nt">-y</span> gcc git make net-tools libncurses5-dev tftpd zlib1g-dev libssl-dev flex bison libselinux1 gnupg wget diffstat chrpath socat xterm autoconf libtool <span class="nb">tar </span>unzip texinfo zlib1g-dev gcc-multilib build-essential <span class="nt">-dev</span> zlib1g:i386 screen pax <span class="nb">gzip</span>
+</code></pre></div>    </div>
+    <ul>
+      <li>这里个人还需要再安装一个gawk库</li>
+    </ul>
+    <ul>
+      <li>否则读取下载的install文件时会出错
+        <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> Bad Address
+</code></pre></div>        </div>
+      </li>
+    </ul>
+  </li>
+  <li>直接运行下载后的文件，在命令行中指定安装位置。注意：不能使用sudo权限或以root身份安装；安装的位置需要在当前用户的权限范围内。
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>./petalinux-v<span class="o">{</span>xxxx.x<span class="o">}</span><span class="nt">-final-installer</span>.run &lt;install-path&gt;
+</code></pre></div>    </div>
+    <ul>
+      <li>启动安装文件时会报Warning
+        <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> WARNING: No tftp server found - please refer to "PetaLinux SDK Installation Guide" for its impact and solution
+</code></pre></div>        </div>
+      </li>
+    </ul>
+    <ul>
+      <li>查阅DataSheet(UG1144)后,本机没有开启tftp服务,会影响将linux镜像烧写到开发板,这里暂时可以不用考虑
+        <ul>
+          <li>由于我们采用的SD卡启动,而不是通过TFTP进行烧写,所以关于这个的warning可以一律无视</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ol>
+
+<ul>
+  <li>这里可能的出错基本都是权限问题
+    <ul>
+      <li>比如安装到/opt目录(如UG1144)用户可能没有权限(其实我是将/opt目录直接chmod成777的(有一点小危险),这样安装没有问题)</li>
+      <li>还有安装文件(install script)不能设置为775权限(UG1144说这样的话bitBake会出问题),我目前是设置为777</li>
+      <li>不能用ROOT安装!</li>
+    </ul>
+  </li>
+</ul>
+
+<ol>
+  <li>在命令行执行以下命令将petalinux添加到路径中，同时建议将该命令添加到~/.bashrc文件中以便命令行启动时自动添加该路径：
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="nb">source</span> &lt;path-to-petalinux&gt;/settings.sh
+</code></pre></div>    </div>
+    <p>虽然不是一定要加,建议把这个也加上(后面如果遇到了找不到sourcing bitbake source一年的时候,有人给的解决方案是source一下这个(虽然我也不太确定这个有没有用,多source一个也花不了多少时间))</p>
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="nb">source</span> /opt/petalinux/components/yocto/source/aarch64/environment-setup-aarch64-xilinx-linux
+</code></pre></div>    </div>
+    <ul>
+      <li>将该文件添加到.bashrc时可能会导致开启bashrc较慢…属于正常现象(大概)</li>
+    </ul>
+  </li>
+  <li>运行以下命令验证配置是否成功，正确时返回安装路径：
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">echo</span> <span class="nv">$PETALINUX</span>
+</code></pre></div>    </div>
+  </li>
+</ol>
+
+<h3 id="辅助软件及驱动">辅助软件及驱动</h3>
+<ol>
+  <li><a href="https://www.silabs.com/products/development-tools/software/usb-to-uart-bridge-vcp-drivers">CP210x USB转串口</a>：用于通过串口连接ZCU102开发板。</li>
+  <li><a href="https://www.balena.io/etcher/">SD卡镜像烧写软件(Windows)</a>：烧写完整img格式镜像至SD卡。</li>
+  <li>SD卡分区软件(Linux)：SD卡格式化及分区。可以直接安装：
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="nb">sudo </span>apt-get <span class="nb">install </span>gparted
+</code></pre></div>    </div>
+  </li>
+</ol>
+
+<h2 id="vivado-set">Vivado Set</h2>
+<ul>
+  <li><strong>注意</strong>：以下部分相当于复现了Xilinx-DPU_TRD中的操作，可以直接在官网上下载trd，tcl脚本会自动完成配置，可以直接开始综合实现
+    <ol>
+      <li>需要在Vivado(2019.1)下建立工程</li>
+      <li>选择 Board(注意不是选芯片,而是选board,board Ver1.0,ver 3.3) -&gt; ZC102</li>
+      <li>需要首先在IP Catalog中导入DPU的IP</li>
+    </ol>
+    <ul>
+      <li>DPU的IP位于:
+        <ol>
+          <li>建立Block Design (以下有超级多的工作,其实如果我的测试过了可以导出一个tcl)</li>
+        </ol>
+      </li>
+      <li>有以下几部分模块需要自行配置
+        <ul>
+          <li>Zynq UltraScale IP Core
+            <ul>
+              <li>首先添加IP核,并且Run Block Automation(让Vivado帮你做一些初始化)</li>
+              <li><img src="pics/zynq0.png" alt="" /></li>
+              <li>然后做一些配置</li>
+              <li><img src="pics/zynq1.png" alt="" /></li>
+              <li><img src="pics/zynq2.png" alt="" /></li>
+              <li><img src="pics/zynq3.png" alt="" /></li>
+              <li>最后配置完的应该如以下所示</li>
+              <li><img src="pics/zynq4.png" alt="" /></li>
+              <li><img src="pics/zynq5.png" alt="" /></li>
+              <li>注意有没有多Port少Port,不然之后连线时会不好连</li>
+            </ul>
+          </li>
+          <li>DPU IP Core
+            <ul>
+              <li>:cry:  我的DPU IP核里面显示是8h时限,过了之后可能需要regenerate(并无大碍)</li>
+              <li>按照下图配置DPU核</li>
+              <li><img src="pics/DPU0.png" alt="" /></li>
+              <li><img src="pics/DPU1.png" alt="" /></li>
+              <li><img src="pics/DPU2.png" alt="" /></li>
+              <li>最终结果如下</li>
+              <li><img src="pics/DPU3.png" alt="" /></li>
+            </ul>
+          </li>
+          <li>Clock Part
+            <ul>
+              <li>由一个clk_wizard和两个system reset构成,分别用来生成DPU所需要的DPU逻辑时钟(clk_dpu)和DSP时钟(clk_dsp)
+                <ul>
+                  <li>clk_dsp: 650M 采用了DDR技术,获得两倍系统时钟的DSP时钟</li>
+                  <li>clk_dpu: 系统时钟 325M</li>
+                  <li>(Xilinx的工程师真的:cow::beer:,资源用满还能跑到325M)</li>
+                  <li>下面是配置:</li>
+                  <li><img src="pics/clk0.png" alt="" /></li>
+                  <li><img src="pics/clk1.png" alt="" /></li>
+                  <li><img src="pics/clk2.png" alt="" /> 这里记得要(拖下去)把rst type选成LOW</li>
+                  <li><img src="pics/clk3.png" alt="" /> 这里也要把两个rst选成0,我当时被固定在1上,重启了一下Vivado就好了</li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+          <li>Interrupt
+            <ul>
+              <li>就是中断信号的concat…</li>
+              <li><img src="pics/intr0.png" alt="" /> 建立一个constant IP</li>
+              <li><img src="pics/intr1.png" alt="" /></li>
+              <li><img src="pics/intr2.png" alt="" /></li>
+            </ul>
+          </li>
+          <li>AXI部分
+            <ul>
+              <li>PS(Zynq)与PL(DPU)通过AXI通信</li>
+              <li><img src="pics/axi.png" alt="" /> 就是例化一个AXI Interconnect,然后连线</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li>DPU部分总框图:
+        <ul>
+          <li><img src="pics/DPU_all.png" alt="" /></li>
+        </ul>
+      </li>
+      <li>完成了以上步骤之后,还需要在Address Editor(在block design的右边)那一栏,配置一下reg0的地址
+        <ul>
+          <li><img src="pics/addr_edit0.png" alt="" /></li>
+          <li><img src="pics/addr_edit1.png" alt="" /></li>
+          <li>(如果这一步不做的话会报超多的error和critical warning…)</li>
+        </ul>
+      </li>
+      <li><em>如果采用了trd可以直接从这里开始</em>
+        <ol>
+          <li>然后开始紧张刺激的Synth(30min) - Impl(1h) - Bitstream(&lt;30min)吧!</li>
+        </ol>
+      </li>
+      <li>不出意外的话会报几百个warinng,但是没有critical warning就好…</li>
+      <li><img src="pics/synth0.png" alt="" /></li>
+      <li><img src="pics/synth1.png" alt="" />
+        <ol>
+          <li>File - Export Hardware - (勾选include bitstream)</li>
+        </ol>
+      </li>
+      <li>导出最后的 .hdf文件 (上面这么多步就是为了生成这么一个.hdf文件,包含了硬件信息和bit文件)</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="pentalinux-set">PentaLinux Set</h2>
+
+<ul>
+  <li>前面配置的时候有讲过,使用pentalinux需要source一个sh文件,可以放在~/.bashrc里面
+    <ul>
+      <li>(但是由于执行时间稍微有一些长,每次开bash都会卡一下子,所以我个人还是alias了一个指令,有需要的时候再用)
+        <ul>
+          <li>可以把petalinux sh最后检查环境的代码删除，这样就快了</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>这一步的主要目标是产生系统镜像(包括image.ub和BOOT.bin)烧写到SD卡中让板卡启动
+    <ul>
+      <li>Petalinux 可以产生Rootfs,但是我们可以不用它的Rootfs</li>
+    </ul>
+  </li>
+</ul>
+
+<ol>
+  <li>建立工程
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>petalinux-create <span class="nt">-t</span> project <span class="nt">--name</span> &lt;project-name&gt; <span class="nt">--template</span> zynqMP
+</code></pre></div>    </div>
+    <p>如果有板卡的BSP，可以采用BSP建立工程(会省很多配置)</p>
+
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>petalinux-create <span class="nt">-t</span> project <span class="nt">-s</span> &lt;path-to-bsp&gt;
+</code></pre></div>    </div>
+    <p>工程建立之后，会在当前路径下建立一个包含工程的文件夹。</p>
+  </li>
+  <li>配置硬件及kernel（开发板可以选用默认选项不配置）
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cd</span> &lt;path-to-project&gt;
+petalinux-config <span class="nt">--get-hw-descroption</span> &lt;path-to-folder-of-hdf&gt;
+</code></pre></div>    </div>
+    <ul>
+      <li>petalinux默认的启动方式是initramfs，即将文件系统加载到内存中运行，而不会从SD卡中读取文件系统。因此需要单独配置启动方式。运行上面一条指令后会默认进入配置界面，需要配置以下内容：</li>
+      <li>取消勾选<code class="highlighter-rouge">DTG Settings-&gt;Kernel Bootargs-&gt;generate boot args automatically</code></li>
+      <li>设置boot args为：<code class="highlighter-rouge">console=ttyPS0,115200 root=/dev/mmcblk0p2 rw earlyprintk rootfstype=ext4 rootwait</code>
+        <ul>
+          <li>bootarg是Linux中非常关键的一个环境变量</li>
+          <li>一些常用的参数
+            <ul>
+              <li>root 指定rootfs的位置</li>
+              <li>rootfstype</li>
+              <li>console
+                <ul>
+                  <li>=tty 虚拟串口设备</li>
+                </ul>
+              </li>
+              <li>mem 指定内存的大小</li>
+              <li>ramdisk(<a href="https://www.cnblogs.com/cornflower/archive/2010/03/27/1698279.html">这篇博文</a>表示最好用ramdisk_size) 表示ramdisk的大小，默认为4M</li>
+              <li>initrd/noinitrd (如果不使用ramdisk启动系统，需要noinitrd这个参数)</li>
+              <li>ip 系统启动之后的网卡地址(如果要使用基于nfs的文件系统，需要此参数)</li>
+              <li>Example
+                <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  setenv bootargs ‘initrd=0x32000000,0xa00000 root=/dev/ram0 console=ttySAC0 mem=64M init=/linuxrc’
+</code></pre></div>                </div>
+              </li>
+            </ul>
+          </li>
+          <li>解释一下上面的Bootarg
+            <ul>
+              <li>console 使用虚拟串口tty0</li>
+              <li>root=/dev/mmcblk0p2 SD卡的第二分区</li>
+              <li>rw printk LOG输出</li>
+              <li>rootwait (rootdelay)用于boot时候文件系统可能还没有准备好的情况</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <p>设置<code class="highlighter-rouge">Image Packaging Configurations-&gt;Root filesystem type</code>为<code class="highlighter-rouge">SD Card</code></p>
+      </li>
+      <li>配置完成之后
+需要更新现有的bootloader，保证bootloader最新
+        <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> petalinux-build -c bootloader -x distclean
+</code></pre></div>        </div>
+      </li>
+      <li>如果需要对内核进行其他配置，请根据<a href="https://www.xilinx.com/support/documentation/sw_manuals/xilinx2019_1/ug1144-petalinux-tools-reference-guide.pdf">UG1144</a>执行。</li>
+    </ul>
+  </li>
+  <li>配置Kernel
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>petalinux-config <span class="nt">-c</span> kernel
+</code></pre></div>    </div>
+    <p>然后需要配置一万个东西（带”//”的应该已经被BSP自动配置好了）</p>
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> Following are some of the mandatory configurations needed for successful booting of Ubuntu Desktop.
+    Disable initramfs in kernel configuration GUI at ‘General setup -&gt; Initial RAM file system and RAM disk (initramfs/initrd) support’
+ Following settings are required to enable Input device, multimedia and USB related settings
+    Device Drivers-&gt;Input device support-&gt;Event interface’　//
+    Device Drivers-&gt;Input device support-&gt;Keyboards’        //
+    Device Drivers-&gt;Input device support-&gt;Mouse interface’
+    Device Drivers-&gt;Multimedia support-&gt;Media USB Adapters-&gt;USB Video Class (UVC)    //
+    Device Drivers-&gt;Multimedia support-&gt;Cameras/video grabbers support’              //
+    Device Drivers-&gt;Multimedia support-&gt;V4L platform devices                         //
+    Device Drivers-&gt;USB support and enable all required classes (Except For Disable External Hub)
+    Device Drivers-&gt;HID support-&gt;Generic HID driver                                      //
+    Device Drivers-&gt;HID support-&gt;USB HID support-&gt;USB HID transport layer                //
+ Disabling the PMBUS PMIC so that power demo can use them without any issues 
+    Device Drivers-&gt;Hardware Monitoring support-&gt;PMBus support-&gt;Maxim MAX20751’  (Careful here is disable)
+    Enable the PHY settings
+    Device Drivers-&gt;PHY Subsystem’
+    Device Drivers-&gt;PHY Subsystem-&gt;Xilinx ZynqMP PHY driver’
+    Disable the PCI settings
+    Bus Support-&gt;PCI support’ This needs to be disabled for this version
+    Enable the sound related settings:
+    Device Drivers-&gt;Sound card support’
+    Device Drivers-&gt;Sound card support-&gt;Advanced Linux Sound Architecture’ enabling ALSA support
+    Kernel hacking &gt; Tracers &gt; Kernel Function Tracer
+ Save and Exit the kernel configuration.
+</code></pre></div>    </div>
+
+    <ul>
+      <li>rootfs同理 (这里config的是petalinux生成rootfs，不是我们最后用的那个，当然其实也可以用petalinux生成的rootfs,同样会生成在image/linux里面)
+        <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>petalinux-config <span class="nt">-c</span> rootfs
+</code></pre></div>        </div>
+        <ul>
+          <li>// 这边petalinux-config时候,有时候可能会卡在(initializing…或者是ss check),原因是没有联网…
+            <ul>
+              <li>解决方法: 输入 (单纯的config是可以config的,带别的指令的可能会卡住)
+                <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  petalinux-config
+</code></pre></div>                </div>
+                <p>向下滚动,到”Yocto Setting”,取消勾选一个”Enable sstate feed from internet”(具体叫啥记不太清楚了,总之就是禁止联网校验)
+  然后没有网也可以正常build和config啦!</p>
+              </li>
+            </ul>
+          </li>
+          <li>// 这边如果卡在Sourcing Bitbake,参考上面安装流程中的
+            <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="nb">source</span> /opt/petalinux/components/yocto/source/aarch64/environment-setup-aarch64-xilinx-linux
+</code></pre></div>            </div>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>Install DNNDK &amp; DPU
+    <ul>
+      <li>该部分<a href="https://www.xilinx.com/support/documentation/sw_manuals/xilinx2018_3/ug1144-petalinux-tools-reference-guide.pdf">文档参考UG1144</a>,按照P77 - Building User Module章节</li>
+      <li><strong>配置设备树</strong> 在完成正常的kernel config之后，修改设备树　将meta-user/recipes-bsp/device-tree/device-tree.bbappend和该目录下files/dpu.dtsi复制进去(TODO:可能还有一个带include的文件需要配置)
+        <ul>
+          <li>如果设备树没有正确配置的话，系统将无法启动</li>
+          <li>petalinux-build之后系统文件夹下的dts与dtsi文件修改是没有用的,不是正确修改方法(虽然我第一反应是这么以为的)</li>
+        </ul>
+      </li>
+      <li><strong>配置dpu驱动</strong>  ./recepts-modules/dpu文件夹内容复制进去
+        <ul>
+          <li>在复制之前，利用petalinux的指令加入该module　<code class="highlighter-rouge">petalinux-create -t modules --name dpu --enable</code>
+            <ul>
+              <li>如果在已经build过之后的文件夹下加入dpu module，会报错了<code class="highlighter-rouge">Failed to open PetaLinux lib: librdi_commonxillic.so: cannot open shared object file: No such file or directory.</code>解决方案，新建工程</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li><strong>编译</strong>
+        <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  petalinux-build
+  petalinux-build -c rootfs
+  petalinux-build -x package
+  petalinux-build  -c dpu       // (确保自建模块dpu被安装了)
+  petalinux-build -c dpu -x do_insatll // (安装dpu模块)
+</code></pre></div>        </div>
+        <ul>
+          <li>完成安装之后 在 %(PROJECT_DIRECTORY)/build/tmp/work/zcu102_zynqmp-xilinx-linux/目录下应有dpu/</li>
+        </ul>
+      </li>
+      <li><strong>寻找并保存驱动文件</strong> petalinux-build 完成之后，在build/tmp/work/zcu102_zynqmp-xilinx-linux/petalinux-user-image/1.0-r0/rootfs下搜索dpu.ko
+        <ul>
+          <li>应该在lib/linux-x.xx/extra/dpu.ko，加入文件系统之后insmod一下</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>编译（通常时间较长10-30分钟）
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>petalinux-build
+</code></pre></div>    </div>
+    <p>该过程会生成一系列文件，在<code class="highlighter-rouge">&lt;path-to-project&gt;/images/linux</code>文件夹内，我们最终需要用到的是image.ub(可能还有一个system.dts设备树)</p>
+    <ul>
+      <li>image文件应该是在这一步骤产生的，如果我们按照默认的配置的话就是按照petalinux的默认配置dts和kernel选择
+        <ul>
+          <li>当然前面如果调用过petalinux-config -c kernel的就使用的是我们配置的内核了</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>打包镜像
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>petalinux-package <span class="nt">--boot</span> <span class="nt">--format</span> BIN <span class="se">\</span>
+    <span class="nt">--fsbl</span>   ./images/linux/zynqmp_fsbl.elf <span class="se">\</span>
+    <span class="nt">--u-boot</span> ./images/linux/u-boot.elf <span class="se">\</span>
+    <span class="nt">--pmufw</span>  ./images/linux/pmufw.elf <span class="se">\</span>
+    <span class="nt">--fpga</span>   ./images/linux/<span class="k">*</span>.bit <span class="se">\</span>
+    <span class="nt">--force</span>
+</code></pre></div>    </div>
+    <ul>
+      <li>这一步骤中各个文件的作用：
+        <ul>
+          <li>FSBL(1st Stage Bootloader)和zynq7000的FSBL相同，用CortexA53，也可以选择CortexR5来制作(取决于板卡的处理器型号)</li>
+          <li>pmufw.elf（所有的.elf其实是二进制可执行文件）MPSoc用来更好的管理电源和功耗，一般不需要修改</li>
+          <li>.bit PL的bitstream</li>
+          <li>uboot.elf uboot文件，一般来自于Xilinx官方提供，编译</li>
+          <li>image.ub 由kernel，rootfs和device tree打包来的</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>以上步骤完成之后,会在images/linux/ 目录下产生BOOT.BIN和image.ub文件,这就是我们需要的</li>
+</ol>
+
+<h2 id="prepare-sd-card">Prepare SD Card</h2>
+<ol>
+  <li>第一使用SD卡时需要对SD卡进行格式化和分区。启动gparted，将SD卡分为两个分区：
+    <ul>
+      <li>BOOT分区：格式为FAT32，大小自定义，通常为几百MB，够用即可</li>
+      <li>
+        <p>ROOTFS分区：格式为EXT4，分配全部剩余空间即可
+结束之后记得把这两个分区mount上</p>
+      </li>
+      <li>这里有时候会出现拔下读卡器之后无法umount分区的情况(提示device busy)
+        <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  fuser <span class="nt">-km</span> <span class="s1">'不能umount的分区所在的目录'</span>
+  <span class="nb">sudo </span>umount <span class="s1">'不能umount的分区'</span>
+</code></pre></div>        </div>
+      </li>
+    </ul>
+  </li>
+  <li>将BOOT必要的文件拷贝到SD卡中
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cd</span> &lt;path-to-petalinux-project&gt;/images/linux
+<span class="nb">cp </span>BOOT.BIN image.ub &lt;path-to-BOOT-of-SDCARD&gt;
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>拷贝文件系统。可以使用<code class="highlighter-rouge">&lt;path-to-petalinux-project&gt;/images/linux</code>下的rootfs.tar.gz，也可以自己下载文件系统，例如从：<a href="https://rcn-ee.com/rootfs/eewiki/minfs/">https://rcn-ee.com/rootfs/eewiki/minfs/</a>。或者是自己构建，之后将文件系统解压缩，运行如下命令：</p>
+
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cd</span> &lt;path-to-rootfs&gt;
+<span class="c"># 将文件系统复制到ROOTFS分区中，注意不可以使用cp</span>
+<span class="nb">sudo </span>rsync <span class="nt">-av</span> ./ &lt;path-to-ROOTFS-of-SDCARD&gt;    
+<span class="c"># 清空缓冲区，确保文件写入SD卡</span>
+<span class="nb">sync</span>
+<span class="c"># 修改权限，否则启动以后会出问题</span>
+<span class="nb">sudo chown </span>root:root &lt;path-to-ROOTFS-of-SDCARD&gt;
+<span class="nb">sudo chmod </span>755 &lt;path-to-ROOTFS-of-SDCARD&gt;
+</code></pre></div>    </div>
+    <ul>
+      <li>该命令的执行地址要在文件系统的目录下面(注意不要选错了)
+        <ul>
+          <li>有/bin /usr /home /bin /lib 的那个目录</li>
+          <li>否则OS不能正确识别Rootfs文件系统,会报Kernel Panic的错误</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ol>
+
+<h2 id="board-setup">Board Setup</h2>
+<ul>
+  <li>开发板配置好跳线设置(根据ZC102 DataSheet)
+    <ul>
+      <li>确保其是从SD卡启动</li>
+    </ul>
+  </li>
+  <li>将SD卡插入上电,通过DP连接到显示器</li>
+  <li>注意如果要使用外设(via USB2转USB3接口(图中那个形态怪异的转接器,板卡本身附带)),需要将J7短接
+    <ul>
+      <li><img src="pics/J7.jpg" alt="" /> 图中那个蓝色的跳线</li>
+    </ul>
+  </li>
+  <li>因为内核配置问题,当不能使用键盘输入的时候,可以通过串口输入
+    <ul>
+      <li>利用micro usb线连接靠近网口的那一个micro usb与电脑</li>
+      <li>安装驱动后PC会识别出Silicon Bridge (4个串口)
+        <ul>
+          <li>第0,1个是PS的串口: 我们需要观察的是<strong>串口0</strong>
+            <ul>
+              <li>会打印一些调试信息(当系统起不起来的时候就靠它Debug…)</li>
+              <li>当键盘外设没有配置成功的时候可以用来往里面输入(记住输指令的时候要把换行也输入进去…<strong>MobaXTerm牛逼!流畅的调试！</strong>)</li>
+            </ul>
+          </li>
+          <li>第2个是PL侧的串口</li>
+          <li>第三个是板载的MSP430的串口</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="xilinx-example">Xilinx Example</h2>
+
+<ul>
+  <li>按照Xilinx的最新版本的<a href="https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/18841937/Zynq+UltraScale+MPSoC+Ubuntu+part+2+-+Building+and+Running+the+Ubuntu+Desktop+From+Sources">教程</a>，采用2018.3的Vivado和Petalinux，按照这个教程，是可以正确运行的</li>
+  <li>唯一和教程中不大一样的几个点
+    <ul>
+      <li>在内核编译的时候，有一项是选择usb driver下的proper part,除了”disbale hub”之外我全部选择了</li>
+      <li>给的tcl文件并不会像它所说的能够直接生成hdf，而是要自己手动generate output products-&gt;create hdl wrapper之后export hardware
+        <ul>
+          <li>这里不需要综合生成bit，输出的hdf file中描述了硬件资源和arm cpu的连接即可</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><strong>最后的img会报很多错误…但是其实能起来，不用去管</strong>
+    <ul>
+      <li><code class="highlighter-rouge">Unable to Load Kernel Module这种错误也属于正常...</code></li>
+    </ul>
+  </li>
+  <li><strong>我在显示这里卡了好几天，尝试去解决很多boot时候的报错信息，但是他们其实都正常！！！实际出错的是hdmi-&gt;DP的线有问题！我用的是无源的转接器，那样不行！</strong></li>
+  <li>官方最后一次给的文件，能起
+    <ul>
+      <li><img src="pics/xilinx_example.jpg" alt="" /></li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="self-build-rootfs-start-desktop">Self-Build Rootfs Start Desktop</h2>
+<ul>
+  <li>到这一步你需要有的：
+    <ul>
+      <li>Ubuntu Rootfs:能联网apt-get</li>
+    </ul>
+  </li>
+  <li>三种登录方式
+    <ul>
+      <li>直接通过板子USB的键盘鼠标，和显示器登录</li>
+      <li>从microusb登录</li>
+      <li>通过ssh登录</li>
+    </ul>
+  </li>
+  <li>有一些包是需要安装的　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　
+    <ul>
+      <li>lsmod -&gt; apt-get install kmod</li>
+      <li>Network-Manager　（检查网络）</li>
+      <li>xinit　-&gt; 包含了startx命令 (安装的时候会让你config一下键盘)</li>
+      <li>psmisc　-&gt;　包含了pstree(查看systemd的服务)</li>
+    </ul>
+  </li>
+  <li>有一些config的相关文件需要复制过去
+    <ul>
+      <li>/etc/X11/xorg.conf.d/zynqmp.conf</li>
+      <li>driver文件
+        <ul>
+          <li>malixx.so    /usr/lib/x11/libmalixxx　（这个后来经过测试没有也可以）</li>
+          <li>armsoc_drv.so /usr/lib/xorg/modules/drivers/armsoc</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><strong>开机手动Load　Arm Mali GPU驱动</strong>
+    <ul>
+      <li>复制mali.ko文件到本机
+        <ul>
+          <li>并且在/etc/rc.local文件中添加一行　<code class="highlighter-rouge">insmod mali.ko</code>
+            <h4 id="做到这一步是rootfs-9-1-base的状态">做到这一步是rootfs-9-1-base的状态</h4>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>安装桌面环境
+    <ul>
+      <li>xfce4 <code class="highlighter-rouge">sudo apt-get install xfce4</code>
+        <ul>
+          <li>然后命令行登录的时候 <code class="highlighter-rouge">startxfce4</code>
+            <ul>
+              <li>BUG1: 只能在root或是sudo的情况下进行登录</li>
+              <li>BUG2: 只能使用显示器默认分辨率，如果修改分辨率仅仅通过xrandr或者是图形界面里面的好像不行，可能需要修改zynqmp.conf文件并添加模式(仅测试过一次)
+                <ul>
+                  <li>参考rootfs-9-1-xfce4的zynqmp.conf文件，自己加了一个Monitor，并且设置了分辨率,这种方式设置应该开机默认就是1920x1080</li>
+                </ul>
+              </li>
+              <li>BUG3: 该方式和xdm不兼容，若安装xdm(窗口管理器)并且开机自启动，登录之后会登录不上</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li><img src="pics/xfce.jpg" alt="" /></li>
+      <li>在Xorg(图形界面的启动中，这样的一行错误属于正常现象)
+        <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  [   139.191] (EE) AIGLX error: dlopen of /usr/lib/aarch64-linux-gnu/dri/armsoc_d
+  ri.so failed (/usr/lib/aarch64-linux-gnu/dri/armsoc_dri.so: cannot open shared oo
+  bject file: No such file or directory)
+  [   139.191] (EE) AIGLX: reverting to software rendering
+</code></pre></div>        </div>
+      </li>
+      <li>最后应当出现的现象：
+        <ul>
+          <li>开发板启动从命令行登录，输入用户名和密码</li>
+          <li>输入<code class="highlighter-rouge">sudo startx</code>或者<code class="highlighter-rouge">sudo startxfce4</code>
+            <h4 id="这里备份为了rootfs-9-2">这里备份为了rootfs-9-2</h4>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="install-ros">Install ROS</h2>
+<ul>
+  <li>本部分基本完全参考<a href="https://github.com/xxzzll11111/SDcard_ROS_SPSLAM/blob/master/README.md">该教程</a>,以及<a href="https://sychaichangkun.gitbooks.io/ros-tutorial-icourse163/content/chapter1/1.4.html">该教程</a>
+    <ul>
+      <li>该教程的系统环境是Debian9，我们的环境是Ubuntu16.04,需要做一定改变　melodic -&gt; kinetic</li>
+    </ul>
+  </li>
+  <li>注意一下要安装自己系统所对应版本的Ubnutu：
+    <ul>
+      <li>Ubuntu16.04 -&gt; Kinetic　[*]</li>
+      <li>Ubnutu14.04 -&gt; Indigo</li>
+      <li>Debian9 -&gt; Melodic
+        <ol>
+          <li>重装Opencv</li>
+        </ol>
+      </li>
+      <li>移除本身的OpenCV  <code class="highlighter-rouge">sudo rm -r /usr/local/include/opencv2 /usr/local/include/opencv /usr/include/opencv /usr/include/opencv2 /usr/local/share/opencv /usr/local/share/OpenCV /usr/share/opencv /usr/share/OpenCV /usr/local/bin/opencv* /usr/local/lib/libopencv*</code></li>
+      <li>安装各种依赖　(经过自己测试都能过所以写成脚本一次性了)
+        <ul>
+          <li>　./ros_install_dep.sh</li>
+        </ul>
+      </li>
+      <li>下载并解压OpenCV　from <a href="https://github.com/opencv/opencv/releases/tag/3.３.0">这个链接</a>
+        <blockquote>
+          <p>如果只是要安装ROS的话其实什么版本的Opencv都可以，但是如果使用DNNDK的话<strong>一定</strong>要安装其对应版本的Opencv　（DNNDK V2.08 - Opencv V3.1.0；　DNNDK V3.0 - Opencv V3.3.0（3.3.1都不行））</p>
+        </blockquote>
+      </li>
+      <li>为了正常的运行DPU提供的例子，还需要OpencvContrib的依赖，同样从github上<a href="https://github.com/opencv/opencv_contrib/releases/tag/3.3.0">下载</a>(注意版本对应)，将其解压到一个位置</li>
+      <li>Build! （小破CPU需要跑个快15min）</li>
+      <li>
+        <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  cd opencv-3.1.0
+  mkdir build
+  cd build
+  cmake -D CMAKE_BUILD_TYPE=Release -D CMAKE_INSTALL_PREFIX=/usr/local -D ENABLE_PRECOMPILED_HEADERS=OFF -DOPENCV_EXTRA_MODULES_PATH=&lt;opencv_contrib&gt;modules　..
+  make
+  sudo make install
+  sudo sh -c 'echo "/usr/local/lib" &gt;&gt; /etc/ld.so.conf.d/opencv.conf'
+  sudo ldconfig
+</code></pre></div>        </div>
+        <blockquote>
+          <p>注意contrib_path的modules后面不要加 ‘/’</p>
+        </blockquote>
+      </li>
+      <li>bash相关的配置</li>
+      <li>
+        <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  sudo vim /etc/bash.bashrc
+  # 在最末尾添加
+  PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/usr/local/lib/pkgconfig 
+  export PKG_CONFIG_PATH
+
+  # 保存，执行如下命令使得配置生效
+  source /etc/bash.bashrc
+
+  # 更新
+  sudo updatedb
+
+</code></pre></div>        </div>
+        <ol>
+          <li>安装ROS</li>
+        </ol>
+      </li>
+      <li>添加sources.list; ppa-key并安装,最后的桌面环境有2G左右，需要安装好久
+        <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  sudo sh -c '. /etc/lsb-release &amp;&amp; echo "deb http://mirrors.ustc.edu.cn/ros/ubuntu/ stretch main" &gt; /etc/apt/sources.list.d/ros-latest.list'
+  sudo apt-key adv --keyserver hkp://ha.pool.sks-keyservers.net:80 --recv-key C1CF6E31E6BADE8868B172B4F42ED6FBAB17C654
+  sudo apt-get update &amp;&amp; sudo apt-get upgrade
+  sudo apt-get install ros-kinetic-desktop-full # Ubuntu 16.04
+</code></pre></div>        </div>
+      </li>
+      <li>初始化 rosdep
+        <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  sudo rosdep init
+  rosdep update
+</code></pre></div>        </div>
+      </li>
+      <li>ROS环境配置
+        <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  echo "source /opt/ros/kinetic/setup.bash" &gt;&gt; ~/.bashrc
+  source ~/.bashrc
+</code></pre></div>        </div>
+      </li>
+      <li>ROS环境配置
+        <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  sudo apt-get install python-rosinstall python-rosinstall-generator python-wstool buid-essential
+</code></pre></div>        </div>
+        <ol>
+          <li>测试环境(参考了<a href="https://blog.csdn.net/WY_star1/article/details/81564319">这个链接</a>)</li>
+        </ol>
+      </li>
+      <li>Turtle demo
+        <ul>
+          <li>
+            <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>roscore &amp;
+rosrun turtlesim turtlesim_node &amp;
+rosrun turtlesim turtle_teleop_key &amp; 
+</code></pre></div>            </div>
+          </li>
+          <li>用键盘移动乌龟吧!
+            <h4 id="这里备份为了rootfs-9-３-withros">这里备份为了rootfs-9-３-withros</h4>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="install-dnndk-on-evaluation-board">Install DNNDK On Evaluation Board</h2>
+<ul>
+  <li>参考<a href="">ug1327</a>  P20
+    <ol>
+      <li>在官网下载DPU所对应版本的DNNDK，解压之后将ZCU102/文件通过scp复制到板子上</li>
+      <li>修改install.sh(删除安装dpu驱动以及覆盖BOOT.BIN以及设备树的部分)(参考../bak/install.sh)</li>
+    </ol>
+    <ul>
+      <li>既然这里取消了，系统应该默认完成了insmod我们自己的dpu驱动
+        <ol>
+          <li>运行install.sh应该能显示success</li>
+        </ol>
+      </li>
+    </ul>
+  </li>
+  <li>利用<code class="highlighter-rouge">dexplorer -v/w</code>来检测安装是否成功
+    <ul>
+      <li>这里由于安装脚本时候用了sudo导致一些运行权限的问题 去/usr/locall/bin　把Permission Denied的对应命令给chmod了就好了</li>
+      <li>-v OUTPUT Is Like
+  ```
+  DNNDK version  3.0
+  Copyright @ 2018-2019 Xilinx Inc. All Rights Reserved.</li>
+    </ul>
+
+    <p>DExplorer version 1.5
+  Build Label: Apr 25 2019 09:50:06</p>
+
+    <p>DSight version 1.4
+  Build Label: Apr 25 2019 09:50:06</p>
+
+    <p>N2Cube Core library version 2.3
+  Build Label: Apr 25 2019 09:50:20</p>
+
+    <p>DPU Driver version 2.2.0
+  Build Label: Sep  3 2019 13:16:19</p>
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  * -w OUTPUT is like 
+</code></pre></div>    </div>
+    <p>[DPU IP Spec]
+  IP  Timestamp   : 2019-09-03 10:45:00
+  DPU Core Count  : 2</p>
+
+    <p>[DPU Core List]
+  DPU Core        : #0
+  DPU Enabled     : Yes
+  DPU Arch        : B4096F
+  DPU Target      : v1.4.0
+  DPU Freqency    : 325 MHz
+  DPU Features    : Avg-Pooling, LeakyReLU/ReLU6, Depthwise Conv
+  DPU Core        : #1
+  DPU Enabled     : Yes
+  DPU Arch        : B4096F
+  DPU Target      : v1.4.0
+  DPU Freqency    : 325 MHz
+  DPU Features    : Avg-Pooling, LeakyReLU/ReLU6, Depthwise Conv</p>
+
+    <p>[DPU Extension List]
+  Extension Softmax
+  Enabled         : Yes
+  ``` 
+      4. 使用TRD中所包含的Demo Resnet50</p>
+  </li>
+  <li>从trd当中复制resnet文件夹(包括了可执行文件与pics)</li>
+  <li>执行可执行文件　resnet50
+    <ul>
+      <li>可执行文件可能没有运行权限,chmod一下
+        <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cd $DIRECTORY_TO_EXEUCATBLE
+./resnet50
+</code></pre></div>        </div>
+      </li>
+    </ul>
+  </li>
+  <li>到这一步骤理论上会报一个　<code class="highlighter-rouge">Error Loading Shared Lib: libopencv_core.so.3.1</code>
+    <blockquote>
+      <p>这并不是意思是需要Opencv.so.3.1,可能是一个奇妙错误，只要把它指向我们的libopencv_core.so.3.3.0就可以</p>
+      <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cd /usr/local/lib
+sudo ln -s libopencv_core.so.3.3.0 libopencv_core.so.3.1 // 创建一个libopencv_core.so.3.1指向libopencv_core.so.3.3.0
+</code></pre></div>      </div>
+    </blockquote>
+  </li>
+  <li>然后应该就能得到正确的结果了</li>
+</ul>
+
+<h1 id="trouble-shooting">Trouble Shooting</h1>
+<ul>
+  <li>系统起不起来，只显示到了Bootloader
+    <ul>
+      <li>大概率是hdf文件的版本错了</li>
+    </ul>
+  </li>
+  <li>DP 出画面之后
+    <ul>
+      <li>Kernel Panic: 相当常见的错误,可能原因有很多
+        <ul>
+          <li>检查Rootfs烧写进的文件夹位置是否正确</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>能够正常启动系统,但是串口中出来的log卡主
+    <ul>
+      <li>并不是代表系统没起来，其实链接显示器并且使用键盘的话是可以正常登录的</li>
+      <li>核心原因是挂载点没有包含正确的串口设备导致文件系统不能从串口登录</li>
+      <li>参考了<a href="https://forums.xilinx.com/t5/Embedded-Linux/Petalinux-2017-2-Ubuntu-RFS-on-Zynq-timed-out-waiting-for-device/td-p/800863">这个帖子</a></li>
+      <li>需要重新定向一下 <code class="highlighter-rouge">ln -s /lib/systemd/system/getty@.service /etc/systemd/system/getty.target.wants/getty@ttyPS0.service</code></li>
+    </ul>
+  </li>
+  <li>系统也能够正常启动了但是不能正常的链接网络
+    <ul>
+      <li>ifconfig出IP地址，eth0只有IPV6没有IPV4</li>
+      <li>初步判断是DHCP没有work，可以改为手动配置静态IP，这个因人而异了
+        <ul>
+          <li>可能是rootfs没有dncp module,首先配置静态IP让他能够连网
+            <ul>
+              <li><code class="highlighter-rouge">sudo apt-get install dhcpcd5</code></li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li>(其实讲道理DHCP应该起身是能正常work的，我配置静态IP也没有其效果，最后换了一个网口就好了,原因未知)</li>
+    </ul>
+  </li>
+  <li>系统启动之后登录的时候就报一个与权限有关的错误，然后发现自动补全的时候会报错 Couldn’t create xxx <strong>Read Only File System</strong>
+    <ul>
+      <li>我是更换了boot.bin但是没有更换rootfs，不知道对文件系统的权限做了啥导致它坏了</li>
+      <li>在宿主机上首先将rootfs的区块umount（我的是/dev/sdd2）然后采用<code class="highlighter-rouge">fsck　/dev/sdd2</code>的方式修复(个人按了一万下y，本来以为铁定没用了，最后居然好像也许成功了？？　&lt;-我是弱智，指令后面加-y)
+        <ul>
+          <li>第二次操作发现没用…(靠难道是我build出来的东西不对？ - 好像我自己build出来的都会一开始有readonly file system)</li>
+          <li>然后用了 <code class="highlighter-rouge">mount -o remount rw</code>正常了,加入文件系统的/etc/profile中，每次登录直接运行</li>
+        </ul>
+      </li>
+      <li>如果以上操作都没有用，检查SD卡的只读开关是否被移动了</li>
+    </ul>
+  </li>
+  <li>在配置Xorg(图形界面)的过程中,ssh登录时间长,一段时间之后出现　　<code class="highlighter-rouge">xauth: “timeout in locking authority file /home//.Xauthority”</code>
+    <ul>
+      <li>参考了<a href="https://blog.csdn.net/qq_39101111/article/details/78727843">这个链接</a>的解决办法,别人说删除~/目录下与.Xauthority相关的文件</li>
+      <li>这个好像就是Xorg没有配置正确的正常现象…稍等一会</li>
+    </ul>
+  </li>
+</ul>
+:ET

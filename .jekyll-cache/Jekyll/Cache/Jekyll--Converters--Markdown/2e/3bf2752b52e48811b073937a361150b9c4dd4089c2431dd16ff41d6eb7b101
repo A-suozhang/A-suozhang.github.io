@@ -1,0 +1,165 @@
+I"�<h1 id="vscode">VSCODE</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th> </th>
+      <th> </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>CRTL+SHIFT+K</td>
+      <td>删除一行</td>
+    </tr>
+    <tr>
+      <td>CRTL+ENTER</td>
+      <td>从行中间跳到下一行</td>
+    </tr>
+    <tr>
+      <td>CRTL+SHIFT+ENTER</td>
+      <td>在之前插入一行</td>
+    </tr>
+    <tr>
+      <td>SHIFT+ALT+下</td>
+      <td>复制这一行到下一行（上一行同理）</td>
+    </tr>
+    <tr>
+      <td>CRTL+L</td>
+      <td>选中当前行</td>
+    </tr>
+    <tr>
+      <td>Alt+Click</td>
+      <td>多光标</td>
+    </tr>
+    <tr>
+      <td>CTRL+SHIFT+S</td>
+      <td>另存为</td>
+    </tr>
+  </tbody>
+</table>
+
+<ul>
+  <li>CTRL+K (起手)
+    <ul>
+      <li>P 复制文件路径（绝对）</li>
+      <li>R 在文件资源管理器中打开文件 (等价于在Explorer中shift+alt+r)</li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="bash">Bash</h1>
+<ul>
+  <li>命令行移动
+    <ul>
+      <li>CRTL+A  移动到命令行首</li>
+      <li>CRTL+E  移动到命令行末尾</li>
+      <li>ALT+F/B 按照单词前后移动</li>
+      <li>CRTL+D/H 往后/前删除</li>
+    </ul>
+  </li>
+  <li>CRTL+l 清除屏幕</li>
+  <li>CRTL+Z 挂起屏幕</li>
+</ul>
+
+<h2 id="tmux">Tmux</h2>
+<ul>
+  <li>输入Tmux启动</li>
+  <li>所有的按键都在　　CTRL+B的基础上</li>
+  <li>
+    <table>
+      <thead>
+        <tr>
+          <th>CRTL+B+</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>?</td>
+          <td>帮助，列举快捷键</td>
+        </tr>
+        <tr>
+          <td>space</td>
+          <td>改变布局</td>
+        </tr>
+        <tr>
+          <td>”</td>
+          <td>横向增加</td>
+        </tr>
+        <tr>
+          <td>%</td>
+          <td>纵向增加一个</td>
+        </tr>
+        <tr>
+          <td>上下左右方向</td>
+          <td>切换Term</td>
+        </tr>
+        <tr>
+          <td>s</td>
+          <td>选择Term</td>
+        </tr>
+        <tr>
+          <td>d</td>
+          <td>退出</td>
+        </tr>
+      </tbody>
+    </table>
+  </li>
+</ul>
+
+<h2 id="vim">VIM</h2>
+<ul>
+  <li>移动光标指令
+    <ul>
+      <li>0(^) / $ 跳到行首/末</li>
+      <li>dd 删除行</li>
+      <li>dw 删除word</li>
+      <li>下一个词　w 上一个词b</li>
+      <li>/word_to_search： search ffoward
+        <ul>
+          <li>然后再按n 表示下一个
+            <ul>
+              <li>?word_to_search:   search_backward</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li>L(大写)屏幕的底行　Ｍ中间　H顶端
+        <ul>
+          <li>G 文尾　gg 文章开始</li>
+        </ul>
+      </li>
+      <li>向下翻页　ctrl+f  半页crtl+d
+        <ul>
+          <li>向上 ctrl+b     crtl+u</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li></li>
+</ul>
+
+<h1 id="chrome">Chrome</h1>
+<ul>
+  <li>CRTL+T 新标签页面</li>
+  <li>CTRL+N 新窗口</li>
+  <li>CTRL+SHIFT+N 新隐身窗口</li>
+  <li>CTRL+H 历史记录</li>
+  <li>CTRL+J 下载</li>
+  <li>CTRL+D 加入标签</li>
+</ul>
+
+<h1 id="ps">PS</h1>
+<ul>
+  <li>ALT+左键： 取消选择（在快速选择的时候）</li>
+  <li>ALT+右键+鼠标移动   <strong>改变画笔大小</strong></li>
+</ul>
+
+<h1 id="pr">PR</h1>
+<ul>
+  <li>按住CRTL拖动素材，素材重叠之后是替换（否则会覆盖）</li>
+  <li>在Timeline中 CTRL+M 输出面板</li>
+</ul>
+
+:ET

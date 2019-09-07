@@ -1,0 +1,123 @@
+I"<h1 id="dpu配置">DPU配置</h1>
+<ul>
+  <li>本文章内容是用于讲解与整理<a href="https://a-suozhang.github.io/2019/09/06/ZCU102-Set-Up/">在ZCU102上配置DPU</a>的一部分内容的原理</li>
+  <li>背景知识:
+    <ul>
+      <li>熟悉利用Petalinux编译生成ZCU102的BOOT流程</li>
+      <li>熟悉Xilinx Vivado SDK PS的使用</li>
+      <li>熟悉一些基本的嵌入式机理</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="dpu设备树配置">DPU设备树配置</h2>
+<ol>
+  <li>在完成petalinux的–get-hw=description的conig之后
+    <ul>
+      <li>在petalinux项目目录下的 ./metauser/recipes-bsp/device-tree目录下有 device-tree.bbapend文件(描述了编译设备树所有索引),将其内容改为</li>
+    </ul>
+  </li>
+</ol>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>FILESEXTRAPATHS_prepend := "${THISDIR}/files:"
+
+SRC_URI += "file://system-user.dtsi \
+	    file://dpu.dtsi"                        // 这一行是后来加入的,表示要索引当前目录下./files中的dpu.dtsi
+
+</code></pre></div></div>
+
+<blockquote>
+  <p>这样的方式本质上是在system-user.dtsi的对应节点下加上了dpu的内容,这样更加清晰</p>
+</blockquote>
+
+<ol>
+  <li>dpu.dtsi的位置在刚才目录下的./files/dpu.dtsi中,内容为</li>
+</ol>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/ {
+        amba{
+		dpu{
+		    #address-cells = &lt;1&gt;;
+    		    #size-cells = &lt;1&gt;;
+    		    compatible = "xilinx,dpu";
+    		    base-addr = &lt;0x8F000000&gt;;     //CHANGE THIS ACCORDING TO YOUR DESIGN
+
+		    dpucore {
+		        compatible = "xilinx,dpucore";
+		        interrupt-parent = &lt;&amp;gic&gt;;
+		        interrupts = &lt;0x0 106 0x1 0x0 107 0x1&gt;;
+		        core-num = &lt;0x2&gt;;
+		    };
+
+		    softmax {
+		        compatible = "xilinx,smfc";
+		        interrupt-parent = &lt;&amp;gic&gt;;
+		        interrupts = &lt;0x0 110 0x1&gt;;
+		        core-num = &lt;0x1&gt;;
+		    };
+		};
+	};
+};
+</code></pre></div></div>
+
+<ul>
+  <li>设备树的内容与我们的Vivado Design有着直接关系(本质上就是那个中断号)</li>
+  <li>查询<a href="">dpu数据手册</a>可知,主要需要修改的是地址和设备号码
+    <ul>
+      <li>
+        <p>其中 base-addr需要与Vivado Design中的Address对应,也就是这里</p>
+      </li>
+      <li>
+        <p><img src="https://github.com/A-suozhang/MyPicBed/raw/master/img/20190907113921.png" alt="" /></p>
+      </li>
+      <li>dpucore的数目与平台有关 (ZCU102是两个)</li>
+      <li>interrupts中的6个数,每3个为一组,两边的0x0和0x1是固定值,内部的106与107则是dpu所对应的中断号
+        <ul>
+          <li><img src="https://github.com/A-suozhang/MyPicBed/raw/master//img/20190907114224.png" alt="" /></li>
+          <li>如图可见,dpu以及其附属模块给出了一个位宽为7的中断信号接到了PS上</li>
+          <li><img src="https://github.com/A-suozhang/MyPicBed/raw/master/img/20190907114517.png" alt="" /></li>
+          <li>这里是那个7位中断信号的内部结构,可以看到,两个dpu核的中断接到了7位信号的[3:2]位,而softmax的中断被接到了最高位</li>
+          <li><img src="https://github.com/A-suozhang/MyPicBed/raw/master/img/20190907115019.png" alt="" /></li>
+          <li>在这里配置ZynqPS的两个7位中断,参考<a href="https://www.xilinx.com/support/documentation/user_guides/ug1085-zynq-ultrascale-trm.pdf">ZU9-PS-INTR数据手册</a>查询
+            <ul>
+              <li><img src="https://github.com/A-suozhang/MyPicBed/raw/master/img/20190907120833.png" alt="" />
+                <ul>
+                  <li>感觉和我们实际操作的结果矛盾了…待解决…</li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+          <li><img src="https://github.com/A-suozhang/MyPicBed/raw/master/img/20190907121356.png" alt="" />
+            <ul>
+              <li>好像说如果要正常用DNNDK的话只能这么配置
+                <blockquote>
+                  <p>曾经尝试过直接改动system-user.dtsi，但是貌似不起作用
+　设备树的改变其实在petalinux-build的一步，如果没有的话改动它没有意义</p>
+                </blockquote>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="dpu驱动">DPU驱动</h2>
+<ul>
+  <li>参考Petalinux文档<a href="https://www.xilinx.com/support/documentation/sw_manuals/xilinx2018_3/ug1144-petalinux-tools-reference-guide.pdf">UG1144</a>中的Building UserModule一章节
+    <ul>
+      <li><img src="https://github.com/A-suozhang/MyPicBed/raw/master/img/20190907125426.png" alt="" /></li>
+      <li>按照这里的步骤走完就可以了</li>
+    </ul>
+  </li>
+  <li>之后把生成的dpu.ko拷贝到我们自己的rootfs中,并且需要设置开机自启动
+    <ul>
+      <li>在/etc/rc.local中加入
+        <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>insmod dpu.ko
+</code></pre></div>        </div>
+      </li>
+    </ul>
+  </li>
+</ul>
+:ET

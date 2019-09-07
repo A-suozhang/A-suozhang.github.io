@@ -1,0 +1,1062 @@
+I"��<h1 id="overview-of-embedded-system">Overview Of Embedded System</h1>
+
+<ul>
+  <li>Def:
+    <ul>
+      <li>以应用为中心</li>
+      <li>以计算机技术为基础</li>
+      <li>软硬件可裁剪</li>
+      <li>适应对应系统对功能，可靠性、成本、体积，功耗严格要求的</li>
+      <li>专用计算机系统</li>
+    </ul>
+  </li>
+  <li>Feature： 内核小，系统精简，专用性强，资源有限，实时性要求高</li>
+  <li>Components:
+    <ul>
+      <li>Hardware： 嵌入式处理器，存储器，模拟电路与电路，接口控制</li>
+      <li>Software：
+        <ul>
+          <li>板级支持包（BSP）</li>
+          <li>设备驱动</li>
+          <li>OS</li>
+          <li>协议栈（Protocal Stack）</li>
+          <li>应用程序</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>嵌入式处理器
+    <ul>
+      <li>MPU(微处理器)
+        <ul>
+          <li>由CPU发展来： 最低功耗和资源</li>
+          <li>MIPS;X86;ARM;PowerPC;SC-400;SPARC</li>
+        </ul>
+      </li>
+      <li>MCU(微控制器)： STM32</li>
+      <li>嵌入式DSP：</li>
+      <li>嵌入式SoC</li>
+    </ul>
+  </li>
+  <li>开发流程： 先PC软件开发，再移植
+    <ul>
+      <li>任务分析 - 处理器/OS选型 - 硬件设计 - 驱动与BSP设计 - 操作系统移植 - 应用程序设计 - 代码固化</li>
+    </ul>
+  </li>
+  <li>调试： —— 交叉编译： 在宿主机上编译生成可以在目标机上运行的程序，原因在于嵌入式可用资源有限。
+    <ul>
+      <li>:star: 调试方法
+        <ul>
+          <li>模拟调试
+            <ul>
+              <li>ARMSimulator ： 不能在线调试，实时仿真</li>
+            </ul>
+          </li>
+          <li>ROM Monitor （Angel）
+            <ul>
+              <li>Code Warrior是运行在目标机ROM的一段程序，监控目标机的情况</li>
+            </ul>
+          </li>
+          <li>在线仿真（ICE）
+            <ul>
+              <li>在线仿真器，支持单步等 比较昂贵</li>
+            </ul>
+          </li>
+          <li>内嵌JTAG仿真 （Joint Test Action Group）
+            <ul>
+              <li>无需目标存储器，不占用目标系统端口 支持在线仿真 (主流方法)</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="arms-structure">ARM’s Structure</h1>
+<ul>
+  <li>几种架构：
+    <ul>
+      <li>Princeton：数据和指令公用存储空间，统一编址 （ARM7 &amp; 8086）
+        <ul>
+          <li>冯诺依曼架构 ARM7</li>
+        </ul>
+      </li>
+      <li>Harvard： 程序指令存储以及数据存储分开，独立编址； 可同时读和写指令和数据，且两者可以用不同位宽  ARM A9</li>
+      <li>典型结构：
+        <ul>
+          <li>ARM7
+            <ul>
+              <li>支持16位压缩指令集 Thumbs</li>
+              <li>支持片上Debug</li>
+              <li>嵌入式ICE，支持片上断点</li>
+            </ul>
+          </li>
+          <li>ARM9
+            <ul>
+              <li>5级Pipeline，指令效率高</li>
+              <li>1.1MIPS 哈佛架构</li>
+              <li>ARM/Thumbs指令集</li>
+              <li>Cache</li>
+              <li>Windows CE/Linux/Palm OS</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>CISC（复杂指令集） 2:8
+    <ul>
+      <li>为了支持新的指令，计算机架构会越发复杂</li>
+    </ul>
+  </li>
+  <li>RISC (Reduced Instrution Set Computer)
+    <ul>
+      <li>采用固定长度的指令格式</li>
+      <li>指令格式与寻址方式尽量少</li>
+      <li>以控制逻辑为主</li>
+      <li>大量用寄存器</li>
+      <li>使用单周期指令</li>
+      <li>只有载入和存储指令可以访问存储</li>
+    </ul>
+  </li>
+  <li>ARM (Advanced RISC Machine)
+    <ul>
+      <li>流水线结构： 把一个重复的过程分解为若干个子过程，子过程可并行
+        <ul>
+          <li>基本Flow： fetc取指令h-dec译码-reg取操作数-exe执行操作-mem存数据-res存数据</li>
+          <li>ARM7 三级流水线： 取指令 - 译码(Thumbs解压缩-ARM译码) - 执行
+            <ul>
+              <li>一条指令用三个周期，但是吞吐量每个周期一条指令</li>
+            </ul>
+          </li>
+          <li>ARM9五级</li>
+          <li>More流水线级数，每一级边简单，提升主频；</li>
+          <li>但是会增加系统延时，也会使段间数据相关</li>
+        </ul>
+      </li>
+      <li>处理器模式：
+        <ul>
+          <li>工作模式由当前程序 状态寄存器 CPSR的低5位[4:0]所决定
+            <ul>
+              <li>HOW 2：
+                <ol>
+                  <li>发生异常，处理器自动改CPSR进对应模式</li>
+                  <li>处于特权模式时，用指令相CPSR写</li>
+                  <li>（用户模式不是发生异常不能改变）</li>
+                </ol>
+              </li>
+            </ul>
+          </li>
+          <li>7种
+            <ul>
+              <li>用户模式：
+                <ul>
+                  <li>除此之外都是非用户（特权模式，其中除了系统之外的5叫做异常模式）</li>
+                </ul>
+              </li>
+              <li>系统模式(sys) 11111 类似用户，只是可以切换
+                <ul>
+                  <li>与用户模式都不能通过中断进入</li>
+                  <li>与用户模式公用寄存器</li>
+                </ul>
+              </li>
+              <li>快速中断(FIQ) 异常响应时进入此模式，支持高速数据传输</li>
+              <li>外部中断(IRQ)</li>
+              <li>管理(SVC)     OS保护，系统复位和软件中断进入</li>
+              <li>中止(ABT)</li>
+              <li>未定义(UND)</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li>异常中断：（总在ARM状态下）
+        <ul>
+          <li>工作流程
+            <ul>
+              <li>返回地址写入R14</li>
+              <li>将CPSR复制到SPSR</li>
+              <li>设定CPSR</li>
+            </ul>
+          </li>
+          <li>异常中断：(7种异常 5种异常模式)
+            <ul>
+              <li>复位；未定义指令；软件中断；指令预取中止；数据访问中止；外部中断请求； 快速中断请求</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li>状态：ARM7有ARM状态（32）与Thumb状态（16位），改变状态不影响寄存器内容或是处理器模式，用BX切换状态
+        <ul>
+          <li>Thumbs指令（ARM的子集）
+            <ul>
+              <li>提高性能，减少功耗；</li>
+              <li>可与ARM互相调用，互相转换用EX指令</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li>存储系统：
+        <ul>
+          <li>处理器核 与 外部存储器 之间有管理让总线信号是必须与外部总线时序对齐</li>
+          <li>存储空间：
+            <ul>
+              <li>2^32个8位， 单元地址用32位无符号数</li>
+              <li>2^30个字(32)</li>
+              <li>半字同理</li>
+              <li>（大小端）
+                <ul>
+                  <li>小端： 高字节高地址</li>
+                  <li>大端： 反之</li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li>指令：
+        <ul>
+          <li>支持单字节（Byte 8位）半字（16 2字节对齐） 字（32 需要4字节对齐）</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="arm-programming">ARM Programming</h1>
+<ul>
+  <li>ARM编程模型：
+    <ul>
+      <li>取指令: CPU从控制总线(CB)上发读指令，从地址总线(AB)上给地址，通过数据总线(DB)把地址送到CPU指令寄存器中</li>
+      <li>指令译码</li>
+      <li>执行</li>
+    </ul>
+  </li>
+  <li>37个寄存器 32 位
+    <ul>
+      <li>31个通用 6个状态(1个PC(Program Counter) 1个CPSR(当前程序状态寄存器 Current Program State Reg) 5个SPSR(Saved Program State Reg))</li>
+      <li>每种模式下有一组对应的寄存器组，最多18个活动的寄存器</li>
+      <li>SPSR （在普通和系统模式下看不到，只有进入异常时候用）</li>
+      <li>R0~R13 汇编语言中存数据的通用寄存器
+        <ul>
+          <li>R0-R7 为未分组，对于任何处理器模式，都对应着相同的物理寄存器</li>
+          <li>R8-R14 为分组，所对应的物理寄存器决定于工作模式
+            <ul>
+              <li>R8-R12 两个分组 FIQ</li>
+              <li>R13 R14 6个分组，一组用于系统/用户，另外5组给5个中断
+                <ul>
+                  <li>R13 （Stack Pointer - SP堆栈指针） Thumbs集中有使用R13的指令</li>
+                  <li>R14 （LR） 连接寄存器
+                    <ul>
+                      <li>每种模式下，模式自身的R14用于存储子程序返回地址
+                        <ul>
+                          <li>Usage： A程序使用中，采用“BL B”，跳转到B程序（BL的下一条指令地址放入LR），在B程序的最后写”MOV PC，LR”返回程序A</li>
+                        </ul>
+                      </li>
+                      <li>发生异常时，R14对应的异常模式设置为异常返回地址
+                        <ul>
+                          <li>类似上面，有一个小偏移</li>
+                        </ul>
+                      </li>
+                    </ul>
+                  </li>
+                </ul>
+              </li>
+              <li>R15 （程序计数器）
+                <ul>
+                  <li>指向程序正在取指的地点（当前正在执行的指令+8字节-2条ARM指令【一条执行，一条译码 0x4000-0x4008】），虽然是通用寄存器但是使用起来有很多限制（因为ARM指令是字，所以低两位总为0）</li>
+                </ul>
+              </li>
+              <li>CPSR (程序状态寄存器)
+                <ul>
+                  <li>与SPSR （保存程序状态寄存器对应）</li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>ARM指令格式：
+    <ul>
+      <li>{指令助记符 ADD} *{执行条件} *{是否影响CPSR值} {目标寄存器}，{第一个操作数} *{第二个操作数}</li>
+      <li>（带星号的可以省略）</li>
+      <li>第二个操作数
+        <ul>
+          <li>/# immed_8r 常数表达 （一个8位常数向右循环移动偶数位）</li>
+          <li>Rm 寄存器表达</li>
+          <li>Rm,Shift 寄存器移位表达
+            <ul>
+              <li>移位不消耗额外时间
+                <ul>
+                  <li>ASR算数右移 （符号位填充）</li>
+                  <li>LSR逻辑左移 （填充0）</li>
+                  <li>ROR循环右移 （纯循环）</li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li>指令会被编成32位指令</li>
+    </ul>
+  </li>
+  <li>ARM寻址
+    <ul>
+      <li>立即数
+        <ul>
+          <li>“#0x55”</li>
+          <li>? 最后8位移动偶数位得到立即数
+            <ul>
+              <li>合法立即数：（有效数据在8位里面，而且可以从最后移位偶数位得到）</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li>寄存器</li>
+      <li>寄存器移位
+        <ul>
+          <li>寄存器带一个移位 MOV R0,R1, LSL R3  (逻辑左移R3位)</li>
+        </ul>
+      </li>
+      <li>寄存器间接
+        <ul>
+          <li>LDR R0,[R1] 寄存器R1中的值才是操作数的物理地址</li>
+        </ul>
+      </li>
+      <li>基址变址
+        <ul>
+          <li>LDR R0, [R1, #5]</li>
+        </ul>
+      </li>
+      <li>相对
+        <ul>
+          <li>将程序计数器PC作为基址寄存器，指令中的标记记作地址偏移</li>
+          <li>:question: : 相对寻址以及基址变址的区别</li>
+        </ul>
+      </li>
+      <li>多寄存器
+        <ul>
+          <li>一组传送: LDMIA R0,{R1-R5} ;R1 = [R0],R2=[R0+4],R3=[R0+8] 地址自增</li>
+          <li>不连续的地址用 {R1,R3,R6}</li>
+        </ul>
+      </li>
+      <li>块拷贝
+        <ul>
+          <li>上面的连续形式</li>
+        </ul>
+      </li>
+      <li>堆栈
+        <ul>
+          <li>堆栈与寄存器组之间的批量传输</li>
+          <li>STMFD R13!,{R0,R1,R2,R3} ;R13为堆栈指针。R0-R3压入堆栈</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>ARM指令集
+    <ul>
+      <li>基本数据处理
+        <ul>
+          <li>MOV</li>
+          <li>ADD / SUB
+            <ul>
+              <li>ADC ; RSB 反向减法; SBC 带借位减法</li>
+              <li>SUBGT R3, R1, #2  // 如果上一步结果 &gt;0 那么R3=R2-R1</li>
+            </ul>
+          </li>
+          <li>MUL 乘法   MLA 乘加</li>
+          <li>AND/ORR/EOR</li>
+          <li>CMP （不存储结果，但是改变CPSR中的值）</li>
+          <li>TEQ 测试相等</li>
+        </ul>
+      </li>
+      <li>存储器访问 （ Load 内存 - 存储器 Store反之）
+        <ul>
+          <li>粗略分为三类： 单一数据传送(LDR/STR)  多数据传送指令(LDM/STM) 数据交换(SWP/SWPB)</li>
+          <li>LDR 字数据加载 LDR Rd, [Rn] （相对寻址的最后加！表示将新地址写入Rn） ;把内存中地址为Rn的数据装入Rd
+            <ul>
+              <li>Rm, LSL #5 -&gt; Rm*32</li>
+              <li>LDR还有一些变体：
+                <ul>
+                  <li>LDRB 加字节数据 LDRH</li>
+                  <li>LDRBT 用户模式加载数据</li>
+                  <li>LDRSB 有符号数字节读取</li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+          <li>STR 与LDR对偶
+            <ul>
+              <li>
+                <table>
+                  <tbody>
+                    <tr>
+                      <td>Save Reg</td>
+                      <td>STR R0，[R1]，＃8</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </li>
+            </ul>
+          </li>
+          <li>LDM 批量数据加载  LDM {Type} Rn{!}, Regs {^} （当regs不包含PC时，用于表示指示为用户模式下的寄存器，否则要将SPSR复制到CPSR）  ;
+            <ul>
+              <li>将一片连续的内存单元数据读取到各寄存器，内存单元起始地址为Rn</li>
+              <li>Type字段：
+                <ul>
+                  <li>IA/IB 传送后/前地址加1  increase before/after</li>
+                  <li>DA/DB 传送后/前地址减1</li>
+                  <li>FD/EA   满递减堆栈
+                    <ul>
+                      <li>Decreasing 降序-在内存中反向增长</li>
+                      <li>Ascending</li>
+                      <li>Full 指向上次写的最后一个单元</li>
+                      <li>Empty 指向第一个空的</li>
+                    </ul>
+                  </li>
+                  <li>ED/EA   空递减堆栈</li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+          <li>数据块操作    堆栈操作    （类似）
+            <ul>
+              <li>STMDA(存储)   STMED(压栈)  空递减</li>
+              <li>STMIA         STMEA       空递增</li>
+              <li>STMDB         STMFD       满递减</li>
+              <li>STMIB         STMFA       满递增</li>
+              <li>解题时； F-A  D-I</li>
+            </ul>
+          </li>
+          <li>SWP 字数据交换  SWP R0,R1,[R2]  R2中的数据存到R0，R1的数据存到R2</li>
+        </ul>
+      </li>
+      <li>跳转 ： 实现跳转可以通过跳转指令（空间受限），也可以直接向PC写入目标地址
+        <ul>
+          <li>B addr (等价于 PC + addr左移两位（由于ADDR的值是相对于当前PC的一个偏移量，是24位有符号，拓展为32位之后要左移两位）)</li>
+          <li>BL 带返回的跳转 （在B的基础上将PC(R15)中的值赋值给LR(R14)） 常用于实现子程序调用</li>
+        </ul>
+      </li>
+      <li>状态寄存器指令 （状态reg与通用reg之间传递数据）
+        <ul>
+          <li>MRS：  MRS R0, CPSR 将CPSR的值存储到R0（Move State Reg）</li>
+          <li>MSR：  MSR CPSR_f, R0</li>
+        </ul>
+      </li>
+      <li>异常中断指令
+        <ul>
+          <li>SWI 软件中断     SWI 0x05 （调用编号为5的）    指令后24位立即数用语产生中断，若无，默认R0</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>ARM伪指令：
+    <ul>
+      <li>小范围数据读取： ADR R0, Delay(Delay是一个汇编程序端)
+        <ul>
+          <li>用一条指令实现</li>
+        </ul>
+      </li>
+      <li>中范围地址读取： ADRL
+        <ul>
+          <li>用两条指令实现</li>
+        </ul>
+      </li>
+      <li>大范围地址读取： LDR</li>
+      <li>空操作 NOP</li>
+    </ul>
+  </li>
+  <li>ARM伪操作
+    <ul>
+      <li>DCD DCDU 分配一段字对其的内存单元</li>
+      <li>AREA 定义一个代码/数据段</li>
+      <li>CODE16/CODE32 告知指令序列位数</li>
+      <li>ENTRY 程序入口</li>
+      <li>ALIGN 对其</li>
+      <li>EXPORT/GLOBAL 声明符号可以被其他文件引用</li>
+      <li>IMPORT/EXTERN 表示符号是引用来的</li>
+      <li>EQU 对数字常量,基于寄存器的值和程序中的标号定义符号名称</li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="embedded-system-os">Embedded System OS</h1>
+<ul>
+  <li>操作系统：
+    <ul>
+      <li>控制和管理计算机系统的软硬件资源</li>
+      <li>组织多通道程序运行</li>
+      <li>用户与计算机之间接口</li>
+      <li>Exm： UNIX，DOS，Linux，Windows98，Windows NT</li>
+    </ul>
+  </li>
+  <li>多道程序技术，在内存中存放互相独立程序，在管理下互相穿插运行（微观上穿行，宏观上并行）
+    <ul>
+      <li>减少作业之间的交接</li>
+      <li>用户响应时间长</li>
+    </ul>
+  </li>
+  <li>分时OS： 一台计算机连接多个中断的计算机系统
+    <ul>
+      <li>把处理及的响应时间分为多个时间片，每个中断获得CPU相当于获得一个时间片</li>
+    </ul>
+  </li>
+  <li>内核：
+    <ul>
+      <li>职能
+        <ul>
+          <li>负责为每个任务 分配CPU时间</li>
+          <li>负责任务间的通信</li>
+          <li>负责任务切换工作</li>
+          <li>负责任务调度（基于优先级）</li>
+        </ul>
+      </li>
+      <li>非抢占式内核 Non-Preemptive
+        <ul>
+          <li>要求每个任务放弃CPU所有权</li>
+          <li>利用中断使高优先级任务从挂起变为就绪，但中断之后还会返回，直至任务主动放弃CPU使用权</li>
+          <li>更高优先级的任务不能打断正在执行的低优先级任务</li>
+        </ul>
+      </li>
+      <li>抢占式内核 Preemptive
+        <ul>
+          <li>最高优先级任务一旦就绪，就可以得到CPU控制权</li>
+          <li>高优先级任务可以打断下一级，被抢占的任务进入就绪任务队列，等待下一次调度</li>
+          <li>实时内核一般都是抢占式</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>单模块操作系统 - 单内核操作系统
+    <ul>
+      <li>进程，内存，设备，文件管理 - 内核与各服务器之间进行通信，效率低</li>
+      <li>复杂的程序调用使系统难以维护 - 各模块相对独立</li>
+    </ul>
+  </li>
+  <li>进程 （在内存中的几个相互独立的程序，它们在内存中需要中断交叉运行，且共享资源）
+    <ul>
+      <li>是程序在并发环境之中的执行过程</li>
+      <li>:question: : 进程和程序的区别？
+        <ul>
+          <li>进程动态，程序静态</li>
+          <li>并发性，程序的并发执行借助进程实现</li>
+          <li>独立性：进程是一个独立运行的单位，是运行调度的基本单位</li>
+          <li>进程与程序没有一一对应关系</li>
+          <li>进程异步潜行</li>
+          <li>进程实体有一定的结构</li>
+        </ul>
+      </li>
+      <li>描述：
+        <ul>
+          <li>进程控制块（PCB Process Control Block）
+            <ul>
+              <li>伴随进程的全过程，进程管理和控制的数据结构</li>
+            </ul>
+          </li>
+          <li>进程的执行程序</li>
+          <li>进程处于某个队列（就绪，等待时间队列）</li>
+          <li>处于某种状态
+            <ul>
+              <li>创建 fork()
+                <ul>
+                  <li>有两个返回： 子进程返回 0 （-1如果失败） 父进程返回子进程ID</li>
+                </ul>
+              </li>
+              <li>执行 execve()</li>
+              <li>消亡
+                <ul>
+                  <li>主动中止： 调用exit()，或是进程从某个程序的主函数返回</li>
+                  <li>被动： 接收到异常，接受到中止信号</li>
+                  <li>linux并不在进程中止时释放所有资源
+                    <ul>
+                      <li>首先，调用do_exit()释放与进程相关的大部分资源，让其进入ZOMBIE</li>
+                      <li>然后： 若子进程先于父进程中止，将一直ZOMBIE，直至父进程调用Wait()[能获取子进程的中止消息，消除子进程共享资源]，释放所有资源； 如果父进程已经中止，则新寻找一个 Init()</li>
+                    </ul>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+          <li>占用资源（内存，文件，外设）</li>
+        </ul>
+      </li>
+      <li>进程同步 （避免并发竞争）
+        <ul>
+          <li>进程间联系 相交/无关</li>
+          <li>进程间作用：直接（只在相关） 简介（均可能）</li>
+          <li>进程同步(Synchronism)
+            <ul>
+              <li>运行都某一处需要另一进程为其提供信息，没有获得消息之前，处于等待，之后处于就绪</li>
+            </ul>
+          </li>
+          <li>进程互斥
+            <ul>
+              <li>抢占资源： 临界资源和互斥</li>
+              <li>处于互斥区域的原则：
+                <ul>
+                  <li>空让进， 忙等待， 有限等待， 让权等待 
+  （硬件：屏蔽中断  软件：忙等待）</li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li>进程调度
+        <ul>
+          <li>Linux基于分时(Time-Sharing)
+            <ul>
+              <li>时间片轮转调度： 当多任务具有相同优先级</li>
+              <li>基于优先级调度</li>
+            </ul>
+          </li>
+          <li>:question: ： 实时内核存在 - 优先级反转： 高优先级任务在申请已经被低优先级内核抢占的资源时被迫进入等待，导致其不能执行。 solu:优先级继承</li>
+        </ul>
+      </li>
+      <li>信号量: 控制共享资源的使用权,通常是一个递减的技数(可为二进制也可以是多进制)</li>
+    </ul>
+  </li>
+  <li>任务
+    <ul>
+      <li>一个任务可以称为一个进程</li>
+      <li>任务有自己的一套CPU寄存器和栈空间，每个典型任务都是一个无限循环</li>
+      <li>每个任务都有确定状态
+        <ul>
+          <li>同一时刻只有一个任务占有CPU，其为就绪的任务中优先级最高的</li>
+          <li>休眠； 就绪； 运行； 挂起； 被中断</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>中断处理：是一种硬件机制
+    <ul>
+      <li>一旦被识别，CPU将保存Reg的值，调到中断服务子程序ISR进行处理，之后
+        <ul>
+          <li>非抢占： 回到原来的任务</li>
+          <li>抢占： 进入就绪态中优先度最高的任务</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="linux-commands">Linux Commands</h1>
+<ul>
+  <li>cat 显示文件内容 more/less分屏幕显示文件内 head/tail显示文件若干行</li>
+  <li>touch创建一个空文件</li>
+  <li>find {directory} (Name)</li>
+  <li>grep 给出模式匹配:
+    <ul>
+      <li>-v 列出不匹配串/正则表达式行</li>
+      <li>-c 对匹配计数</li>
+      <li>-l 只显示匹配的文件名</li>
+      <li>-i 不区分大小写的匹配</li>
+    </ul>
+  </li>
+  <li>sort 逐行对文件内容排序</li>
+  <li>comm比较文件内容: 产生两个文件中都存在的</li>
+  <li>diff 列出不一样的</li>
+  <li>cp/rm/mv
+    <ul>
+      <li>-f 覆盖存在的,无提示</li>
+      <li>-i 覆盖给提示</li>
+    </ul>
+  </li>
+  <li>wc 统计</li>
+  <li>目录
+    <ul>
+      <li>/bin 存放各种命令程序 比如ls cp sh等</li>
+      <li>/boot 存放系统核心文件和系统启动必须读取的文件</li>
+      <li>/dev  接口设备文件目录</li>
+      <li>/etc  存放系统管理和配置的文件 比如passwd</li>
+      <li>/home 主目录</li>
+      <li>/lib  用来存放系统动态链接共享库</li>
+      <li>/mnt 各项设备的文件挂载点</li>
+      <li>/Proc 目前系统内核与程序执行的信息 ps free</li>
+      <li>/root</li>
+      <li>/tmp</li>
+      <li>/usr  bin/ src/ include/</li>
+      <li>目录操作: cd mkdir pwd</li>
+    </ul>
+  </li>
+  <li>链接: 对于新的文件名,可以指定不同权限,保证安全;
+    <ul>
+      <li>Hard Link: 文件的节点将被多个目录文件使用 ln (Source) {Target}
+        <ul>
+          <li>会增加链接数</li>
+          <li>删除源文件,文件不会消失,知识链接数-1</li>
+        </ul>
+      </li>
+      <li>软链接,将路径名链接 ln -s</li>
+    </ul>
+  </li>
+  <li>改权限: chmod umask chrgp chown</li>
+  <li>联机指令:
+    <ul>
+      <li>ps 查看系统运行的进程信息
+        <ul>
+          <li>-a 当前终端的进程信息</li>
+          <li>-e 所有进程</li>
+          <li>-l 长格式显示</li>
+        </ul>
+      </li>
+      <li>top 监控系统资源</li>
+      <li>kill 中止进程</li>
+      <li>sleep 暂停</li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="bootloader">BootLoader</h1>
+<ul>
+  <li>嵌入式Linux层次结构:
+    <ul>
+      <li>引导加载程序(Boot,BootLoader)</li>
+      <li>Linux内核</li>
+      <li>文件系统</li>
+      <li>用户程序</li>
+    </ul>
+  </li>
+  <li>概念:
+    <ul>
+      <li>OS内运行之前运行的一段小程序</li>
+      <li>初始化硬件设备,建立内存空间映射</li>
+      <li>将系统的硬件环境带到合适状态,准备调用内核</li>
+      <li>依赖于硬件,难以通用</li>
+    </ul>
+  </li>
+  <li>存储方式:(嵌入式系统无BIOS,系统上电复位之后从0x00000000开始执行,需要将静态存储ROM,以及BootLoader映射到上述地址)</li>
+  <li>在执行Bootloader的时候,通常系统还不可用,一般与Host(主机)相连</li>
+  <li>2 Stage:
+    <ul>
+      <li>Stage1 简单,依赖硬件,用汇编
+        <ul>
+          <li>硬件设备初始化</li>
+          <li>为Stage2准备RAM空间</li>
+          <li>拷贝Stage2到RAM中</li>
+          <li>设置堆栈</li>
+          <li>跳转到Stage2程序入口</li>
+        </ul>
+      </li>
+      <li>Satge2: 复杂,用C
+        <ul>
+          <li>初始化Satge2需要的设备</li>
+          <li>检测系统内存映射 (Memory Map)</li>
+          <li>将Kernel映象和跟文件系统从Flash读取到RAM</li>
+          <li>为内核启动设置参数</li>
+          <li>调用内核</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>操作模式:
+    <ul>
+      <li>启动模式 Boot Loading,或是自动模式
+        <ul>
+          <li>系统上电,CPU从BootLoader处开始运行</li>
+          <li>BootLoader运行,将代码复制到RAM中,转到RAM上运行</li>
+          <li>BootLoader准备好内核运行所需要的环境,运行内核</li>
+        </ul>
+      </li>
+      <li>下载模式
+        <ul>
+          <li>系统上电,CPU从BootLoader处开始运行</li>
+          <li>用户干预,进入下载模式
+  *从控制台输入信息</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>文件传输:
+    <ul>
+      <li>串口(xyz-modem)/以太网/USB</li>
+    </ul>
+  </li>
+  <li>Bootstrap:
+    <ul>
+      <li>在开发板上将Bootstrap PIn 打开</li>
+      <li>BootLoader在Bootstrap模式下被加载到Flash上</li>
+      <li>允许开发者通过UART对设备初始化,允许通过UART将程序下载到系统RAM,可以接受命令,运行程序,支持内存</li>
+      <li>流程: 上电后,Bootstrap模式将UART1,2设置为自动波特率,同时设置为8bit,无校验,1停止位.等待用户输入a/A,通过Bootstrap Record语句将CPU芯片内部寄存器初始化为目标寄存器.</li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="makefile">Makefile</h1>
+<ul>
+  <li>由于项目文件之中互相引用,修改一个文件会导致多个文件重新编译,避免重复键入GCC进行编译,因而Makefile中要说明文件之间的依赖关系
+    <ul>
+      <li>gcc -o exc_file file.c 指定文件名</li>
+      <li>gcc -c filename.c 产生filename.o</li>
+      <li>gcc filename.c</li>
+      <li>gcc -o exc_file *.o 产生名为exc_file的文件且建立连接</li>
+    </ul>
+  </li>
+  <li>gcc flag
+    <ul>
+      <li>-g 生成调试信息</li>
+      <li>-c 只编译不连接成为可执行文件</li>
+      <li>-o 确定输出文件名称</li>
+      <li>-O 优化</li>
+      <li>-w 禁止警告</li>
+      <li>-W 打开所有类型警告</li>
+    </ul>
+  </li>
+</ul>
+
+<p><code class="highlighter-rouge"> myprog: foo.o bar.o        (表示依赖关系,只要myprog比后面的文件旧,就要执行重建)</code>
+` gcc -o myprog foo.o bar.os`</p>
+<ul>
+  <li>定义规则:</li>
+</ul>
+
+<p><code class="highlighter-rouge"> OBJS = foo.o bar.o $(CC) = gcc $(CFLAGS) = -Wall -O -g </code></p>
+
+<p><code class="highlighter-rouge"> 之后用 $(OBJS) 之类的替代</code></p>
+
+<ul>
+  <li>自动变量:
+    <ul>
+      <li>$@ 目标的完整名称</li>
+      <li>$^ 所有的依赖文件,空格分隔,不包含重复</li>
+      <li>$&lt; 第一个依赖文件</li>
+      <li>$? 所有依赖文件,比目标文件出现的晚</li>
+      <li>$* 不含扩展名的目标文件名</li>
+      <li>$+ 所有依赖文件,可能包含重复</li>
+    </ul>
+  </li>
+  <li>隐含规则:
+    <ul>
+      <li>GNU Make1发现依赖关系语句时自动按照内嵌规则处理
+        <ul>
+          <li>对C程序: X.o 由 X.c</li>
+        </ul>
+
+        <p><code class="highlighter-rouge"> $(CC) -c $(CPPFLAGS) $(CFLAGS)</code></p>
+
+        <ul>
+          <li>对C++ “N.o” 由 “N.cc/N.C”产生</li>
+        </ul>
+
+        <p><code class="highlighter-rouge"> $(CXX) -c $(CPPFLAGS) $(CFLAGS)</code></p>
+      </li>
+      <li>重建/取消隐含规则</li>
+    </ul>
+
+    <p><code class="highlighter-rouge"> %.o : %.c</code> 
+  ` $(CC) $(CFLAGS) –D__DEBUG__ $&lt; -o $@  //下一行为空则为取消规则`</p>
+  </li>
+  <li>伪目标: all:exc1 exc2
+    <ul>
+      <li>make把all来作为主要目的,虽然all不是实际文件</li>
+      <li>可以用于产生非预设的动作
+        <ul>
+          <li>EXM 若没有其他规则依赖于clean,其不会被执行,但是当执行make clean的时候被执行
+            <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  clean:
+ rm *.o
+ rm myprog
+</code></pre></div>            </div>
+          </li>
+        </ul>
+      </li>
+      <li>make clean 清楚编译过程中中间文件</li>
+      <li>make dep 设置Makefile中目录所依赖的文件列表</li>
+      <li>make install 将编译好的可执行文件复制到指定目录</li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="qemu-experiment">Qemu Experiment</h1>
+<ul>
+  <li>Procedure:
+    <ul>
+      <li>Qemu安装</li>
+      <li>编译并运行U-boot(用的是Xilinx的Toolchain)</li>
+      <li>编译并运行Linux
+        <ul>
+          <li>编译BusyBox</li>
+          <li>制作根文件目录</li>
+          <li>根文件系统镜像</li>
+        </ul>
+      </li>
+      <li>在目标机中运行应用程序
+        <ul>
+          <li>在Linux上安装NFS网络文件系统</li>
+          <li>在宿主机中开启NFS服务</li>
+        </ul>
+      </li>
+      <li>6Steps
+        <ul>
+          <li>LInux交叉编译环境搭建</li>
+          <li>Uboot原理编译</li>
+          <li>设备数原理编译</li>
+          <li>内核原理编译</li>
+          <li>根文件系统的编译</li>
+          <li>Uboot以及内核的椅子</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="examples-2-memorize">Examples 2 Memorize</h1>
+<ol>
+  <li>ARM体系架构(?)
+    <ul>
+      <li>硬件: 处理器,存储器,模拟电路与电源,接口</li>
+      <li>软件: BSP,驱动,OS,PS,应用程序</li>
+      <li>冯诺依曼架构,哈佛架构</li>
+      <li>流水线结构</li>
+    </ul>
+  </li>
+  <li>Qemu实验概述</li>
+  <li>注释程序阅读?</li>
+  <li>思考进程同步 (?)
+    <ul>
+      <li>基于时间片轮转调度</li>
+      <li>基于优先级的调度</li>
+    </ul>
+  </li>
+  <li>ARM内核是否一定是MPU，请举例说明。
+    <ul>
+      <li>除了MPU,还有MCU(微控制器)比如STM32</li>
+      <li>DSP</li>
+      <li>SOC</li>
+    </ul>
+  </li>
+  <li>ARM V5和V7指什么?
+    <ul>
+      <li>ARM V5架构:
+        <ul>
+          <li>3级流水线</li>
+          <li>Thumbs指令集</li>
+          <li>支持ICE片上断电调试Debug</li>
+        </ul>
+      </li>
+      <li>ARM V7架构:
+        <ul>
+          <li>5级流水线</li>
+          <li>嵌入式实时OS支持</li>
+          <li>高精度乘法DSP</li>
+          <li>ARM/Thumbs指令集</li>
+          <li>Cache</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>ARM的特权和异常模式
+    <ul>
+      <li>除了用户模式之外,都属于特权模式</li>
+      <li>有几种异常模式由异常产生: IRQ,FIQ</li>
+      <li>各种工作模式由当前 程序状态寄存器 CPSR的低5位决定</li>
+      <li>除了用户模式不能改变工作模式,其他有两种: 1. 发生异常,处理器自动改变CPSR,处理器处于特权模式也可以通过指令往CPSR写入</li>
+    </ul>
+  </li>
+  <li>ARM有几种类型的中断,对应几种异常模式
+    <ul>
+      <li>7种中断 5种异常模式</li>
+      <li>复位,未定义指令,软件,指令读取中止,数据访问中止,外部中断请求,快速中断请求</li>
+    </ul>
+  </li>
+  <li>ADR和LDR两种伪指令
+    <ul>
+      <li>LDR用于大范围地址读取,用于加载一个32位立即数,或者是一个地址到对应的寄存器,与ARM的LDR相比,参数带有”=”</li>
+      <li>ADR用于小范围,一般被编译器替换成一条合适的指令,若不能用一条指令实现,就产生错误</li>
+    </ul>
+  </li>
+  <li>嵌入式调试方法
+    <ul>
+      <li>模拟调试</li>
+      <li>ROM Monitor(Angel)</li>
+      <li>在线仿真ICE</li>
+      <li>JTAG</li>
+    </ul>
+  </li>
+  <li>什么是临界段
+    <ul>
+      <li>临界资源: 系统中某些资源只允许一个进程使用</li>
+      <li>临界段只能用于一个进程中不同线程的通信</li>
+      <li>涉及到临界资源的程序段叫临界区(访问公用资源的那段程序)</li>
+    </ul>
+  </li>
+  <li>thumbs指令集优点
+    <ul>
+      <li>指令长度固定</li>
+      <li>执行效率高</li>
+      <li>单字节指令</li>
+      <li>大量使用寄存器</li>
+    </ul>
+  </li>
+  <li>画地址内存的题目:
+    <ul>
+      <li>LDMIA R1!, {R2-R4,R6}
+        <ul>
+          <li>由于有”!” R1 = R1+4*4</li>
+          <li>R2,R3,R4,R6 分别是地址为R1+4,R1+8.地方的数据</li>
+        </ul>
+      </li>
+      <li>LDR RD &lt;- [RI]        // reg到reg</li>
+      <li>LDMIA R1! -&gt; {R2,R3}  // reg到存储器</li>
+      <li>LDMIA == LDMFD  ( Full - After) (Descending - Increase) (?6)</li>
+    </ul>
+  </li>
+</ol>
+
+<h1 id="qs-to-memorize">Qs To Memorize</h1>
+<ul>
+  <li>ARM7TDMI - ARM V4T架构(?)</li>
+  <li><code class="highlighter-rouge"> $(CC) $(CFLAGS) -c foo.c -o foo.o      $(OBJS)</code></li>
+  <li><code class="highlighter-rouge"> $(CC) $(CFLAGS) -c $&lt; -o $@            $^</code></li>
+  <li>(开发流程): 任务分析 - 处理器/OS选型 - 硬件设计 - 驱动与BSP设计 - 操作系统移植 - 应用程序设计 - 代码固化</li>
+  <li>7x工作模式: USR,FIQ,IRQ(填)</li>
+  <li>硬件部分: 嵌入式处理器,存储器,接口,模拟电路与电源;   软件: BSP,驱动,OS,PS,应用程序</li>
+  <li>嵌入式微处理器(MPU) 有ARM,X86,PowerPC,MIPS,SPARC</li>
+  <li>以<strong>应用为中心</strong> <strong>计算机技术</strong>为基础,软硬件<strong>可裁剪</strong>,对<strong>可靠性,成本,体积,功耗</strong>有严格要求<strong>专用计算机系统</strong></li>
+  <li>嵌入式系统开发过程: 任务分析,处理器-OS选型-硬件设计-驱动BSP设计-OS移植-代码固化</li>
+  <li>嵌入式处理器包括? MPU MCU DSP Soc</li>
+  <li>占先式内核: 1. 不要求任务主动放弃CPU所有权 2. 更高优先级任务可以打断</li>
+  <li>交叉编译: 先在宿主机上完成编译,再下载到目标机  嵌入式系统存储有限</li>
+  <li>哈佛与冯诺依曼架构: 指令和数据是否采用一样的数据位宽,程序与指令是否使用同一存储空间,是否可以同时读写数据</li>
+  <li>进程与程序的区别: 1. 进程动态概念,程序静态 2 进程是独立运行的基本单元,程序无此意义 3. 进程和程序没有一一对应 4. 进程可以并行,异步前进,互相制约</li>
+  <li>优先级翻转: 高优先级任务在申请低优先级任务的资源的时候一直等待,如果有一个中优先级,将一直执行</li>
+  <li>Bootstrap的原理: 将Bootloader加载到Flash中 设置串口UART12  将Bootstrap Pin打开 (不可以引导操作系统)</li>
+  <li>Bootloader支持的文件传输接口 : 串口(xyz-modem) 以太网 USB
+    <ul>
+      <li>两种模式:  启动和下载</li>
+    </ul>
+  </li>
+  <li>寻址方式判断</li>
+  <li>采用的Arm伪指令 : Ldr 带=</li>
+  <li>PC(R15) 程序计数器   LR(R14) 保存返回地址   SP(R13) 堆栈指针  [R13,15各6个]</li>
+  <li>VIM三种工作模式: 指令,文本输入,行末</li>
+  <li>判断合法立即数:8bit 移动偶数位</li>
+  <li>Thumbs(见上)</li>
+  <li>linux设备驱动添加到内核</li>
+  <li>伪指令: EQU: 一个数值或寄存器名赋给一个指定的符号名    DCD:分配一片连续的存储空间</li>
+  <li>CISC 20% 80%</li>
+  <li>Cortex ARM, 单片机是M</li>
+</ul>
+
+<hr />
+<ul>
+  <li>Bootstrap题目:
+    <ul>
+      <li>00000000408 E3Axx E1A0xxx  0000000400</li>
+      <li>mov Pc r4 ;跳转到镜像</li>
+    </ul>
+  </li>
+  <li>汇编程序题目
+    <ul>
+      <li>ENTRY的部分开始</li>
+      <li>LDR PC,SWI (0008/4)</li>
+      <li>0x1122</li>
+      <li>0xA000</li>
+      <li>rtmp 0x1</li>
+      <li>0x004</li>
+    </ul>
+  </li>
+</ul>
+
+:ET

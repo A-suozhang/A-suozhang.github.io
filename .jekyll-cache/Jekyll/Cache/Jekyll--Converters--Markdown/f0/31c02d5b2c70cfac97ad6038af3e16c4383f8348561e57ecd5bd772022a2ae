@@ -1,0 +1,237 @@
+I"�,<h1 id="set-up-ubuntu">Set Up Ubuntu</h1>
+<h2 id="选择版本">选择版本</h2>
+<ul>
+  <li>尽量选择LTS的版本（16.04/18.04）</li>
+  <li>不要选择太老的版本
+    <h2 id="win下的准备">Win下的准备</h2>
+  </li>
+  <li>官网下载镜像（xx.img）</li>
+  <li>下载Universal USB Installer制作启动盘</li>
+  <li>磁盘管理中把盘分好
+    <ul>
+      <li>注意有的时候合并分区不能跨分区</li>
+      <li>注意在安装了ubuntu之后在windows分盘的时候不要把带grub的分区清空
+        <h2 id="安装">安装</h2>
+      </li>
+    </ul>
+  </li>
+  <li>开机时候进入grub（thinkpad貌似是F12？）</li>
+  <li>关闭Secure Boot并且把U盘的启动设置高优先级</li>
+  <li>选择英文可能没有中文输入法</li>
+  <li>再度开机时候就进入安装界面了
+    <ul>
+      <li>关闭在安装时同时安装软件等东西</li>
+      <li><strong>一定不要选择清除已有的系统安装</strong></li>
+      <li>建议直接按照默认让他帮你配置boot等分区
+        <h2 id="开机配置">开机配置</h2>
+        <h3 id="切换软件源">切换软件源</h3>
+      </li>
+    </ul>
+  </li>
+  <li>先切换源否则apt-get会很慢</li>
+  <li>在software &amp; Update中，选择更换源
+    <h3 id="安装中文输入法">安装中文输入法</h3>
+  </li>
+  <li>我装的时搜狗，貌似还需要配置fctix（Ubuntu的输入法管理）
+    <ul>
+      <li>参考<a href="https://www.cnblogs.com/BlackStorm/p/10359254.html">这个链接</a>
+        <h3 id="安装必要软件">安装必要软件</h3>
+      </li>
+    </ul>
+  </li>
+  <li>以下基本都可以通过直接在官网下载.deb安装
+    <ul>
+      <li>chrome
+        <ul>
+          <li>chrome登录之后如果没有同步收藏夹，需要修改host，参考<a href="https://blog.csdn.net/nyist327/article/details/22929553">这个链接</a></li>
+          <li>这一步如果不做的话可以后面如果shadowsocks配置好了理论上也可以（？实际上没有尝试过）</li>
+        </ul>
+      </li>
+      <li>网易云</li>
+      <li>vscode
+        <ul>
+          <li>Sudo 使用VSCODE的时候在末尾加上–user-data-dir</li>
+          <li>乱七八糟插件装起来
+            <ul>
+              <li>Power Mode： 闪光插件，很好玩</li>
+              <li>Markdown</li>
+              <li>Python等语言的支持</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li>坚果云
+        <h3 id="bash相关">Bash相关</h3>
+      </li>
+    </ul>
+  </li>
+  <li><a href="https://blog.csdn.net/nyist327/article/details/22929553">环境变量的配置</a></li>
+  <li>可以通过这种方式在写指令的同时输入密码
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>echo 123456|sudo -S ls
+</code></pre></div>    </div>
+  </li>
+  <li>或者通过这种方式写log
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>echo "看到这行字，说明添加自启动脚本成功。" &gt; /usr/local/test.log
+</code></pre></div>    </div>
+    <h3 id="科学上网">科学上网</h3>
+    <ol>
+      <li>Shadowsocks客户端配置</li>
+    </ol>
+  </li>
+  <li>首先你需要已经有一个Shadowsocks服务器，并且获得
+    <ul>
+      <li>服务器地址</li>
+      <li>密码 &amp; 加密方式</li>
+      <li>本地端口（后面会一直用到）</li>
+    </ul>
+  </li>
+  <li><a href="https://mystery0.vip/2017/01/12/Ubuntu%E4%BD%BF%E7%94%A8Shadowsocks-qt5%E7%A7%91%E5%AD%A6%E4%B8%8A%E7%BD%91/">教程1</a></li>
+  <li><a href="https://note.janhui.xyz/blog/post/janhui/ubuntu%E5%AE%89%E8%A3%85shadowsocks">教程2</a></li>
+  <li><em>我个人没有采用带GUI的安装，因为它有点丑而且老</em></li>
+  <li>推荐采用教程二的pip安装方式</li>
+  <li>安装完成之后在根目录编辑 shadowsocks.json,然后调用
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sslocal <span class="nt">-c</span> PATH_TO_YOUR_SHADOWSOCKS_JSON <span class="o">(</span>~/shadowsocks.json<span class="o">)</span>
+</code></pre></div>    </div>
+    <ol>
+      <li>Chrome配置</li>
+    </ol>
+  </li>
+  <li>在<a href="https://chrome.google.com/webstore/">Chrome应用商店</a>中安装Switchy Omega
+    <ul>
+      <li>（如果你不科学上网下不了这个插件…而你想要科学上网又需要这个插件，所以要么拷贝或者找国内分享吧）</li>
+      <li>在Switchy Omega中首先建立一个情景模式
+        <ul>
+          <li>“Proxy” - 地址为本地地址 127.0.0.1 端口为你在shadowsocks.json里面配置的<strong>本地端口</strong></li>
+          <li>“Auto Switch”模式也可以勾选了（这里可以导入PAC文件配置来选择哪些网站需要走ss那些不要）
+            <ol>
+              <li>开机自启</li>
+            </ol>
+          </li>
+        </ul>
+      </li>
+      <li>参考<a href="https://blog.csdn.net/qq_25241325/article/details/80691271">这个链接</a></li>
+      <li>可以选择开机自启动，也可以在指令后面加一个“&amp;”（不然打开这行指令之后这个Terminal就不能干别的了，当然如果你关掉这个Term SS也失效了）
+        <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sslocal <span class="nt">-c</span> PATH_TO_YOUR_SHADOWSOCKS_JSON <span class="o">(</span>~/shadowsocks.json<span class="o">)</span>
+</code></pre></div>        </div>
+      </li>
+    </ul>
+  </li>
+  <li>建立开机启动脚本的时候可以通过这种方式在写指令的同时输入密码
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>echo 123456|sudo -S ls
+</code></pre></div>    </div>
+  </li>
+  <li>或者通过这种方式写log
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  echo "看到这行字，说明添加自启动脚本成功。" &gt; /usr/local/test.log
+</code></pre></div>    </div>
+  </li>
+  <li>和上面链接不同的是Ubuntu 18.04不支持使用rc.local了，改用<a href="https://www.cnblogs.com/airdot/p/9688530.html">这个</a>
+    <ul>
+      <li><a href="做了一些原理上面的解释">这个</a></li>
+      <li>卡在了 systemctl start service 上，很迷，不知道是不是因为sslocal的原因，目前原因未知</li>
+      <li>最后的解决方法是没用用到那个sh，直接在建立出来的那个rc.local里面加上了sslocal的指令并且加上了”&amp;”效果达成，成功利用proxy模式链接上了某P站
+    4. 添加Proxychains以在Term中使用梯子</li>
+      <li>先
+        <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo apt-get install proxychains
+</code></pre></div>        </div>
+        <p>（貌似apt的archive里有proxychains和proxychains4，我用的是前者）</p>
+      </li>
+      <li>编辑/etc/proxychains.conf</li>
+      <li>注意设置梯子的模式（我的是SOCK5，设置SOCK4的时候会报错）</li>
+      <li>将端口号设置为我们之前的本地端口</li>
+      <li>之后在命令行命令前面加上proxychains就可以了
+        <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>proxychains git clone https://xxx.git
+</code></pre></div>        </div>
+        <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>5. 配置下载
+</code></pre></div>        </div>
+      </li>
+    </ul>
+  </li>
+  <li><a href="https://zhuanlan.zhihu.com/p/55212887">通过Aria2c+chrome百度云下载</a></li>
+</ul>
+
+<h4 id="v2ray">V2Ray</h4>
+<ul>
+  <li>参考了<a href="https://guide.v2fly.org/prep/">V2Ray白话文指南</a>
+    <ul>
+      <li>以及其他的几个链接
+        <ul>
+          <li><a href="https://huifeng.me/2018/10/12/The-Right-Way-Make-Linux-Desktop-Use-V2ray-Service/">link1</a></li>
+          <li><a href="https://www.imcaviare.com/2018-12-18-1/">link2</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>注意V2Ray服务器会按照时间进行对照，所以需要做时间校准(虽然我的Ubuntu安装正常)
+    <ol>
+      <li>下载脚本 <code class="highlighter-rouge">wget https://install.direct/go.sh</code></li>
+      <li>执行安装脚本 <code class="highlighter-rouge">sudo bash go.sh</code></li>
+    </ol>
+    <ul>
+      <li>如果直接这样下载的话他会默认选择从git下载，但是很多时候git也是被墙的，所以是一个左脚踩右脚上天，很蠢</li>
+      <li>首先下载 v2ray-linux-64，可以在脚本指定本地文件(复制到指定目录下) <code class="highlighter-rouge">sudo bash go.sh --local ./v2ray-linux-64</code>
+        <ul>
+          <li>下载我是通过能翻墙的机子从<a href="https://github.com/233boy/v2ray/wiki">这里</a>下载的</li>
+          <li>分享一个<a href="https://pan.baidu.com/s/18SlswO73uoJf0zDjTKyUdQ">百度云</a>把,提取码cuvy</li>
+        </ul>
+      </li>
+      <li>运行完成之后应该就安装成功了
+        <ol>
+          <li>安装成功之后不会立即启动V2ray服务,手动开启  <code class="highlighter-rouge">systemctl start v2ray</code></li>
+        </ol>
+      </li>
+      <li>关闭用<code class="highlighter-rouge">systemctl stop v2ray</code></li>
+      <li>开机启动<code class="highlighter-rouge">systemctl enable v2ray</code></li>
+      <li>这之后采用比如 <code class="highlighter-rouge">pstree</code> 等命令查看正在运行的服务，可以看到v2ray正在运行
+        <ol>
+          <li>添加配置文件</li>
+        </ol>
+      </li>
+      <li>配置文件在 /etc/v2ray/config.json</li>
+      <li>可以自己写，也可以利用Win或者其他平台下用GUI配置好的config.json文件直接复制过来替换
+        <ol>
+          <li>Chrome浏览器配置</li>
+        </ol>
+      </li>
+      <li>同样可以使用Switchy Omega,proxy中选择SOCK5,地址127.0.0.1，端口选择config.json文件中的端口(in my case, 10808)</li>
+      <li>Proxy模式开启V2Ray就能够正常运行了
+        <ol>
+          <li>proxychains的配置也要做对应修改，修改本地端口</li>
+        </ol>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="一些win下的应用">一些Win下的应用</h2>
+<ul>
+  <li>安装deepin wine以安装一些Win下软件</li>
+  <li><a href="https://github.com/wszqkzqk/deepin-wine-ubuntu">Deepin-Wine的安装与配置</a></li>
+  <li>在官网上下载安装包（.deb）双击直接安装
+    <ul>
+      <li>或者
+        <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo dpkg -i xxx.deb
+</code></pre></div>        </div>
+      </li>
+    </ul>
+  </li>
+  <li>直接通过应用程序即可打开</li>
+  <li><a href="https://dstore-appstore.deepin.cn/china/index">deepin’ wine 的应用商店</a></li>
+  <li>推荐的比如
+    <ul>
+      <li>TIM</li>
+      <li>微信</li>
+      <li><a href="https://github.com/patrikx3/onenote">OneNote</a></li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="我最喜欢的美化时间">我最喜欢的美化时间！</h2>
+<ul>
+  <li>仿Mac风格
+    <ul>
+      <li><a href="https://blog.csdn.net/qq_28869927/article/details/80917997">教程1</a></li>
+      <li><a href="https://zhuanlan.zhihu.com/p/71588449">教程2</a></li>
+    </ul>
+  </li>
+</ul>
+:ET
