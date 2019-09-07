@@ -33,7 +33,7 @@ SRC_URI += "file://system-user.dtsi \
 > 这样的方式本质上是在system-user.dtsi的对应节点下加上了dpu的内容,这样更加清晰
 
 1. dpu.dtsi的位置在刚才目录下的./files/dpu.dtsi中,内容为
-
+![](http://mikemclin.net/mmwp/wp-content/uploads/2013/03/markdown-syntax-language.png)
 
 ```
 / {
