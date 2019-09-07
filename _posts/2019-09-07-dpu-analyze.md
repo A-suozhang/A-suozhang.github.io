@@ -61,7 +61,6 @@ SRC_URI += "file://system-user.dtsi \
 };
 ```
 
-![](https://github.com/A-suozhang/MyPicBed/raw/master/img/triangles-1430105_960_720.png)
 
 * 设备树的内容与我们的Vivado Design有着直接关系(本质上就是那个中断号)
 * 查询[dpu数据手册]()可知,主要需要修改的是地址和设备号码
