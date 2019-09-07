@@ -2,7 +2,7 @@
 layout:     post                    # 使用的布局（不需要改）
 title:      北斗实验班的二三琐事               # 标题 
 subtitle:   前人恰屎，后人乘凉    #副标题
-date:       2019-09-06              # 时间
+date:       2019-09-07              # 时间
 author:     tianchen                      # 作者
 header-img:     #这篇文章标题背景图片
 catalog: true                       # 是否归档
