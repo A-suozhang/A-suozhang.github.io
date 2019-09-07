@@ -67,7 +67,7 @@ SRC_URI += "file://system-user.dtsi \
 * 查询[dpu数据手册]()可知,主要需要修改的是地址和设备号码
     * 其中 base-addr需要与Vivado Design中的Address对应,也就是这里
 
-    ![](https://github.com/A-suozhang/MyPicBed/blob/master/img/20190907113921.png)
+    * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20190907113921.png)
 
     * dpucore的数目与平台有关 (ZCU102是两个)
     * interrupts中的6个数,每3个为一组,两边的0x0和0x1是固定值,内部的106与107则是dpu所对应的中断号
