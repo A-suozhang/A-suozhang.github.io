@@ -4,7 +4,7 @@ title:      数字图像处理笔记               # 标题
 subtitle:   好好学习，天天睡觉     #副标题
 date:       2019-09-06              # 时间
 author:     tianchen                      # 作者
-header-img:     #这篇文章标题背景图片
+header-img: https://github.com/A-suozhang/MyPicBed/raw/master/img/20190907182233.png    #这篇文章标题背景图片
 catalog: true                       # 是否归档
 tags:                               #标签
     - 学习笔记
@@ -17,7 +17,7 @@ tags:                               #标签
     * 预处理: 改善图像质量,减少干扰,低级处理阶段 (图像增强,复原,编码压缩) 输入输出都是图像
     * 识别: 中级 输入图像,输出分类结果
     * 理解: 分析和解释图像 高级
-* 特点:
+* 特点:   
     * 数据量大
     * 数据量/频带 电视图像5.6M
     * 像素相关性大,可压缩潜力大
