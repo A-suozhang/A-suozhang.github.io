@@ -61,7 +61,7 @@ SRC_URI += "file://system-user.dtsi \
 };
 ```
 
-![](https://github.com/A-suozhang/MyPicBed/blob/master/img/triangles-1430105_960_720.png)
+![](https://github.com/A-suozhang/MyPicBed/raw/master/img/triangles-1430105_960_720.png)
 
 * 设备树的内容与我们的Vivado Design有着直接关系(本质上就是那个中断号)
 * 查询[dpu数据手册]()可知,主要需要修改的是地址和设备号码
@@ -71,15 +71,15 @@ SRC_URI += "file://system-user.dtsi \
 
     * dpucore的数目与平台有关 (ZCU102是两个)
     * interrupts中的6个数,每3个为一组,两边的0x0和0x1是固定值,内部的106与107则是dpu所对应的中断号
-      * ![](https://github.com/A-suozhang/MyPicBed/blob/master//img/20190907114224.png)
+      * ![](https://github.com/A-suozhang/MyPicBed/raw/master//img/20190907114224.png)
       * 如图可见,dpu以及其附属模块给出了一个位宽为7的中断信号接到了PS上
-      * ![](https://github.com/A-suozhang/MyPicBed/blob/master/img/20190907114517.png)
+      * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20190907114517.png)
       * 这里是那个7位中断信号的内部结构,可以看到,两个dpu核的中断接到了7位信号的[3:2]位,而softmax的中断被接到了最高位
-      * ![](https://github.com/A-suozhang/MyPicBed/blob/master/img/20190907115019.png)
+      * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20190907115019.png)
       * 在这里配置ZynqPS的两个7位中断,参考[ZU9-PS-INTR数据手册](https://www.xilinx.com/support/documentation/user_guides/ug1085-zynq-ultrascale-trm.pdf)查询
-        * ![](https://github.com/A-suozhang/MyPicBed/blob/master/img/20190907120833.png)
+        * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20190907120833.png)
             * 感觉和我们实际操作的结果矛盾了...待解决...
-      * ![](https://github.com/A-suozhang/MyPicBed/blob/master/img/20190907121356.png)
+      * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20190907121356.png)
           * 好像说如果要正常用DNNDK的话只能这么配置
 > 曾经尝试过直接改动system-user.dtsi，但是貌似不起作用
 >　设备树的改变其实在petalinux-build的一步，如果没有的话改动它没有意义
@@ -87,7 +87,7 @@ SRC_URI += "file://system-user.dtsi \
 
 ## DPU驱动
 * 参考Petalinux文档[UG1144](https://www.xilinx.com/support/documentation/sw_manuals/xilinx2018_3/ug1144-petalinux-tools-reference-guide.pdf)中的Building UserModule一章节
-  * ![](https://github.com/A-suozhang/MyPicBed/blob/master/img/20190907125426.png)
+  * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20190907125426.png)
   * 按照这里的步骤走完就可以了
 * 之后把生成的dpu.ko拷贝到我们自己的rootfs中,并且需要设置开机自启动
   * 在/etc/rc.local中加入
