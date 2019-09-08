@@ -20,7 +20,7 @@ tags:                               #标签
 * ```https://github.com/A-suozhang/MyPicBed/blob/master/img/andromeda-galaxy-755442__340.jpg```这个是从git中直接浏览图片的链接
 * 长这样
 ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20190907135124.png)
-* github里面markdown的解析方式貌似能够把这种图片解析出来,但是博客不行
+* github里面markdown的解析方式貌似 能够把这种图片解析出来,但是博客不行
 * *把上面的blob改成raw之后,会出现这个界面,这个才是我们所需要的*
 ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20190907135232.png)
 
