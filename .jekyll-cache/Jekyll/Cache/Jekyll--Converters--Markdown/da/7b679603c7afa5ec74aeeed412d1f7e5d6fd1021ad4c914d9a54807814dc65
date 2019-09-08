@@ -1,0 +1,32 @@
+I"x<h1 id="正确的在vscode中使用emoji">正确的在Vscode中使用Emoji</h1>
+<h2 id="安装extension---emoji">安装Extension -&gt; “Emoji”</h2>
+<ul>
+  <li><code class="highlighter-rouge">Ctrl+Shift+P</code> -&gt; Input <code class="highlighter-rouge">Emoji:Insert Emoji</code></li>
+  <li>之前的Markdown-Emoji插件没有这个好用</li>
+</ul>
+
+<p>😃😃😃😃😃😃 - SMILE</p>
+
+<p>😢😢😢😢😢😢 - CRY</p>
+
+<p>🐎🐎🐎🐎🐎🐎 - HORSE</p>
+
+<p>🤔🤔🤔🤔🤔🤔 - THINKING</p>
+
+<p>❓❓❓❓❓❓❓❓  - QUES</p>
+
+<p>⭐⭐⭐⭐⭐⭐ - STAR</p>
+
+<p><script type="math/tex">\int_a^b f(x)\,dx</script> #Inline公式</p>
+
+<p>\[\int_0^{+\infty} x^n e^{-x} \,dx = n! \]  另起一行居中公式</p>
+
+<p>\( p{X=x}=f(x)=\frac{1}{\sqrt{2\pi}\sigma}e^{-\frac{(x-\mu)^2}{2\sigma^2}} \)  Inline公式</p>
+
+<p>\[ p{X=x}=f(x)=\frac{1}{\sqrt{2\pi}\sigma}e^{-\frac{(x-\mu)^2}{2\sigma^2}} \]  另起一行居中公式</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+F(x) = P\{ X <= x \} = \int_{-\infty}^x f(x)\,dx %]]></script>
+
+<p>\[ f(x,y,z) = 3y^2 z \left( 3 + \frac{7x+5}{1 + y^2} \right). \]</p>
+:ET

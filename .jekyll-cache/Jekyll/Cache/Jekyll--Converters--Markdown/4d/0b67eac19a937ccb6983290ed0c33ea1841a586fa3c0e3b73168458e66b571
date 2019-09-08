@@ -1,4 +1,4 @@
-I"�<h1 id="intro-to-rl">Intro To RL</h1>
+I"�)<h1 id="intro-to-rl">Intro To RL</h1>
 <ul>
   <li>之前对RL的理解一直是只言片语，没有“系统地入个门”（雾），之后把RL相关的一些碎片知识都整理到这个post里面把</li>
 </ul>
@@ -100,6 +100,80 @@
       </li>
     </ol>
   </li>
+  <li>State：对于现实世界情况的完全描述（往往是比较抽象的建模）
+    <ul>
+      <li>用一个Tensor来作为<em>Representation</em></li>
+    </ul>
+  </li>
+  <li>Observation与State相对应，是当前世界不完全的描述，但是一般会比较具体  <del>我不到啊我瞎猜的</del></li>
+  <li>Action State-决策空间
+    <ul>
+      <li>可能连续（机器人在实际场景中）可能离散AlphaGO</li>
+    </ul>
+  </li>
+  <li>Policy - a rule used by agent to decide which action to take <del>我好像想不到一个太好的中文翻译，决策方式？</del>
+    <ul>
+      <li>可以是Deterministic（Hard） <em>Max</em></li>
+      <li>也可以是Stochastic （Soft） <em>Soft</em>
+        <ul>
+          <li>Categorical Policies - Used In Discrete
+            <ul>
+              <li>就类似建立一个对离散Action的Classifier</li>
+              <li>🤔已知了各个Action的概率分布，对输出需要做一个<em>Sampling</em></li>
+            </ul>
+          </li>
+          <li>Diagonal Gaussion Policies - Used In Continuous
+            <ul>
+              <li>一个高维的高斯分布，可以由一个均值Vector&amp;协方差矩阵来描述
+                <ul>
+                  <li>Diagnol Gaussian Distribution是协方差矩阵是对角阵的时候,这个时候协方差矩阵也可以拿一个Vector来表示</li>
+                </ul>
+              </li>
+              <li>一般这种方式通过一个NN把输入的Observation映射为Mean Vector以及Covariance Matrix的一个代表，可以是
+                <ul>
+                  <li>直接是Vector Of Log Standard Variation （标准差的Log的向量）</li>
+                  <li>通过一个NN建立一个state到log(σ)的映射（或许会与输出mean的网络share param）</li>
+                  <li><em>用Log的原因是值域覆盖整个实数域，而标准差在(0,1),而且没有什么精度损失</em></li>
+                </ul>
+              </li>
+              <li>Sampling就是一个采样，已知一个分布之后 Mean + Variation*Noise</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>Trajectory (episodes / rollouts)
+    <ul>
+      <li>A Sequence T={s0,a0,s1,a1…}</li>
+      <li>The 1st State Is ramdom sample of state-state-distribution</li>
+      <li>状态之间的转换是由Environment所决定的</li>
+      <li>为了算法研究，一般具有马尔科夫性，即只依赖于前一状态</li>
+    </ul>
+  </li>
+  <li><strong>Reward</strong>
+    <ul>
+      <li>rt = R{st,at,st+1}</li>
+      <li>经常被简化为R(st)或者是R(st,at)</li>
+      <li>The Goal Of a Agent is to get <em>Maxium cumulative reward</em></li>
+      <li>Final Reward(return)
+        <ul>
+          <li>Infinite with discount R = sum((discount_factor)*rt)
+            <ul>
+              <li>discount factor (0,1) The Earlier Than Now,The Less</li>
+              <li><em>Used For Better Convergence</em></li>
+            </ul>
+          </li>
+          <li>Finite Without Discount</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><strong>The Main Problem</strong>
+    <ul>
+      <li></li>
+    </ul>
+  </li>
 </ul>
 
 <h2 id="q-learning">Q-Learning</h2>
@@ -124,11 +198,35 @@
   </li>
 </ul>
 
-<h2 id="sarsa">Sarsa</h2>
+<h2 id="sarsastate-action-reward-state-action-这个名字也太魔性了">Sarsa(State-Action-Reward-State-Action-这个名字也太魔性了…)</h2>
 <ul>
   <li>前向推断方式类似于Q-Learning（都是从一个QTable中选取最大Q值的策略）</li>
   <li>更新方式不同：
 <img src="https://github.com/A-suozhang/MyPicBed/raw/master/img/20190908135538.png" alt="" /></li>
+  <li>可以理解为对差距的定义不一样：
+    <ul>
+      <li>Q-Learning是 “下一状态的最佳Q” - “当前状态Q” （可以看做观察了下一状态会怎么样，再做判断（还有转机））</li>
+      <li>而Sarsa直接对 “下一状态的Q” - “当前状态的Q” （可以看做已经做出了决定到了下一状态，不再有回旋余地）</li>
+      <li>Q-Learning在当前时刻只会定当前时刻的Action（决定了下一时刻的State）但是不会确定下一时刻的Action（需要看MaxQ(s’,a’)）</li>
+      <li>Sarsa的每一时刻都决定了当前时刻的Action以及下一时刻的Action
+        <ul>
+          <li>每一时刻参与学习的参数有(State-Action-Reward-State’-Action’)</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>这么看Q-Learning更加<strong>贪婪</strong>（体现在最大化maxQ）一些，如果两个模型都表现得好的话，Q-Learning能找到最近的路线，而Sarsa则会表现的相对<strong>保守</strong>（因为不保守的都死了）</li>
+  <li>Sarsa属于<em>单步更新</em>的算法</li>
+</ul>
+
+<h2 id="improved-sarsa---sarsalambda">Improved-Sarsa -&gt; Sarsa(lambda)</h2>
+<ul>
+  <li>加速的Sarsa，主要就是把<em>单步更新</em>改成了<em>N步更新</em>，能够避免“原地打转”的情况
+    <ul>
+      <li>lambda在[0,1] - 0就退化为简单Sarsa，1就变成直到获取了reward才更新</li>
+    </ul>
+  </li>
+  <li></li>
 </ul>
 
 <h2 id="ref">Ref</h2>
