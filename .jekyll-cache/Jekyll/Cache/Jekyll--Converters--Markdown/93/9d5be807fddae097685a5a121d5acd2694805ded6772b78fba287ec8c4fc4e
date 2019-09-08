@@ -1,4 +1,4 @@
-I"3<h1 id="尝试建立一个博客">尝试建立一个博客</h1>
+I":<h1 id="尝试建立一个博客">尝试建立一个博客</h1>
 
 <h2 id="我是个穷人买不起服务器">我是个穷人，买不起服务器</h2>
 <h2 id="还是条懒狗懒得去维护">还是条懒狗，懒得去维护</h2>
@@ -77,7 +77,15 @@ gem install jekyll bundler
 <h3 id="windows">Windows</h3>
 <ol>
   <li><a href="https://www.jekyll.com.cn/docs/installation/windows/">官网</a></li>
-  <li>好复杂搁置了</li>
+  <li>上Ruby官网安装包（带Dev Kit的）
+    <ul>
+      <li>在安装程序进行完之后会跳出一个像cmd一样的安装程序，把那个里面东西也安装了吧</li>
+    </ul>
+  </li>
+  <li>在Start Up Menu点开命令行安装jekyll
+<img src="https://github.com/A-suozhang/MyPicBed/raw/master/img/20190908140215.png" alt="" />
+输入<code class="highlighter-rouge">gem install jekyll bundler</code></li>
+  <li>和Ubuntu一样，进入你的项目文件夹，运行 <code class="highlighter-rouge">jekyll s</code>应该起了</li>
 </ol>
 
 :ET

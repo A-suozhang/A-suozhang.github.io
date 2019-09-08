@@ -1,0 +1,139 @@
+I"�<h1 id="intro-to-rl">Intro To RL</h1>
+<ul>
+  <li>之前对RL的理解一直是只言片语，没有“系统地入个门”（雾），之后把RL相关的一些碎片知识都整理到这个post里面把</li>
+</ul>
+
+<h2 id="核心四元结构">核心四元结构</h2>
+<p><img src="https://github.com/A-suozhang/MyPicBed/raw/master/img/20190908082919.png" alt="" /></p>
+<ul>
+  <li>对Agent（智能体）从环境中学习的过程建模</li>
+</ul>
+
+<h2 id="分类辨析-a-simple-taxonomy">分类辨析 A Simple Taxonomy</h2>
+<p><img src="https://github.com/A-suozhang/MyPicBed/raw/master/img/20190908083740.png" alt="" /></p>
+<ul>
+  <li>Model Free &amp; Model Based 理不理解所处的环境
+    <ul>
+      <li>不去对环境建模，直接接受真实世界的反馈 - <strong>Model-Free</strong>
+        <ul>
+          <li><em>Q-Learning,Sarsa,Policy Gradients</em></li>
+        </ul>
+      </li>
+      <li>智能体自己建立一个模型去模拟真实世界对自己行为的反馈 <strong>Model-Based</strong>
+        <ul>
+          <li>相比于Model-Free多了一个建模的工具，多了一个沙盒模拟的过程</li>
+          <li>相比Model-Free的方法，多了“想象力”和“推测”，Model-Free只能等待真实世界的反馈，一步步进行；而Model-Based的方法可以预测出未来几步，并且选择一个更加pleasant的预测来执行（思考一下围棋，看几步）</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>Policy-Based &amp; Value-Based
+    <ul>
+      <li>Policy-Based 基于概率的方法：通过分析所处的环境，对所有action（决策）给一个发生概率
+        <ul>
+          <li>Policy Gradient</li>
+        </ul>
+      </li>
+      <li>Value-Based 基于价值的方法，输出所有action的价值然后选择一个最好的
+        <ul>
+          <li>Q-Learning,Sarsa</li>
+        </ul>
+      </li>
+      <li>两者结合
+        <ul>
+          <li>Actor-Critic: Actor基于Policy，基于概率给出动作，然后Critic对所作出的动作给出价值（相比于单纯的Policy Gradient加速了学习过程）</li>
+        </ul>
+      </li>
+      <li>❓: 有点像Hard/SoftMax?</li>
+    </ul>
+  </li>
+  <li>回合更新/单步更新
+    <ul>
+      <li>传统的比如Monte-Carlo Leaning，Policy Gradient（OLD），一整个回合结束才会总结更新</li>
+      <li>Q-Learing，Sarsa，Policy Gradient（NEW），每一步都更新，<em>效率更高</em>，现在大部分的都是</li>
+    </ul>
+  </li>
+  <li>On-Policy/Off-Policy
+    <ul>
+      <li>在线： Sarsa</li>
+      <li>离线： QLearning</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="关键定义">关键定义</h2>
+<ul>
+  <li>RL的<strong>核心</strong>：
+    <ol>
+      <li>如何定义采取动作之后的Reward的评价标准（reward的设计不仅要符合最后我们所需要达到的目的，还需要注意在学习过程中不同action的比较）
+        <ul>
+          <li>本质是需要让agent学到最好的状态转移矩阵</li>
+        </ul>
+      </li>
+      <li>我们如何更新操作
+        <blockquote>
+          <p>Q-Learning中，会有一张很大的Table，记录了所有state对应的所有action的值，我们按样本学习每个单元格，使最后的Reward最大</p>
+          <ul>
+            <li>基于Value的方法 - DQN</li>
+          </ul>
+        </blockquote>
+        <ul>
+          <li>但是由于表过度大，DQN用一个NN来查表</li>
+          <li>DQN通过experience reply(解决机器学习独立同分布的问题) ❔</li>
+          <li>用一个网络估计Q和现实Q之差，作为loss
+        * 基于Policy的方法</li>
+          <li>直接优化Policy简单明快（NN直接输出Policy），问题被转化为如何更新NN参数
+            <ul>
+              <li>有stochastic / deterministic
+                <ul>
+                  <li>Stochastic 需要采样，计算大  - PPO</li>
+                  <li>Deterministic 已经证明过了策略梯度公式 - DPG/DDPG
+                    <ul>
+                      <li>融合Value与Policy - Actor-critic方法 -&gt; A3C</li>
+                    </ul>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ol>
+  </li>
+</ul>
+
+<h2 id="q-learning">Q-Learning</h2>
+<ul>
+  <li>基于表格的方法（表格的XY轴分别是当前state和当前时刻所作出的决策；里面的值是潜在奖励-Q值）
+    <ul>
+      <li>这个表格<em>Q-table</em>就像是个状态转移矩阵：决定了每一个状态需要采取什么样的策略</li>
+    </ul>
+  </li>
+  <li>那么Q值是怎么定义和更新呢？
+    <ul>
+      <li>如果出现了新的state（插入全0或者特定初始化）拓展QTable
+<img src="https://github.com/A-suozhang/MyPicBed/raw/master/img/20190908104247.png" alt="" /></li>
+    </ul>
+  </li>
+  <li>每次更新都会用到Q的真实值和预测值</li>
+  <li>alpha是学习率，表示学习速度 / gamma是对未来reward的衰减值（深谋远虑的程度）</li>
+  <li>Q-Learning是Off-Policy的（Q-Table存储了之前的经验，其更新可以不基于正在经历的经验）
+    <ul>
+      <li>但是我们并没有利用到Q-Learning OFF-policy的特性，在DQN中会有用到</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="sarsa">Sarsa</h2>
+<ul>
+  <li>前向推断方式类似于Q-Learning（都是从一个QTable中选取最大Q值的策略）</li>
+  <li>更新方式不同：
+<img src="https://github.com/A-suozhang/MyPicBed/raw/master/img/20190908135538.png" alt="" /></li>
+</ul>
+
+<h2 id="ref">Ref</h2>
+<ul>
+  <li><a href="https://spinningup.openai.com/en/latest/spinningup/rl_intro2.html#id20">OpenAI SpinningUp</a></li>
+  <li><a href="https://morvanzhou.github.io/tutorials/machine-learning/reinforcement-learning/2-1-A-q-learning/">Morvan’s Blog</a></li>
+</ul>
+:ET

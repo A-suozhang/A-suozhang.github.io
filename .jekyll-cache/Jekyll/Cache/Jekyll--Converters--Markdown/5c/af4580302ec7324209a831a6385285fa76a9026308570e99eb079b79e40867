@@ -1,0 +1,137 @@
+I"<h1 id="graph-neural-network">Graph Neural Network</h1>
+<ul>
+  <li>图是一种很灵活多变的结构
+    <ul>
+      <li>如果没有边，就会退化为<em>集合</em></li>
+      <li>如果只有垂直的边，就会变成<em>树</em></li>
+    </ul>
+  </li>
+  <li>与NN的联系：
+    <ul>
+      <li>大部分的数据可以被看做“图”
+        <blockquote>
+          <p>对于二维图像，不从像素入手，而是将图看做一种“超像素”</p>
+        </blockquote>
+      </li>
+      <li>还可以反映一些一些先验知识：
+        <ul>
+          <li>比如： 人的姿态估计，面部识别</li>
+        </ul>
+      </li>
+      <li>NN本身也可以看做是一张图（计算图）</li>
+      <li>很多Task先天的类似图：
+        <ul>
+          <li>知识图谱；动态对象的交互，问答，3D Mesh分类（图可以描述一个球面上的形状）</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="conv-in-gnn">CONV IN GNN</h2>
+<h3 id="why-conv">WHY CONV?</h3>
+<ul>
+  <li>也就是conv相对于fc的优点，会带来一些自然的优势
+    <ol>
+      <li>平移不变性</li>
+      <li>局部性</li>
+      <li>层次结构 （浅层低级纹理特征，深度高级特征）
+        <blockquote>
+          <p>这些属性对于设计GNN有启发意义</p>
+          <h3 id="an-exmaple-to-analog-nn-to-gnn">An Exmaple To Analog NN to GNN</h3>
+          <p><img src="https://github.com/A-suozhang/MyPicBed/raw/master/img/20190907214505.png" alt="" /></p>
+        </blockquote>
+      </li>
+    </ol>
+  </li>
+  <li>图像描述
+    <ul>
+      <li>对于mnist的图像，用24*24=784个像素来描述，对应地采用784个节点(Node)来描述</li>
+      <li>对于位置比较近的像素，边(Edge)有一个相对比较大的值</li>
+    </ul>
+  </li>
+  <li>计算描述
+    <ul>
+      <li>将卷积抽象为了一种“滤波器”，也就是“聚合算子”</li>
+      <li>CNN和GNN的区别主要在<strong>卷积是对顺序敏感的，而图是无序的</strong></li>
+      <li>对于GNN我们也需要定义“聚合算子”得到一个好的<strong>聚合器</strong>
+        <ul>
+          <li>平均值</li>
+          <li>求和 （都是以某个节点为中心，对相连的节点相加之后乘上W（W-是一个可训练的Tensor））</li>
+          <li><em>人们管这种方式叫做GNN中的“卷积”，但是严格来说并不是卷积，因为他没有方向性，主要利用了卷积中<strong>局部性</strong>的特点</em>
+            <h3 id="a-case">A CASE：</h3>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>GNN的核心思想是<strong>聚合“邻值”</strong>（而一般什么样的值为邻近值由您定义）
+    <ul>
+      <li>个人理解：可以抽象为是很多的，布朗运动的混乱的粒子，邻近的粒子相聚合，聚合成一个图像的形状，GNN就是建模这样一个过程</li>
+    </ul>
+  </li>
+  <li>借助邻接矩阵 -（N<em>N（784</em>784）的邻接矩阵，描述每个节点对之间的距离）
+    <ul>
+      <li>是一种<strong>距离建模</strong>体现了“相近的像素比较容易组成图案，而比较远的不大可能”这样的先验知识</li>
+      <li>这样的抽象过于Naive，而且图像本也不是图网络最好的用武之地，单纯利用这样的方式并不太能获得有效的分类</li>
+    </ul>
+  </li>
+  <li>由于图具有无序性，所以我们给这784如何排序其实是不对的，不可能找到一个正确的排序
+    <ul>
+      <li>需要假定像素被随机调整位置</li>
+      <li>新的问题❓: 如何知道在哪一行放置对应节点的特征？
+        <ul>
+          <li>如果忽略的话，训练出来的结果相当于随机打乱</li>
+          <li>Solution： <code class="highlighter-rouge">X_l+1 = A * X_l * W</code>只要保证A中第一行对应着X中第一行的特征就可以
+<img src="https://github.com/A-suozhang/MyPicBed/raw/master/img/20190907215659.png" alt="" /></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="history">History</h2>
+<ul>
+  <li>Refer To <a href="https://towardsdatascience.com/tutorial-on-graph-neural-networks-for-computer-vision-and-beyond-part-2-be6d71d70f49">This Log</a>
+    <ol>
+      <li>Naive GNN(Ancent time)
+<img src="https://github.com/A-suozhang/MyPicBed/raw/master/img/20190907225843.png" alt="" /></li>
+    </ol>
+  </li>
+  <li>😟 只是单纯的把Graph通过一个Embedding映射到一个Vector Representation而已
+    <ul>
+      <li>Graph层的传递，<code class="highlighter-rouge">X' = A*X*W</code> 比之前多一个adjacent matrix
+        <ol>
+          <li><strong>Spectral Graph Convolution</strong></li>
+        </ol>
+      </li>
+    </ul>
+  </li>
+  <li>Core Math
+<img src="https://github.com/A-suozhang/MyPicBed/raw/master/img/20190907230951.png" alt="" /></li>
+  <li>V 是由图的<a href="https://en.wikipedia.org/wiki/Laplacian_matrix">拉普拉斯矩阵L</a>经过SVD得到的特征值矩阵
+    <ul>
+      <li>L = D(Degree Matrix) - A(Adjacent Matrix)
+  <img src="https://github.com/A-suozhang/MyPicBed/raw/master/img/20190907232031.png" alt="" /></li>
+      <li>做了Laplace Matrix对称而且归一化的假设，因而可以直接从Adjacent Matrix得到</li>
+    </ul>
+  </li>
+  <li>W是Filter
+    <ul>
+      <li>W的维度依赖于：前一步Embedding Node的个数</li>
+      <li>需要避免太大: <a href="https://arxiv.org/abs/1312.6203">This Paper</a>
+        <ul>
+          <li>提出了采用平滑滤波器，来获得Local的表示 <strong>“Smooth Version Of Spectral Conv”</strong>
+  <img src="https://github.com/A-suozhang/MyPicBed/raw/master/img/20190907233121.png" alt="" />
+  （不是去学W中的N个参数，而是学k个参数(k « N),而fk是几个固定函数）
+            <ol>
+              <li>Chebyshev Graph Conv</li>
+            </ol>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>上面方法的缺陷在于，一个N*N的奇异值分解，需要很大的计算，存储Laplace矩阵也需要很大的RAM；而且过分依赖于奇异值，缺乏一些泛化</li>
+</ul>
+:ET
