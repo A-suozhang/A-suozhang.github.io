@@ -23,31 +23,47 @@ $$ \sigma - \xi $$
 ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20190909095145.png)
 
 ## 2. 装饰
+
 2.1 上标　"^" ; 下标 "_"   
+
 $$ \alpha^2  \omega^{20}$$
+
 2.2 矢量
+
 $$ \vec{xy} $$
+
 2.3 括号
+
 * "\left" "\right"让符号的大小与临近的公式适应
+
 $$ \left(\frac{x}{y}\right)$$
+
 $$ (\frac{x}{y})$$
+
 ```$$ \left(\frac{x}{y}\right)$$```
 
 2.4 求和 & 极限　&积分 ```OP_{lower_bound}^{higer_bound} {fx}```
+
 $$ \sum_{i=2}^{100}(a_i*k_{ij}) $$  
+
 ```$$ \sum_{i=2}^{100}(a_i*k_{ij}) $$```  
 
 $$ \lim_{x \to 0}{x^3+y^{10}} $$
+
 ```$$ \lim_{x \to 0}{x^3+y^{10}} $$```
 
 $$ \int_{20*a}^{\infty}{fxdx}$$
+
 ```$$ \int_{20*a}^{\infty}{fxdx}$$```
 
 2.5 分式根式　```\OP{}{}```
+
 $$ \frac{x^3}{2\pi}$$
+
 ```$$ \frac{x^3}{2\pi}$$```
 
 $$ \sqrt[3]{x^2}$$
+
 ```$$ \sqrt[3]{x^2}$$```
 
 2.6 特殊函数 sin ln max
