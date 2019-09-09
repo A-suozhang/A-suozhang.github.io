@@ -94,6 +94,16 @@ a_3x+b_3=c_3\\
 \end{cases}
 $$
 
+```
+$$
+\begin{cases}
+a_1x+b_1=c_1\\
+a_2x+b_2=c_2\\
+a_3x+b_3=c_3\\
+\end{cases}
+$$
+```
+
 $$\begin{bmatrix}
 {a_{11}}&{a_{12}}&{\cdots}&{a_{1n}}\\
 {a_{21}}&{a_{22}}&{\cdots}&{a_{2n}}\\
@@ -101,6 +111,14 @@ $$\begin{bmatrix}
 {a_{m1}}&{a_{m2}}&{\cdots}&{a_{mn}}\\
 \end{bmatrix}$$
 
+```
+$$\begin{bmatrix}
+{a_{11}}&{a_{12}}&{\cdots}&{a_{1n}}\\
+{a_{21}}&{a_{22}}&{\cdots}&{a_{2n}}\\
+{\vdots}&{\vdots}&{\ddots}&{\vdots}\\
+{a_{m1}}&{a_{m2}}&{\cdots}&{a_{mn}}\\
+\end{bmatrix}$$
+```
 
 
 ## Practice 
