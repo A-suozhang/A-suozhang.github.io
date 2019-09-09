@@ -120,6 +120,23 @@ $$\begin{bmatrix}
 \end{bmatrix}$$
 ```
 
+### 5. 分段函数
+
+$$
+f_x(x) = \begin{cases}
+\frac{x+1}{2\pi}, 0<x<2; \\
+0, \text{otherwise}
+\end{cases}
+$$
+
+```
+$$
+f_x(x) = \begin{cases}
+\frac{x+1}{2\pi}, 0<x<2; \\(这两个杠真正起到了换行的作用)
+0, \text{otherwise}
+\end{cases}
+$$
+```
 
 ## Practice 
 * Back Prop

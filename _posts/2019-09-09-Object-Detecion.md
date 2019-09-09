@@ -22,11 +22,9 @@ tags:                               #标签
 * AP - Average Precision
     * 不同Recall下的Precision的Mean
     * 详细计算方法参考[这个教程](https://zhuanlan.zhihu.com/p/72838705)
-        * 分别计算PR并画出PR曲线
+        * 分别计算PR(这里计算的是框子的数目,不是类别)并画出PR曲线
         * PR曲线下的积分面积就是AP
 * mAp - meanAP - AP是基于某一类的，mAp就是求AP关于类的平均
-
-
 
 ## Methods
 ### Faster-RCNN 2015
@@ -34,11 +32,38 @@ tags:                               #标签
 * CNN end2end训练，速度几乎实时
     * 一次性完成区域提取，特征提取bounding box和回归
 * 用RPN(Region Proposal Network)以“Anchor”的概念，代替了Selective Search
+    * 以Feature Map（经过降采样之后不大的）上的每一个点作为中心，在**原图**映射为9个anchor  
+    * 以IOU作为前景后景的打分标准
+* 经过RPN，我们将原图中产生的anchor box返回到Feature Map，得到了一些Proposal，然后做一个ROI Pooling（将抠出来的Proposal转化为统一大小）
+* Loss是分类损失以及位置回归误差之和
 ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20190909152753.png)
 ###  Yolo（You Only Look Once） 2015
-* 第一个1-Stage的网络，抛弃了区域提取+验证的2-stage思想，直接将原图分为S*S的grid cell,每个里面塞B个Bounding Box,推测C类，每个BBox预测5个value（xywh+conf）最后用NMS去掉多余的Bbox
+* **简单暴力**所有东西拿CNN硬干
+* 第一个1-Stage的网络，抛弃了区域提取+验证的2-stage思想，直接将原图分为S*S的grid cell,每个里面塞B个Bounding Box,推测C类，每个BBox预测5个value（xywh+conf）最后需要预测的Tensor为 ```S*S*(B*5+C)```
+* *How 2 Get Box* 每一个BBox都会对应一个confidence，等价于GT与该Bbox的IOU（如果这个Grid Cell里面没有Obj则conf=0，判断方式是gtbox的中心是否落在这个gridcell里面）然后Bbox的conf再和20个类别所得的置信度相乘，获得每一类的最终置信度，并经过一个NMS（防止一个Obj对应着太多的Box）
+* Loss = 定位误差 + IOU误差 + 分类误差
 * 速度极快，精度也随着改进跟上了
     * 引入Res，引入Anchor，加入BN
+* 发展历史：
+    * Yolo v1：
+        * Features： 1. 用Grid Cell划分区域之后，对每个区域独立进行检测（分治法） 2. 完全End2End 3.应用了Leaky relu
+        * Shortcomings： 1. 位置准确度不足 2，对小物体效果差（由于每个格子最多检测出一个物体） 3. Recall比2-Stage的方法小
+    * Yolo V2 （Yolo9000） - 主要改善Recall以及定位精度
+        * 加入了BatchNorm
+            * 🤔Why Could BN Help: 网络层数加深，整体数据的分布会越来越偏，由BN强制拉到一个比较标准的分布（不然会发生Internal Covariance Shift）
+                * 本质上还是把数据拉到损失函数比较敏感（梯度比较大的地方）便于收敛
+        * Anchor Box的引入
+            * RPN的核心也是Anchor，通过anchor，让feature map上的点映射回到原图的点，这样需要预测的就不是直接的坐标而是偏移量了
+            * Yolo V2把全连接换成了Anchor Box方式进行预测
+                * 
+        * 用K-means训练Bbox的Size
+        * 添加了细粒度模块添加了一个PassThrough层，将相邻的特征按通道叠加而不是按空间叠加，这样让高低分辨率的特征能够串接起来
+            * [这篇文章]()表示这种方法和Res异曲同工，我没理解
+            * 🤔:Why Res Help(我感觉这个观点有点意思) Resnet通过一个shortcut feedback，学习的是f(x)-x，*举一个比较极端的例子*，假设f(x)=x（恒等映射）学习一个g(x) = f(x)-x=0比学习一个x要简单（而且NN的初始化一般都是0均值的）
+        * MultiScale-Training 多尺度训练
+    * Yolo V3 （Even Faster）
+
+            
 ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20190909152711.png)
 ### SSD (Single Shot Detector)
 * 引入了多目标检测
@@ -57,4 +82,10 @@ tags:                               #标签
 ### TridenNet （~~在深海使用三叉戟~~）2019
 * 关注*尺度变化的问题，研究不同感受野的优劣*
 * 将传统conv换*空洞卷积*，从而改变不同分支的感受野的大小
+
+## SubFileds (~~术业有专攻~~)
+### 多尺度目标检测 MultiResolution
+* Timeline
+![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20190909183225.png)
+* 
 
