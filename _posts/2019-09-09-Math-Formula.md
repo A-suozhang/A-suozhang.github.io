@@ -14,6 +14,7 @@ tags:                               #标签
 # Math Formula
 * 起因是看OpenAI的RL Spining Up 当中有太多公式了，实在忍不住配置了一下Markdown和博客上面的数学公式
 * 顺便可以学习一个LaTEX的公式打法
+* [这里](https://www.cnblogs.com/linxd/p/4955530.html)有一个不错的参考链接
   
 # 语法
 ## 1. 希腊字母　   
@@ -27,10 +28,13 @@ $$ \sigma - \xi $$
 2.1 上标　"^" ; 下标 "_"   
 
 $$ \alpha^2  \omega^{20}$$
+$$ \alpha_{ij}^{k}$$
 
-2.2 矢量
+2.2 矢量等上标记
 
-$$ \vec{xy} $$
+$$ \vec{xy} (vec)$$
+$$ \hat{xy} (hat)$$
+
 
 2.3 括号
 
@@ -72,6 +76,13 @@ $$ \sqrt[3]{x^2}$$
 
 ### 3.特殊符号
 ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20190909101738.png)
+* 补充几个
+
+$$ \prod (prod)$$  
+$$ \iint (iint)$$  
+$$ \sim  (sim) $$
+
+
 
 ### 4.方程组 & 矩阵
 
@@ -90,3 +101,15 @@ $$\begin{bmatrix}
 {a_{m1}}&{a_{m2}}&{\cdots}&{a_{mn}}\\
 \end{bmatrix}$$
 
+
+
+## Practice 
+* Back Prop
+
+$$ \delta^L = \nabla_a C \odot \sigma^`(z^L) $$
+
+$$ \delta^l = ({(\omega^{l+1})}^T\delta^{l+1}) \odot \delta^`(z^l) $$
+
+$$ \frac{\partial C}{\partial b^l_j} = \delta^l_j $$
+
+$$ \frac{\partial C}{\partial w^l_{jk}} = a^{l-1}_k*\delta^l_j$$
