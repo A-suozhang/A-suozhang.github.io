@@ -113,7 +113,11 @@ gem install kramdown
 * **解决方案**：在本地先使用　```$FORMULA$```书写并测试渲染，push之前再改成```$$ FORMULA $$```
 $$ F(x) = P\{ X <= x \} = \int_{-\infty}^x f(x)\,dx $$
 * 这个是网页上支持的另起一行的公式书写(但是本地markdown不支持)
-\\[ f(x,y,z) = 3y^2 z \left( 3 + \frac{7x+5}{1 + y^2} \right). \\]
+\\[ f(x,y,z) = 3y^2 z \left( 3 + \frac{7x+5}{1 + y^2} \right). \\]]
+
+## Other Trouble Shooting
+* 网站渲染的时候出现某一个大标题右缩进
+    > 大标题紧跟的行数的上一行缩进了，再空一行即可
 
 
 
