@@ -11,15 +11,18 @@ tags:                               #标签
     - Linux
 ---
 # Set Up Ubuntu
+
 ## 选择版本
 * 尽量选择LTS的版本（16.04/18.04）
 * 不要选择太老的版本
+  
 ## Win下的准备
 * 官网下载镜像（xx.img）
 * 下载Universal USB Installer制作启动盘
 * 磁盘管理中把盘分好
   * 注意有的时候合并分区不能跨分区
   * 注意在安装了ubuntu之后在windows分盘的时候不要把带grub的分区清空
+* 
 ## 安装
 * 开机时候进入grub（thinkpad貌似是F12？）
 * 关闭Secure Boot并且把U盘的启动设置高优先级
@@ -28,13 +31,17 @@ tags:                               #标签
   * 关闭在安装时同时安装软件等东西
   * **一定不要选择清除已有的系统安装**
   * 建议直接按照默认让他帮你配置boot等分区
+* 
 ## 开机配置
+
 ### 切换软件源
 * 先切换源否则apt-get会很慢
 * 在software & Update中，选择更换源
+  
 ### 安装中文输入法
 * 我装的时搜狗，貌似还需要配置fctix（Ubuntu的输入法管理）
   * 参考[这个链接](https://www.cnblogs.com/BlackStorm/p/10359254.html)
+  
 ### 安装必要软件
 * 以下基本都可以通过直接在官网下载.deb安装
   * chrome
@@ -48,6 +55,7 @@ tags:                               #标签
       * Markdown
       * Python等语言的支持
   * 坚果云
+
 ### Bash相关
 * [环境变量的配置](https://blog.csdn.net/nyist327/article/details/22929553)
 * 可以通过这种方式在写指令的同时输入密码
@@ -58,6 +66,7 @@ tags:                               #标签
   ```
   echo "看到这行字，说明添加自启动脚本成功。" > /usr/local/test.log
   ```
+
 ### 科学上网
 1. Shadowsocks客户端配置
 * 首先你需要已经有一个Shadowsocks服务器，并且获得

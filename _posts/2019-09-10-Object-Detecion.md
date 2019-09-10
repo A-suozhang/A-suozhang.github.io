@@ -15,10 +15,12 @@ tags:                               #标签
 * 文章来自于[Arxiv](https://arxiv.org/abs/1905.05055)又看的[zhihu](https://zhuanlan.zhihu.com/p/72838705)的翻译版，我自己再夹杂一些私货，算是二次咀嚼了，~~反刍（不是)~~
 
 ## Metrics
-* Precison = True Positive/All Positve
+* Precison = True Positive/All Positve 
     * 最后判断为Positive的有多少是正确的
-* Recall = True Positive/(TP+FN)->All Positive(GT) 
+    * *放心度* 模型判断出来正确我用起来多放心，可以很放心，但是过度谨慎（recall度 ）
+* Recall = True Positive/(TP+FN)->All Positive(GT)  - 
     * GT中有Positive多少被判断出来了
+    * *敏锐度* 模型能够把客观正确的判断出来多少，可以很敏锐，但是很粗心(Precision低)
 * AP - Average Precision
     * 不同Recall下的Precision的Mean
     * 详细计算方法参考[这个教程](https://zhuanlan.zhihu.com/p/72838705)
