@@ -72,6 +72,7 @@ tags:                               #标签
     3. 保留了先验框（Faster RCNN中的**Anchor**）为每一个单元格子都设置长宽比不同的先验框，是BBox的基准，对于每个anchor box都独立作出判别
     4. 训练中Ground Truth与Box的配准： yolo较为naive，gt的中心在那个单元格，就找（该grid cell中）与其IOU最大的bbox负责
         * 而SSD则更为“谨慎”，对于每一个gt都找出图中所有的anchor box（比前面少了当前的grid cell中）与其IOU最大的，然而这样会造成负样本过多（超多的anchorbox没有对应的gt），因而需要降低标准，对每一个anchor，如果与gt的iou大于某一阈值，也看做匹配
+        
 ### FPN（Feature Pyramid） 2017
 * 金字塔的结构，更好适应多尺度
 ### RetinaNet
@@ -82,6 +83,12 @@ tags:                               #标签
 ### TridenNet （~~在深海使用三叉戟~~）2019
 * 关注*尺度变化的问题，研究不同感受野的优劣*
 * 将传统conv换*空洞卷积*，从而改变不同分支的感受野的大小
+
+## 🤔🤔🤔Thoughts
+### 
+
+
+
 
 ## SubFileds (~~术业有专攻~~)
 ### 多尺度目标检测 MultiResolution
