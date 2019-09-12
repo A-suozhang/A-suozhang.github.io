@@ -15,6 +15,7 @@ tags:                               #标签
 > Make It **REASONABLE**
 * 遥记得大一的时候去T大和学长聊天他就说过他自己把线代学了三遍
 * 目前我对线代的理解近乎为0吧，大一啥都没学到，特此重学
+![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20190912151656.png)
 
 # Linear Algebra
 ## Vectors 向量
@@ -32,13 +33,14 @@ $$
 * 向量加法，看做数轴上面加(减)法的二维拓展
 * 向量乘法，缩放(Scaling)
 * *给了计算机科学一种将大量数据格式化，概念化，并且可以加以计算的方式*
+
 ## Span 线性空间 
 * The **Span** Of 2 Vectors由两个向量“张开成的空间”
     * 可以理解为一个固定不动，另一个变化所“扫”出的空间(多个也同理)
     * 如果增加一个新的向量，对**扫出的空间(Span)**没有增加，则他与原先的基*线性相关*
         * 可以被之前的Vector线性表示（在之前向量组成的span内）
 * Basis - 基
-  * 可以决定一个空间
+  * 一个线性空间可以被它的一组基完全表示
 
 ## Matrix
 * 与Linear Transforamtion
@@ -48,6 +50,8 @@ $$
 * 将矩阵乘法分解
   * 矩阵的列看做是变化之后的**基向量**
   * 结果看做是它们的**线性组合**
+* 将几个变换复合*先发生的靠近[x,y]（也就是在右边）*
+
 $$
 \begin{bmatrix}
 {a}&{b}\\
@@ -89,7 +93,27 @@ $$
 
 ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20190910194807.png)
 
-
+## Determinant 行列式
+* 行列式的意义是该空间的基，所构成的平行四边形(平行六面体)的面积(体积)
+    * 矩阵或者说线性变换的行列式表示了**空间被挤压，伸缩的情况**
+![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20190912152003.png)
+* *What If Det(A) < 0*
+    * 当基之间的相对位置关系发生了改变的时候（比如原先j在i的逆时针方向，但是后来跑到顺时针方向了）
+    * 当整个空间(2-D)被压缩到一条直线的时候(这个时候ij重合了),此时det(A)大小为0s
+* 数学定义的几何意义
+![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20190912152111.png)
+* 当**行列式**的值为0的时候，平行四边形将会退化为直线（2-D -> 1-D）
+    * *这个时候没有逆变换* （不满秩的时候（当维度退化的时候）不存在逆变换）
+        * ❗没有办法从一个低维度的空间回复出一个高维度的空间（这样一定会让1个input对应多个output，而函数要求单输入单输出）
+    * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20190912152314.png)
+* **秩**： 该线性变化的矩阵的列向量，所Span成的空间，也叫做**列空间**的维度，就是这个矩阵的“秩”
+    * **满秩**该线性变换不会将空间退化 -> 行列式的值不为0 -> 存在逆变换
+![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20190912152415.png)
+* 将**线性变换** -> **矩阵** -> **线性方程组**所对照的话
+    * 当满秩的时候，直接对应，很简单（一定有解）
+    * 当不满秩的时候，只有特殊情况才有解（当解正好在被退化的平面上时）
+        * 秩大小不同，解空间也不同： 比如3-D的，退化为2-D（秩为2）解就在平面上，如果rank=1，那么解收缩为原点
+        * 原点，又被称为**零空间(Null Space)**或者是**核(kernel)**
 
 # Refs
 1. [3Blue1Brown's Video](http://www.bilibili.com/video/av6731067?p=1&share_medium=android&share_source=qq&bbid=XY8437382A43059E8474C51AA1E313CA89074&ts=1568085084206)

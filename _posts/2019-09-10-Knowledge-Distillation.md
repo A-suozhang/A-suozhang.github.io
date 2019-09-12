@@ -91,13 +91,16 @@ $$ q_i = \frac{e^{\frac{z_i}{T}}}{\sum_j{e^{\frac{z_j}{T}}}}$$
   * Core:**The FLow Of The Solution** - Direction Between Features Of 2 Layers  
     * The **FSP Matrix**
 
+### 4.[Deep Mutual Learning](https://arxiv.org/abs/1706.00384)
+  * CVPR 2018
+
 $$ G_{i,j}(s;W)=\sum_{s=1}^{h}{\sum_{t=1}^{w}{\frac{F_{s,t,i}^1(x;W)xF^2_{s,t,j}(x;W)}{h \times W}}}  $$
     * F1,F2是两个WxHxm的Feature Map
     * 选择TCH和STU分别生成的N个FSP Matrix做L2范数加入Loss（两者的Fsp Matrix大小需要相同（文章中对于不一样分辨率的使用了Max-pooling）~~Not That Elegant  ~~）
       * 两个网络分辨率需要相同感觉就像是resemble，而不太是distill（个人观点）
         * 作者说没有多少restrict，但是这个对STU的结构感觉限制有点多了
   ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20190910220809.png)
-    * 实际训练时**2 Stage**学习FSP矩阵和学习任务是分开的 ~~Not So Elegant~~
+    * 实际训练时**2 Stage**学习FSP矩阵和学习任务是分开的 ~~ Not So Elegant ~~
   * 实验
     * 都使用ResNet on Cifar10/Cifar100
     * 锤了FitNet
@@ -109,7 +112,9 @@ $$ G_{i,j}(s;W)=\sum_{s=1}^{h}{\sum_{t=1}^{w}{\frac{F_{s,t,i}^1(x;W)xF^2_{s,t,j}
 
 ### 4. [Born Again Neural Network](https://arxiv.org/abs/1805.04770)
 ### 5. [Using Knowledge Distillation Techniques To Improve Low-Precision Network Accuracy](https://arxiv.org/abs/1711.05852)
-
+### 6. [Feature Fusion for Online Mutual Knowledge Distillation](https://arxiv.org/abs/1904.09058)
+### 7. [Knowledge Distillation by On-the-Fly Native Ensemble](https://www.semanticscholar.org/paper/Knowledge-Distillation-by-On-the-Fly-Native-Lan-Zhu/c864e3785a9aecf25296781c272980eaed78e51a )
+### 8. [EnsembleNet: End-to-End Optimization of Multi-headed Models](https://arxiv.org/abs/1905.09979)
 
 ## Clips
 * [“在线蒸馏”训练大规模神经网络](https://zhuanlan.zhihu.com/p/35698635) Hinton,Google Brain; 处理分布式训练问题 
