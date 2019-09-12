@@ -50,6 +50,7 @@ $$
 * 将矩阵乘法分解
   * 矩阵的列看做是变化之后的**基向量**
   * 结果看做是它们的**线性组合**
+> 把一个矩阵的列，看做单位基向量经过它对应的线性变换之后的Landing Spot
 * 将几个变换复合*先发生的靠近[x,y]（也就是在右边）*
 
 $$
@@ -114,6 +115,68 @@ $$
     * 当不满秩的时候，只有特殊情况才有解（当解正好在被退化的平面上时）
         * 秩大小不同，解空间也不同： 比如3-D的，退化为2-D（秩为2）解就在平面上，如果rank=1，那么解收缩为原点
         * 原点，又被称为**零空间(Null Space)**或者是**核(kernel)**
+* *不为方阵的矩阵* - *Transorm Between Dimensions*
+    * 本身就是跨维度的变换，不存在Det
+    
+$$
+\begin{bmatrix}
+{a_{11}}&{a_{12}}&{a_{13}}\\
+{a_{21}}&{a_{22}}&{a_{23}}\\
+\end{bmatrix}
+$$
+    * Example: 3 columns表示输入空间有3个基底（也就是3维）
+        * col - input； row - output
+        * *有一些类似于投影或者点积的意味但是又区别*
+## 点积 (Dot Product)
+* **经典看法**对两个维度一样的向量，将对应位置的元素相乘并且相加
+* **几何意义**  $$ \vec{a} \cdot \vec{b} $$ a在b上（b在a上）的投影乘上它本身的长度 
+* 对偶性
+* 多维到1维(数轴)的线性变化
+    * 套用我们前面的，将一个向量在它的空间内（N维）分解为N个基底的表示，并且用每个基底的变化后的坐标组合得到这个点变化后的坐标
+        我们会发现这样的过程，就是做点积的过程
+* **新的看法** 假设有一个2-D -> 1-D的矩阵（1*2） 
+    * 这个新空间是一条数轴，假设它在2D平面内的一条直线
+    * 它的两个值分别是i，j（二维空间基底）映射到这数轴上对应的点的值
+    * 假设数轴上单位长(1)的值对应二维空间中的点为(ux,uy)
+        * 有对称性可以得到这个矩阵就是 [ux,uy] 
+        * (想象i投影到数轴上，由**对称**就相当于u投影到x轴上)
+* **对偶性(Duality)看法**
+    * 两个向量的点乘，将其中一个转化为线性变换 （线性变换与向量之间具有对偶性）
+
+$$ \begin{bmatrix}{x_1}\\{y_1}\end{bmatrix} \cdot  \begin{bmatrix}{x_2}\\{y_2}\end{bmatrix}\quad >>> \quad \begin{bmatrix}{x_1}&{y_1}\end{bmatrix}\begin{bmatrix}{x_2}\\{y_2}\end{bmatrix}$$ 
+
+> 不要把Vector(向量)看做空间中的一些矢量，而是看做线性变化的物理载体
+
+## 叉积
+* **经典看法** 模等于两个向量围成的平行四边形的面积（如果b在a的右边（顺时针）结果为正）
+    * 如何记顺序: ixj>0
+    * 右手定则
+    * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20190912192336.png)
+* Where Did The Det Come From :
+    * 延伸之前对Duality的看法： *根据ab向量定义一个三维到1维度的线性变换，找出这个线性变换所对应的Vecotr就是结果*
+    * 将3x3矩阵的第一纵列看做变量，构造一个函数，这个函数是线性的，可以看做是由线性变换组成的，再由对偶性，将其转化为点积(dot)
+![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20190912193435.png)
+![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20190912193540.png)
+
+## 基变换
+* 基底的不同可以看做 1)先进行基向量变化 2)再看向量
+    * *注意这边基底的变化应该在观察的变化之前* 
+    * *注意正逆哦，可以想一下旋转*
+    * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20190912195538.png)
+* 如何描述不同基底下的变换矩阵？
+    * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20190912200128.png)
+    * （把(-1,2)替换成她的基，前面三个的积就是所求的矩阵）
+    * $$ A^{-1} M A $$ The New Transformation M From Another Aspect (A)
+
+## 特征向量特征值(Eigen Vector&EigenValue)
+*  一般的一个很Random的线性变化，大部分向量都会偏移自身span出的直线，那些例外的，就是**特征向量**，而其伸长(压缩)的就是**特征值**（如果为负数就是方向反了flipped）
+* 定义： $$A\vec{v}=\lambda\vec{v} \quad>>\quad A\vec{v}=\begin{bmatrix}{\lambda}&{0}&{0}\\{0}&{\lambda}&{0}\\{0}&{0}&{\lambda}\end{bmatrix}\vec{v}\quad>>\quad (A-\lambdaI)\vec{v} = 0 $$
+    * 且只有当矩阵不满秩的时候才会存在解使得变换降维 
+* 特征基 此时Matrix为Diagonal Matrix(只有对角元)
+    * 可以自己转 - 这个过程就是**特征值分解 **
+
+        
+
 
 # Refs
 1. [3Blue1Brown's Video](http://www.bilibili.com/video/av6731067?p=1&share_medium=android&share_source=qq&bbid=XY8437382A43059E8474C51AA1E313CA89074&ts=1568085084206)

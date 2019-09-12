@@ -24,7 +24,7 @@ tags:                               #标签
   * 注意在安装了ubuntu之后在windows分盘的时候不要把带grub的分区清空
 * 
 ## 安装
-* 开机时候进入grub（thinkpad貌似是F12？）
+* 开机时候进入BIOS（thinkpad貌似是F12？）
 * 关闭Secure Boot并且把U盘的启动设置高优先级
 * 选择英文可能没有中文输入法
 * 再度开机时候就进入安装界面了

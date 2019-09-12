@@ -76,11 +76,14 @@ $$ \sqrt[3]{x^2}$$
 
 ### 3.特殊符号
 ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20190909101738.png)
+![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20190912191324.png)
+
 * 补充几个
 
 $$ \prod (prod)$$  
 $$ \iint (iint)$$  
 $$ \sim  (sim) $$
+$$ \cdot (cdot)$$
 
 
 
