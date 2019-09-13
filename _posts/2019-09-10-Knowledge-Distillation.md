@@ -49,6 +49,11 @@ $$ q_i = \frac{e^{\frac{z_i}{T}}}{\sum_j{e^{\frac{z_j}{T}}}}$$
   3. 不用soft ~~废话~~ 
 * Distillation与其他的Model Compression的方法(比如Pruning,Quantize)是可以结合的
 * 试验证明Soft Target是可以起到正则化作用的
+* **后续的很多研究说明，或许KD并不需要一个很好的TCH**
+  * 🤔是否只是一个比较好的Soft Label起到了效果而并非是KD
+  * 其他研究中的Dataset Distillation验证了该观点
+* KD可以广泛使用与比如RL，在
+  * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20190913111544.png)
 * 前期大家方法的主要区别是**What To Distill**
   * Origianl-KD: OUTPUT with Soft Target
   * ThinNet:     Intermediate Layer Weight
@@ -58,7 +63,9 @@ $$ q_i = \frac{e^{\frac{z_i}{T}}}{\sum_j{e^{\frac{z_j}{T}}}}$$
 * 过少的数据不能很好表达Teacher的所有Knowledge,所以需要一些额外的Data Augmentation
 * **What To Worry**
   * 目前的一些Knowledge Distillation的方式有些看起来还是比较像在炼丹...那个压缩BERT的文章看上去很Appealing,但是只是比未蒸馏的高了5个点,还远达不到能够替代或者是上线
+    * 目前水文章的一些人还是去关注怎么样通过一些trick去证明“能学出来”，去提升一些点
   * 不知道是蒸馏起了作用还是单纯的数据量增多了
+    * 单纯的对比小模型直接训练，很容易就能超过
   * 概念很简单,但是实际实践起来有很多Trick层面的东西
   * （个人感觉）这种方式本质上还是针对OverParam，对于一个设计得比较elegant的网络架构压缩效率不高（类似于Deep Compression对VGG和ResNet）
     * 现有的论文尝试去Distill BERT效果只是稍有提升，和原模型差距还是很远...（感觉那篇文章与其说是去压缩BERT不如说是利用BERT的知识（但是作者好像本意就是后者，只是标题的意思有点像前者））
@@ -91,16 +98,15 @@ $$ q_i = \frac{e^{\frac{z_i}{T}}}{\sum_j{e^{\frac{z_j}{T}}}}$$
   * Core:**The FLow Of The Solution** - Direction Between Features Of 2 Layers  
     * The **FSP Matrix**
 
-### 4.[Deep Mutual Learning](https://arxiv.org/abs/1706.00384)
-  * CVPR 2018
-
 $$ G_{i,j}(s;W)=\sum_{s=1}^{h}{\sum_{t=1}^{w}{\frac{F_{s,t,i}^1(x;W)xF^2_{s,t,j}(x;W)}{h \times W}}}  $$
+
     * F1,F2是两个WxHxm的Feature Map
-    * 选择TCH和STU分别生成的N个FSP Matrix做L2范数加入Loss（两者的Fsp Matrix大小需要相同（文章中对于不一样分辨率的使用了Max-pooling）~~Not That Elegant  ~~）
+    * 选择TCH和STU分别生成的N个FSP Matrix做L2范数加入Loss（两者的Fsp Matrix大小需要相同（文章中对于不一样分辨率的使用了Max-pooling
+      * ~~Not That Elegant~~
       * 两个网络分辨率需要相同感觉就像是resemble，而不太是distill（个人观点）
         * 作者说没有多少restrict，但是这个对STU的结构感觉限制有点多了
   ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20190910220809.png)
-    * 实际训练时**2 Stage**学习FSP矩阵和学习任务是分开的 ~~ Not So Elegant ~~
+    * 实际训练时**2 Stage**学习FSP矩阵和学习任务是分开的 ~~Not So Elegant~~
   * 实验
     * 都使用ResNet on Cifar10/Cifar100
     * 锤了FitNet
@@ -109,16 +115,54 @@ $$ G_{i,j}(s;W)=\sum_{s=1}^{h}{\sum_{t=1}^{w}{\frac{F_{s,t,i}^1(x;W)xF^2_{s,t,j}
     * Transfer Learning
       * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20190910223127.png)
 
+TODO: 最后把这边的序号改一下
+### 4.[Deep Mutual Learning](https://arxiv.org/abs/1706.00384)
+  * CVPR 2018
+  * 单TCH单STU -> 单TCH多STU(STU之间还有Mutual Learning) -> 不需要TCH
+  * 不仅可以从大模型中得到一个小模型，单纯的对大模型进行MutualLearning的效果也比单纯训练好
+  > 感觉这就是换了一种形式的Ensemble(最大的区别就是实际上线的时候不需要多个Netorwk都跑取平均)
+  ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20190913101825.png)
+  * Loss函数是正常的分类Loss加上该网络与其他网络的后验概率的KL散度
+    * 对单网络来说相当于是加上了一个多余的惩罚项？（惩罚各个网络训练出来的差距过大？）
+    * 多个STU的时候可以把其他K-1个STU的Ensemble当成一个TCH
+  * 🤔这个东西的提出是不是说明了之前的大模型不必要？不需要一个非常接近效果好的模型（大模型），只需要一个比较接近效果好的模型（？），说不清楚
+  * 实验
+    * 数据集
+      * Cifar100
+      * Market 1501 （Person ReID - Fine-Grained）
+    * 模型
+      * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20190913103015.png)
+      * 小的是STU 大的是TCH （Inception V1； Wide ResNet）
+    * Results
+      * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20190913103633.png)
+      * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20190913103702.png)
+      * 与Distilation对比：
+        * Peer As Teacher Is Better！
+        * More Peers：Even Better Than More Network Ensemble    
+    * Why Does This Work?
+      * 不去寻找一个很陡峭很Deep的Train Set最优，而是去寻找一块相对Robust的最小值
 
-### 4. [Born Again Neural Network](https://arxiv.org/abs/1805.04770)
+### 5. [Born Again Neural Network](https://arxiv.org/abs/1805.04770)
+  * Cite 76
+  * ICML 2018
+  * The BAN could OUTPERFORM the teacher in Image & Language Field
+  * TCH与STU有完全相同的结构
+  * (**Main Contribution**)认为KD的内容可以分为两个Term
+    * 一个蕴含着错误信息的Dark Knowledge  DKPP
+    * 一个GT相关的，只相当于原先gradient的简单rescale（?）  CWTM
+  * Loss还是TCH和STU的Soft Target的Cross Entropy
+    * 认为KD不需要一个Strong Master (with实验)
+  * 实验(比较健全，之后具体分析)
+    * 数据集： cifar100
+
+
+
+
 ### 5. [Using Knowledge Distillation Techniques To Improve Low-Precision Network Accuracy](https://arxiv.org/abs/1711.05852)
 ### 6. [Feature Fusion for Online Mutual Knowledge Distillation](https://arxiv.org/abs/1904.09058)
 ### 7. [Knowledge Distillation by On-the-Fly Native Ensemble](https://www.semanticscholar.org/paper/Knowledge-Distillation-by-On-the-Fly-Native-Lan-Zhu/c864e3785a9aecf25296781c272980eaed78e51a )
 ### 8. [EnsembleNet: End-to-End Optimization of Multi-headed Models](https://arxiv.org/abs/1905.09979)
 
-## Clips
-* [“在线蒸馏”训练大规模神经网络](https://zhuanlan.zhihu.com/p/35698635) Hinton,Google Brain; 处理分布式训练问题 
-* 
 
 # Refs
 > 以下文章按照实践顺序排列,且不可避免的会有一些比较没用的东西
@@ -126,3 +170,5 @@ $$ G_{i,j}(s;W)=\sum_{s=1}^{h}{\sum_{t=1}^{w}{\frac{F_{s,t,i}^1(x;W)xF^2_{s,t,j}
 2. [知识蒸馏knowledge distillation 在自然语言处理NLP中有哪些方面的应用或发展？](https://www.zhihu.com/question/333196499)
 3. [Git-Awesome-Knowledge-Distillation](https://github.com/dkozlov/awesome-knowledge-distillation)
 4. [数据集蒸馏](https://zhuanlan.zhihu.com/p/56328042)
+5. [“在线蒸馏”训练大规模神经网络](https://zhuanlan.zhihu.com/p/35698635) Hinton,Google Brain; 处理分布式训练问题 
+6. [ICML 2018 | 再生神经网络：利用知识蒸馏收敛到更优的模型](https://zhuanlan.zhihu.com/p/37384778)

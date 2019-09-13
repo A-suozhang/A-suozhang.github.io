@@ -2,7 +2,7 @@
 layout:     post                    # 使用的布局（不需要改）
 title:      重学线性代数 Linear-Algebra             # 标题 
 subtitle:   一个感慨自己本科三年白学了的系列        #副标题
-date:       2019-09-10              # 时间
+date:       2019-09-12              # 时间
 author:     tianchen                      # 作者
 header-img:  img/bg-beer.jpg  #这篇文章标题背景图片
 catalog: true                       # 是否归档
