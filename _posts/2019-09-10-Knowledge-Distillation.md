@@ -2,7 +2,7 @@
 layout:     post                    # 使用的布局（不需要改）
 title:      A Survey Of Knowledge Distillation              # 标题 
 subtitle:   The Most Advanced & Elegant Compression        #副标题
-date:       2019-09-10              # 时间
+date:       2019-09-13              # 时间
 author:     tianchen                      # 作者
 header-img:  img/bg-term.png  #这篇文章标题背景图片
 catalog: true                       # 是否归档
@@ -51,7 +51,7 @@ $$ q_i = \frac{e^{\frac{z_i}{T}}}{\sum_j{e^{\frac{z_j}{T}}}}$$
 * 试验证明Soft Target是可以起到正则化作用的
 * **后续的很多研究说明，或许KD并不需要一个很好的TCH**
   * 🤔是否只是一个比较好的Soft Label起到了效果而并非是KD
-  * 其他研究中的Dataset Distillation验证了该观点
+  * 其他研究中的Dataset Distillation验证了该观点 
 * KD可以广泛使用与比如RL，在
   * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20190913111544.png)
 * 前期大家方法的主要区别是**What To Distill**
@@ -100,11 +100,11 @@ $$ q_i = \frac{e^{\frac{z_i}{T}}}{\sum_j{e^{\frac{z_j}{T}}}}$$
 
 $$ G_{i,j}(s;W)=\sum_{s=1}^{h}{\sum_{t=1}^{w}{\frac{F_{s,t,i}^1(x;W)xF^2_{s,t,j}(x;W)}{h \times W}}}  $$
 
-    * F1,F2是两个WxHxm的Feature Map
-    * 选择TCH和STU分别生成的N个FSP Matrix做L2范数加入Loss（两者的Fsp Matrix大小需要相同（文章中对于不一样分辨率的使用了Max-pooling
-      * ~~Not That Elegant~~
-      * 两个网络分辨率需要相同感觉就像是resemble，而不太是distill（个人观点）
-        * 作者说没有多少restrict，但是这个对STU的结构感觉限制有点多了
+  * F1,F2是两个WxHxm的Feature Map
+  * 选择TCH和STU分别生成的N个FSP Matrix做L2范数加入Loss（两者的Fsp Matrix大小需要相同（文章中对于不一样分辨率的使用了Max-pooling
+    * ~~Not That Elegant~~
+    * 两个网络分辨率需要相同感觉就像是resemble，而不太是distill（个人观点）
+      * 作者说没有多少restrict，但是这个对STU的结构感觉限制有点多了
   ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20190910220809.png)
     * 实际训练时**2 Stage**学习FSP矩阵和学习任务是分开的 ~~Not So Elegant~~
   * 实验
@@ -155,12 +155,20 @@ TODO: 最后把这边的序号改一下
   * 实验(比较健全，之后具体分析)
     * 数据集： cifar100
 
-
-
-
 ### 5. [Using Knowledge Distillation Techniques To Improve Low-Precision Network Accuracy](https://arxiv.org/abs/1711.05852)
-### 6. [Feature Fusion for Online Mutual Knowledge Distillation](https://arxiv.org/abs/1904.09058)
+  * Low Precison + KD (强调KD可以显著提高low-bit网路的准确度)
+  * **先用pretrain的Full-Precision，做量化之后，再用KD做Finetune，这样效果最好**
+  * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20190913145408.png)
+
+
+### 6. [Feature Fusion for Online Mutual Knowledge Distillation](https://arxiv.org/abs/1904.09058)、
+  * **从不同的Sub-Network中汇集Feature Map，本质上还是一种Ensemble的方式** 
+  * 比较appealing的是提出了不同的subnetwork可以用不同的type（因为提取的是feature map） **But Not Different Task**
+  * 实验中对比较和
+
 ### 7. [Knowledge Distillation by On-the-Fly Native Ensemble](https://www.semanticscholar.org/paper/Knowledge-Distillation-by-On-the-Fly-Native-Lan-Zhu/c864e3785a9aecf25296781c272980eaed78e51a )
+  * **脱离Pretrained Teacher**
+
 ### 8. [EnsembleNet: End-to-End Optimization of Multi-headed Models](https://arxiv.org/abs/1905.09979)
 
 
@@ -171,4 +179,4 @@ TODO: 最后把这边的序号改一下
 3. [Git-Awesome-Knowledge-Distillation](https://github.com/dkozlov/awesome-knowledge-distillation)
 4. [数据集蒸馏](https://zhuanlan.zhihu.com/p/56328042)
 5. [“在线蒸馏”训练大规模神经网络](https://zhuanlan.zhihu.com/p/35698635) Hinton,Google Brain; 处理分布式训练问题 
-6. [ICML 2018 | 再生神经网络：利用知识蒸馏收敛到更优的模型](https://zhuanlan.zhihu.com/p/37384778)
+6. [ICML 2018 再生神经网络：利用知识蒸馏收敛到更优的模型](https://zhuanlan.zhihu.com/p/37384778)
