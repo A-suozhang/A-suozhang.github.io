@@ -2,7 +2,7 @@
 layout:     post                    # 使用的布局（不需要改）
 title:      A Survey Of Knowledge Distillation              # 标题 
 subtitle:   The Most Advanced & Elegant Compression        #副标题
-date:       2019-09-13              # 时间
+date:       2019-09-14              # 时间
 author:     tianchen                      # 作者
 header-img:  img/bg-term.png  #这篇文章标题背景图片
 catalog: true                       # 是否归档
@@ -71,6 +71,18 @@ $$ q_i = \frac{e^{\frac{z_i}{T}}}{\sum_j{e^{\frac{z_j}{T}}}}$$
     * 现有的论文尝试去Distill BERT效果只是稍有提升，和原模型差距还是很远...（感觉那篇文章与其说是去压缩BERT不如说是利用BERT的知识（但是作者好像本意就是后者，只是标题的意思有点像前者））
     * **Not Too Bad**理论上不会出现“对于一个distill得比较好的网络就不能用剪枝定点去压缩”这样子的问题
     * 但是我们也不是只用来做压缩，可能还要考虑这个东西对Transfer的应用（感觉肯定有人拿distillation做transfer这样的）
+* **Where Did This Field GO**
+  * 该领域原本提出是为了从大模型之中提炼出一个比较小的模型(如其名字所述)
+  * 但是后续方向有些变化
+    * 单纯用来更好地提升单个模型的效果,甚至有一些抛弃了TCH,只是互相学习(Deep Mutual Learning)
+      * 有一些炼丹的意味
+      * 有一定的应用价值
+    * 应用于Transfer Learning
+      * 感觉不是很多...(待寻)
+      * A Gift 这篇文章提到过,但是不是特别合适
+    * 深入地解释蒸馏的含义,更多trick,更多水文章...
+      * Distill BERT
+      * 感觉有些被引申为怎么提取出大模型中有价值的部分而更加深入研究DL的本质了,有点飘...
 
 # Papers List
 ### 1. [FitNets](https://arxiv.org/abs/1412.6550.pdf)
@@ -115,8 +127,20 @@ $$ G_{i,j}(s;W)=\sum_{s=1}^{h}{\sum_{t=1}^{w}{\frac{F_{s,t,i}^1(x;W)xF^2_{s,t,j}
     * Transfer Learning
       * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20190910223127.png)
 
-TODO: 最后把这边的序号改一下
-### 4.[Deep Mutual Learning](https://arxiv.org/abs/1706.00384)
+### 4. [Net2Net: Accelerating Learning via Knowledge Transfer](https://arxiv.org/abs/1511.05641)
+  * Tianqi Chen & Ian Goodfellow
+  * ICLR 2018
+  * 强调的是**Knowledge Transfer**和Distillation不完全类似,有一定联系
+  * 更像是描述一种**Design Flow**，专注解决的问题是**Training Every Net From Scratch**是浪费，解决的是**Accelerate Training**
+    * 与一般的Design Flow的最大区别是，**利用**预先训练的结构与模型而不丢弃它 （有那么一点Incremental的意味，作者在文中提到这种方法可以Smoothly instantiate a larger model）
+  * 方法基于function preserving transformation(有点数学)目标是initialize STU 2 Represent The Same Function As Teacher
+  * **Implemention**
+    1. STU加入一些"Teacher Prediction Layer"，并修改损失函数，鼓励额外层去接近TCH网络中的某一层
+      * 作者认为原理是： ```Teacher could provide a good interna Representation for the task```
+      * 这种方法类似FitNets
+      * 作者表示实验说明这种方法并没有比传统方法好太多  
+
+### 5.[Deep Mutual Learning](https://arxiv.org/abs/1706.00384)
   * CVPR 2018
   * 单TCH单STU -> 单TCH多STU(STU之间还有Mutual Learning) -> 不需要TCH
   * 不仅可以从大模型中得到一个小模型，单纯的对大模型进行MutualLearning的效果也比单纯训练好
@@ -142,7 +166,7 @@ TODO: 最后把这边的序号改一下
     * Why Does This Work?
       * 不去寻找一个很陡峭很Deep的Train Set最优，而是去寻找一块相对Robust的最小值
 
-### 5. [Born Again Neural Network](https://arxiv.org/abs/1805.04770)
+### 6. [Born Again Neural Network](https://arxiv.org/abs/1805.04770)
   * Cite 76
   * ICML 2018
   * The BAN could OUTPERFORM the teacher in Image & Language Field
@@ -155,21 +179,21 @@ TODO: 最后把这边的序号改一下
   * 实验(比较健全，之后具体分析)
     * 数据集： cifar100
 
-### 5. [Using Knowledge Distillation Techniques To Improve Low-Precision Network Accuracy](https://arxiv.org/abs/1711.05852)
+### 7. [Using Knowledge Distillation Techniques To Improve Low-Precision Network Accuracy](https://arxiv.org/abs/1711.05852)
   * Low Precison + KD (强调KD可以显著提高low-bit网路的准确度)
   * **先用pretrain的Full-Precision，做量化之后，再用KD做Finetune，这样效果最好**
   * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20190913145408.png)
 
-
-### 6. [Feature Fusion for Online Mutual Knowledge Distillation](https://arxiv.org/abs/1904.09058)、
+### 8. [Feature Fusion for Online Mutual Knowledge Distillation](https://arxiv.org/abs/1904.09058)、
   * **从不同的Sub-Network中汇集Feature Map，本质上还是一种Ensemble的方式** 
   * 比较appealing的是提出了不同的subnetwork可以用不同的type（因为提取的是feature map） **But Not Different Task**
   * 实验中对比较和
 
-### 7. [Knowledge Distillation by On-the-Fly Native Ensemble](https://www.semanticscholar.org/paper/Knowledge-Distillation-by-On-the-Fly-Native-Lan-Zhu/c864e3785a9aecf25296781c272980eaed78e51a )
+### 9. [Knowledge Distillation by On-the-Fly Native Ensemble](https://www.semanticscholar.org/paper/Knowledge-Distillation-by-On-the-Fly-Native-Lan-Zhu/c864e3785a9aecf25296781c272980eaed78e51a )
   * **脱离Pretrained Teacher**
+  * 单纯的通过KD,来提升训练某个模型的效果(一个该领域目前的主要应用点🤔感觉还是有一点偏炼丹的感觉)
 
-### 8. [EnsembleNet: End-to-End Optimization of Multi-headed Models](https://arxiv.org/abs/1905.09979)
+### 10. [EnsembleNet: End-to-End Optimization of Multi-headed Models](https://arxiv.org/abs/1905.09979)
 
 
 # Refs
