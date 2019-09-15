@@ -2,7 +2,7 @@
 layout:     post                    # 使用的布局（不需要改）
 title:      An Intro to RL              # 标题 
 subtitle:   Think Like An Agent    #副标题
-date:       2019-09-08              # 时间
+date:       2019-09-15                # 时间
 author:     tianchen                      # 作者
 header-img:  img/bg-street.jpg  #这篇文章标题背景图片
 catalog: true                       # 是否归档
@@ -72,6 +72,7 @@ tags:                               #标签
                 * Stochastic 需要采样，计算大  - PPO
                 * Deterministic 已经证明过了策略梯度公式 - DPG/DDPG
     * 融合Value与Policy - Actor-critic方法 -> A3C
+    * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20190915141712.png)
 * State：对于现实世界情况的完全描述（往往是比较抽象的建模）
     * 用一个Tensor来作为*Representation*
 * Observation与State相对应，是当前世界不完全的描述，但是一般会比较具体  ~~我不到啊我瞎猜的~~
@@ -154,8 +155,15 @@ $$ V^*(\pi) = \max_{a}{Q^*(s,a)}$$
   * R - reward Function $$r =  R(s_t,a_t,s_{t+1})$$
   * P - Transition Probaliliy Function
   * $$ \rho_0 $$ - The Starting State
+* **MDP(Markov Decision Process)**
+    * Markov决策过程,比一半的Markov过程,在每个状态转移的过程中,定义一个回报函数(一般在每一步上加一个折扣因子)
+    * 决策优化的目标是寻找到一条 si->sj->sk 这样的**路径**,让回报函数最大化
     
-
+## Mc & TD
+* 是DL之外的另外分支,面向某些特别的Scenario 
+* Mc: **Monte-Carlo**适用于"情节型任务"(与之对应的是连续型)
+* TD: **Time Difference**结合了MC和DP(Dynamic Programming)
+* ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20190915141540.png)
 
 ## Q-Learning
 * 基于表格的方法（表格的XY轴分别是当前state和当前时刻所作出的决策；里面的值是潜在奖励-Q值）
@@ -167,6 +175,8 @@ $$ V^*(\pi) = \max_{a}{Q^*(s,a)}$$
 * alpha是学习率，表示学习速度 / gamma是对未来reward的衰减值（深谋远虑的程度）
 * Q-Learning是Off-Policy的（Q-Table存储了之前的经验，其更新可以不基于正在经历的经验）
     * 但是我们并没有利用到Q-Learning OFF-policy的特性，在DQN中会有用到
+* **Problem😣**:一般来说,Q Value对不同Action的方差小,难收敛(而且在某些情况下,Q-Value始终为正))
+  * Solution:引入Advantage Function
 
 ## Sarsa(State-Action-Reward-State-Action-这个名字也太魔性了...) 
 * 前向推断方式类似于Q-Learning（都是从一个QTable中选取最大Q值的策略）
@@ -187,15 +197,35 @@ $$ V^*(\pi) = \max_{a}{Q^*(s,a)}$$
 
 ## DQN - Deep Q Network
 * 当问题复杂之后，Q-Table会变得非常大，*将以一个表格存储Q值，转为由一个NN来生成Q值*🤔（用一个NN来建模QTable的规律，可以认为是一种压缩感知？）
-* DQN Work的核心： 
+* DQN Work的核心(由于DQN使用NN,但是不满足*iid*(独立同分布),理论上在这个环节上不是特别严谨,所以需要一些额外的设计来保证网络的收敛)： 
     1. Experience Replay： 由于Q-Learning Off-Policy（离线学习，能学习过去以及现在的Experience，也可以是别的agent的）
-        * 随机抽取过去的经历进行学习，而打乱经历之间的相关性，避免学到我们不需要的
+        * 随机抽取过去的经历进行学习，而打乱经历之间的相关性，避免学到我们不需要的(或者说是一个随机采样,来保证随机性以尽量达成分布的**独立性**)
     2. Fixed-Q-Target
-        * 使用两个结构一样的NN，实际进行Q-Estimation的网络具备新的参数，而预测$$\hat{Q}$$的NN用的是比较久之前的
+        * 使用两个结构一样的NN(Target/Estimation Network)，实际进行Q-Estimation的网络具备新的参数，而预测$$\hat{Q}$$的NN用的是比较久之前的
+        * 每C轮迭代之后让target<-estimation,目的i是更好的稳定训练    
 ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20190909150807.png)
 
+## DDPG (Deterministic Policy Gradient)
+* DQN能够解决高维的离散问题,但是对于连续空间或是变化很大的Scenario不太适用
+* 采用了Actor-Critic解决连续空间的问题
+  * via 引入Actor输出连续的动作(或者是离散的),Critic对[s,a]打分
+* 类似于DQN,也是Dual-Network,Critic和Actor各有两个NN(Target/Estimation)
+* ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20190915134806.png)
+* DDPG不是直接将Estimation付给Target,而是采用了soft target update,让参数*缓慢更新*
+* 有Trick是对Critc或者是Actor空间加入noise,会鼓励Actor进行Exploration,最后效果会更好
 
+##　TRPO(Trust Region Policy Optimization)
+* 解决DDPG网路参数更新的步长不确定问题
+* UCB,核心在于学习的可信度
+* 好数学...
 
+## PPO (Proximal Policy Optimization)
+
+## A3C - Asynchronous Advantage Actor-Critic
+* 做到了异步,适用于分布式的平台,多个actor-critic对,每个对应了不同的探索策略(多个小队共同探索)
+  * 由于异步各对之间低相关,不需要使用DQN中的Experience Replay机制来训练
+* 整体架构和DDPG类似,比DDPG多了: **采用了Max(Advantage)而不是Max(Q)**
+* ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20190915142259.png)
 
 
 
