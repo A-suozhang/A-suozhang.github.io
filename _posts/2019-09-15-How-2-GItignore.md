@@ -2,7 +2,7 @@
 layout:     post                    # 使用的布局（不需要改）
 title:      如何使用Git            # 标题 
 subtitle:   VScode的git插件在非正常使用下陷入混乱        #副标题
-date:       2019-09-10              # 时间
+date:       2019-09-15              # 时间
 author:     tianchen                      # 作者
 header-img:  img/bg-dayun0.jpg  #这篇文章标题背景图片
 catalog: true                       # 是否归档
@@ -19,7 +19,8 @@ tags:                               #标签
   * 本地文件如果只是修改了,没有执行git add,在VScode插件里面只显示CHANGES,如果进行了add之后,则显示STAGED CHANGES
 * 在Vscode当中的Commit按钮相当于执行了```git add.```,并且执行了```git commit```
 * 在Commit之前,可以用```git status```来查看当前的修改情况
-```
+
+``` bash
 On branch master
 Your branch is up to date with 'origin/master'.
 
@@ -29,8 +30,10 @@ Changes to be committed:
         deleted:    README.md
         modified:   _posts/2019-09-15-How-2-GItignore.md
 ```
+
 * 如果本地有没有add的东西,会显示
-```
+
+``` bash
 On branch master
 Your branch is up to date with 'origin/master'.
 

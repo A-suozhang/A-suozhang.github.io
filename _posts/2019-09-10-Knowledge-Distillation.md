@@ -16,7 +16,9 @@ tags:                               #标签
 > 希望能够好好坚持做完
 
 # Overview & 🤔Thinking
+
 > 在熟悉一个领域之前,首先有一些感性的认识,可以边读边思考,将来的一些思考内容也将汇入这里
+
 * **Why Knowledge Distillation**
   * The Model Is Too BIG (~~屁话~~)
 * **What Is Knowledge Distillation?**
@@ -39,7 +41,9 @@ tags:                               #标签
       * 可以认为是TCH学到了这几类比较相似,并且将这个信息传递给STU
     * 道理上讲 **这样的Target具有更大的熵!** 而且这样的类之间梯度的方差更小
 * Use **Softmax With Tempeature**
+
 $$ q_i = \frac{e^{\frac{z_i}{T}}}{\sum_j{e^{\frac{z_j}{T}}}}$$
+
   * Distillation Loss做了什么?
     * 由于正常NN输出的结果一般某一类的置信度很高,学不太出来东西,用温度因子T(*一般在1~20*)将各种类别的分布平缓一下(不然的话就是类似一个冲激,~~有点展宽旁瓣的意思~~)
 * 目标函数:
