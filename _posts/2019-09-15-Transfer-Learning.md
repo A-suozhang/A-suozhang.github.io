@@ -4,7 +4,7 @@ title:      迁移学习 Transfer Learning            # 标题
 subtitle:   Apply        #副标题
 date:       2019-09-15              # 时间
 author:     tianchen                      # 作者
-header-img:  img/bg-dayun0.jpg  #这篇文章标题背景图片
+header-img:  img/bg-cat2.jpg  #这篇文章标题背景图片
 catalog: true                       # 是否归档
 tags:                               #标签
      - DL

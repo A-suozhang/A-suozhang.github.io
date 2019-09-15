@@ -4,7 +4,7 @@ title:      数学公式应该怎么打              # 标题
 subtitle:   顺便学习一下LaTex哈        #副标题
 date:       2019-09-09              # 时间
 author:     tianchen                      # 作者
-header-img:     #这篇文章标题背景图片
+header-img:   img/bg-shahe0.jpg #这篇文章标题背景图片
 catalog: true                       # 是否归档
 tags:                               #标签
     - 常用

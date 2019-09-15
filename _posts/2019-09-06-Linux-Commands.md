@@ -4,7 +4,7 @@ title:      Linux常用命令笔记              # 标题
 subtitle:   学了忘，忘了学(Learning and then Forget, then Forgot to Learn)     #副标题
 date:       2019-09-06              # 时间
 author:     tianchen                      # 作者
-header-img:     #这篇文章标题背景图片
+header-img:  img/bg-april2.jpg   #这篇文章标题背景图片
 catalog: true                       # 是否归档
 tags:    
     - 常用                           #标签

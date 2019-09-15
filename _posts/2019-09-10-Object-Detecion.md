@@ -4,7 +4,7 @@ title:      Object Detection简述              # 标题
 subtitle:   看看这一年目标检测领域又背着我发展了多少(雾)        #副标题
 date:       2019-09-10              # 时间
 author:     tianchen                      # 作者
-header-img:  img/bg-beer.jpg  #这篇文章标题背景图片
+header-img:  img/bg-neon.jpg  #这篇文章标题背景图片
 catalog: true                       # 是否归档
 tags:                               #标签
     - DL
