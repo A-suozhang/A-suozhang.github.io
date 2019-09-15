@@ -1,6 +1,6 @@
 ---
 layout:     post                    # 使用的布局（不需要改）
-title:      A Survey Of Knowledge Distillation              # 标题 
+title:      A Survey On Knowledge Distillation              # 标题 
 subtitle:   The Most Advanced & Elegant Compression        #副标题
 date:       2019-09-14              # 时间
 author:     tianchen                      # 作者
