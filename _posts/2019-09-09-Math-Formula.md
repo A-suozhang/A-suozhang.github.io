@@ -34,6 +34,7 @@ $$ \alpha_{ij}^{k}$$
 
 $$ \vec{xy} (vec)$$
 $$ \hat{xy} (hat)$$
+$$ \tilde{xy} (tilde)$$
 
 
 2.3 括号

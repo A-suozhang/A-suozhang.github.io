@@ -1,7 +1,7 @@
 ---
 layout:     post                    # 使用的布局（不需要改）
 title:      保研面试-信号           # 标题 
-subtitle:   恰饭的手艺        #副标题
+subtitle:   恰饭的手艺                                   #副标题
 date:       2019-09-17              # 时间
 author:     tianchen                      # 作者
 header-img:  img/bg-solo.jpg  #这篇文章标题背景图片
@@ -28,6 +28,7 @@ tags:                               #标签
         * 极点靠近单位圆，极大值大；零点主要影响最小值
         * 群延迟 (-1)*(相频特性关于w的导数)
     6. 广义线性相位系统
+        * 实对称序列必定线性相位    
         * 由于线性相位，所以群延时(相频特性的导数)为常数
         * 可以找到4种
 
@@ -244,7 +245,7 @@ tags:                               #标签
         * *栅栏效应* 如果两个离散的谱线之间有一个比较大的频谱分量，归因于*频率采样点数不足*
             * 让谱线更密集，可以减少栅栏效应，但是不会提高*频率分辨率*
 
-* 信号无穷积分的问题： ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20190916165543.png)
+> 信号无穷积分的问题： ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20190916165543.png)
         
 
 
