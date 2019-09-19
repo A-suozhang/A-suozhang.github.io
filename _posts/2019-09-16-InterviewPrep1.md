@@ -247,5 +247,6 @@ tags:                               #标签
 
 > 信号无穷积分的问题： ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20190916165543.png)
         
+# 自控原理
 
 
