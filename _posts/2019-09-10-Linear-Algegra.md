@@ -134,6 +134,7 @@ $$
     * Example: 3 columns表示输入空间有3个基底（也就是3维）
         * col - input； row - output
         * *有一些类似于投影或者点积的意味但是又区别*
+        ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20190919092032.png)
 ## 点积 (Dot Product)
 * **经典看法**对两个维度一样的向量，将对应位置的元素相乘并且相加
 * **几何意义**  $$ \vec{a} \cdot \vec{b} $$ a在b上（b在a上）的投影乘上它本身的长度 

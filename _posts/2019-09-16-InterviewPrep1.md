@@ -1,7 +1,7 @@
 ---
 layout:     post                    # 使用的布局（不需要改）
 title:      保研面试-信号           # 标题 
-subtitle:   恰饭的手艺                                   #副标题
+subtitle:   恰饭的手艺                                     #副标题
 date:       2019-09-17              # 时间
 author:     tianchen                      # 作者
 header-img:  img/bg-solo.jpg  #这篇文章标题背景图片
