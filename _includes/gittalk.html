@@ -1,0 +1,20 @@
+
+<!-- Link Gitalk 的支持文件  -->
+<link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk@latest/dist/gitalk.min.js"></script> 
+<script type="text/javascript" src="/assets/js/md5.min.js"></script>
+<div id="gitalk-container"></div>     
+<script type="text/javascript">
+    var gitalk = new Gitalk({
+ 
+    // gitalk的主要参数
+        clientID: 'd15394fc97f26351f607',
+        clientSecret: 'a0b5354395b40413a4b260ae5e6b4901213fd1d3',
+        repo: 'a-suozhang.xyz',
+        owner: 'a-suozhang',
+        admin: ['a-suozhang'],
+        id: md5(location.pathname),
+        
+    });
+    gitalk.render('gitalk-container');
+</script> 
