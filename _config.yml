@@ -64,7 +64,7 @@ gitalk:
   enable: true    #是否开启Gitalk评论
   clientID: e9ac4584b1a134072e79                            #生成的clientID
   clientSecret: fbd004d0f23bf6b6809125d2a7a458d9fd2373d3    #生成的clientSecret
-  repo: a-suozhang.xyz   #仓库名称
+  repo: A-suozhang.github.io   #仓库名称
   owner: a-suozhang    #github用户名
   admin: a-suozhang
   distractionFreeMode: true #是否启用类似FB的阴影遮罩
