@@ -179,3 +179,4 @@ tags:                               #标签
   * [保研面试-数理](http://a-suozhang.xyz/2019/09/20/InterviewPrep0/)
 * 还有一个别人写的教程`
   * [北航信息与通信工程方向保研面试准备](https://www.cnblogs.com/RyanXing/p/9678456.html)
+  * [以及刘导的总结](http://ryushane.top/index.php/archives/27/)

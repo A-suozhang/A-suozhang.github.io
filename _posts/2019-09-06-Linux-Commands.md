@@ -178,3 +178,6 @@ tags:
     * locate命令　比find执行更快
 * Ubuntu目录下的lost+found/在非正常关机的时候会把一些文件放进这个文件夹供数据恢复用，大小可能有好几个Ｇ
     * 这种情况在板子不把系统shutdown直接断电的时候经常会出现
+* base64编码解码
+  * ```echo 'a-suozhang.xyz' | base64```
+  * ```echo $BASE^$_STRING | base64 -d ```

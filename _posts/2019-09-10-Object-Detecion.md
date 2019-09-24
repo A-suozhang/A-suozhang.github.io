@@ -2,7 +2,7 @@
 layout:     post                    # 使用的布局（不需要改）
 title:      Object Detection简述              # 标题 
 subtitle:   看看这一年目标检测领域又背着我发展了多少(雾)        #副标题
-date:       2019-09-10              # 时间
+date:       2019-09-24              # 时间
 author:     tianchen                      # 作者
 header-img:  img/bg-neon.jpg  #这篇文章标题背景图片
 catalog: true                       # 是否归档
@@ -104,13 +104,27 @@ tags:                               #标签
         * 而SSD则更为“谨慎”，对于每一个gt都找出图中所有的anchor box（比前面少了当前的grid cell中）与其IOU最大的，然而这样会造成负样本过多（超多的anchorbox没有对应的gt），因而需要降低标准，对每一个anchor，如果与gt的iou大于某一阈值，也看做匹配
 
 ### FPN（Feature Pyramid） CVPR 2017
+* 提出了一种新的特征提取器(在Object Detection中属于BackBone)
 * 金字塔的结构，更好适应多尺度,Pyramid体现在特征图的尺度,分为几个级别(每个级别是一个ResBlock)
-* **核心思想** 把高层的语义传下来,同时获得具有*高分辨率与高语义度的特征图*,可以有利于小目标的检测
+* 解决了之前的图像金字塔的*计算量过大的问题*
+    * 原本的比较Naive，相当于是在多个Scale下分别进行预测
+    * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20190924124258.png)
+* **核心思想** **高低层特征融合**把高层的语义传下来,同时获得具有*高分辨率与高语义度的特征图*,可以有利于小目标的检测
 * **如何能够结合高低尺度分辨率的特征?** 把更抽象,语义信息更强的高层特征图(在更深的位置)把该层的特征横向链接(lateral connection)到前一级特征图,让高级特征得到增强(两个feature map尺度要相同-via*对更深层的feature map做上采样(via直接复制,不是插值或者是反卷积)*,才可以利用位置信息)
   * 浅层的feature map需要用1*1Conv把channel数目也弄得和深度的一样
   * 结合的方式是直接**逐像素相加**
+---
+* NN中融合特征的方法
+* 直接逐像素Add相当于先Concat再让通道共享同一个卷积核-用Add其实更节省计算量和参数
+* **ADD Example**
+    * ResNet的Skip Connection
+    * FPN中的多尺度Feature Map融合
+* **Concat**
+    * Skip Connection其实很多时候用的都是concat - *DenseNet*
+---
 
 * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20190924101053.png)
+* ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20190924124837.png)
 
 ### RetinaNet
 * 注重于*one-stage为何不如2-stage精确度高的问题*
