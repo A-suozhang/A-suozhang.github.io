@@ -59,7 +59,7 @@ tags:                               #标签
     1. 首先经过卷积层，最后一个FeatureMap有三个分支
         1.1 RPN的操作获取Region
         1.2 获取Position-Sensitive-Score-Map (KxKx(C+1))的用来分类
-        1.2 获取Position-Sensitive-Score-Map (KxKx(4))的用来分类
+        1.2 获取Position-Sensitive-Score-Map (KxKx(4))的用来定位
     2. 对Position-Sensitive-Score-Map做Roi-Pooling(Average Pooling)
 ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20190910103318.png)
 * ？How Position Senstive
@@ -84,7 +84,6 @@ tags:                               #标签
         * Anchor Box的引入
             * RPN的核心也是Anchor，通过anchor，让feature map上的点映射回到原图的点，这样需要预测的就不是直接的坐标而是偏移量了
             * Yolo V2把全连接换成了Anchor Box方式进行预测
-                * 
         * 用K-means训练Bbox的Size
         * 添加了细粒度模块添加了一个PassThrough层，将相邻的特征按通道叠加而不是按空间叠加，这样让高低分辨率的特征能够串接起来
             * [这篇文章]()表示这种方法和Res异曲同工，我没理解
@@ -104,8 +103,14 @@ tags:                               #标签
     4. 训练中Ground Truth与Box的配准： yolo较为naive，gt的中心在那个单元格，就找（该grid cell中）与其IOU最大的bbox负责
         * 而SSD则更为“谨慎”，对于每一个gt都找出图中所有的anchor box（比前面少了当前的grid cell中）与其IOU最大的，然而这样会造成负样本过多（超多的anchorbox没有对应的gt），因而需要降低标准，对每一个anchor，如果与gt的iou大于某一阈值，也看做匹配
 
-### FPN（Feature Pyramid） 2017
-* 金字塔的结构，更好适应多尺度
+### FPN（Feature Pyramid） CVPR 2017
+* 金字塔的结构，更好适应多尺度,Pyramid体现在特征图的尺度,分为几个级别(每个级别是一个ResBlock)
+* **核心思想** 把高层的语义传下来,同时获得具有*高分辨率与高语义度的特征图*,可以有利于小目标的检测
+* **如何能够结合高低尺度分辨率的特征?** 把更抽象,语义信息更强的高层特征图(在更深的位置)把该层的特征横向链接(lateral connection)到前一级特征图,让高级特征得到增强(两个feature map尺度要相同-via*对更深层的feature map做上采样(via直接复制,不是插值或者是反卷积)*,才可以利用位置信息)
+  * 浅层的feature map需要用1*1Conv把channel数目也弄得和深度的一样
+  * 结合的方式是直接**逐像素相加**
+
+* ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20190924101053.png)
 
 ### RetinaNet
 * 注重于*one-stage为何不如2-stage精确度高的问题*
@@ -135,7 +140,7 @@ tags:                               #标签
     1. 一个Backbone给出Feature Map
     2. RPN之类的网络出Region Proposal(必须对每个Region独立，参数不共享 - *体现在RPN对FeatureMap每个输出点做1x1xN的卷积*)
     2.5. Roi Pooling
-    3. 最后的分类回归网络
+    1. 最后的分类回归网络
 
 
 ## SubFileds (~~术业有专攻~~)

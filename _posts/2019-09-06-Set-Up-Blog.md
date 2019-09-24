@@ -116,6 +116,35 @@ $$ F(x) = P\{ X <= x \} = \int_{-\infty}^x f(x)\,dx $$
 * 这个是网页上支持的另起一行的公式书写(但是本地markdown不支持)
 \\[ f(x,y,z) = 3y^2 z \left( 3 + \frac{7x+5}{1 + y^2} \right). \\]]
 
+
+## Comment Support
+
+> 选用了Gittalk,因为作者的Tempelate里面有这一条
+1. 在github个人设置中获取token
+
+![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20190924105555.png)
+![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20190924105631.png)
+* 建立一个Oauth App
+* 内容按照图中填写
+  * Homepage URL填写Repo的地址
+  * Callback URL填写域名地址
+* 在作者tempelate的config.yml中加入如下所示的代码
+  * 注意repo的域名即使你买了自己的域名,这里也要填写你的git repo的名字
+  * 两个token来自github的账户设置
+* ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20190924105332.png)
+* ```这一步完成之后应该不再会出现 "Error Not Found"```
+
+2. 添加isssue权限
+   * 如果上一步完成之后显示"Issue Disabled" 
+   * 进入blog对应的repo-Settings-features并赋予权限
+   * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20190924110445.png)
+
+* ```理论上这样设置完了之后就可以正常的进行评论了,评论会在博客的repo下面建立一个issue```
+
+
+
+
+
 ## Other Trouble Shooting
 * 网站渲染的时候出现某一个大标题右缩进
     > 大标题紧跟的行数的上一行缩进了，再空一行即可
