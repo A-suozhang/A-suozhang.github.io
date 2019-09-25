@@ -4,10 +4,11 @@ title:      论文阅读笔记《And The Bits Goes Down》           # 标题
 subtitle:   第一次单独把一篇论文拎出来        #副标题
 date:       2019-09-25              # 时间
 author:     tianchen                      # 作者
-header-img:  img/bg-zynq.jpg  #这篇文章标题背景图片  
+header-img:  img/bg-luomu.jpg  #这篇文章标题背景图片  
 catalog: true                       # 是否归档
 tags:                               #标签
-     - dl
+     - DL
+     - 论文阅读
 ---
 
 > 这篇文章暂且作为将来文献阅读的一个小Tempelate把，把每个部分主要写什么东西列举一下
