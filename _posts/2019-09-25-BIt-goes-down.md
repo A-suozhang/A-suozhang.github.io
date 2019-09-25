@@ -89,4 +89,6 @@ tags:                               #标签
 
 * 作者在实验环节提到了一点很有趣的： leverage a large collection of unlabelled images to improve the performance of a given architecture 
     * Suppoerted by [Billion-scale semi-supervised learning for image classification](https://www.semanticscholar.org/paper/Billion-scale-semi-supervised-learning-for-image-Yalniz-J%C3%A9gou/88ee291cf1f57fd0f4914a80b986a08a90d887f1)
+    * 这种方式被叫做**Levearge The Unlabelled Images**
+
 
