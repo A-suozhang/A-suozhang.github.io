@@ -40,6 +40,8 @@ tags:                               #标签
 * Transductive(转移) --**Source Domain Available;Target Unavailable**感性的来看比Inductive要难
     * Domain Adaptation
         * 目标是要学习出 Domain-Invariant的Feature
+        * *将不同源领域的数据映射到同一个特征空间*
+        * 不要求训练以及测试数据同分布
         * 要防止学习Overfittig于Source Domain （~~显而易见的问题~~）    
         * 现在的常规操作基本都不得不利用到Target Domain的一些信息，去尝试缩小covariance shift,还不能够完全利用Source Domain（那就通用人工智能了吧...）
     * [Unsupervised Domain Adaptation by Backpropagation](https://arxiv.org/abs/1409.7495)
