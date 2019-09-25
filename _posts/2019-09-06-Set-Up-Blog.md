@@ -44,6 +44,13 @@ tags:                               #标签
     * 修改图床软件的自定义域名里面的blob为raw
 * *如果有的时候莫名其妙传不上去了，首先重启一下picgo看看好没好（有时候这样真的就解决问题了），然后上git看看自己token还在不在*
 
+## 压缩图片
+* Win下选择了腾讯的[智图](https://zhitu.isux.us/index.php/preview/install)
+* 这个东西安装的时候真的有点蠢，点开智图的软件会启动Imagedisk的安装，不能按照默认配置安装(安装文件也不说一声，只有官网上有)
+* ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20190925224324.png)
+* 按照图中配置应该就可以启动了，把图片拖进去就可以了
+    * 注意可以勾选**替换原图**
+
 ## 本地调试
 
 ### Ubuntu 
