@@ -50,6 +50,9 @@ tags:                               #标签
 * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20190925224324.png)
 * 按照图中配置应该就可以启动了，把图片拖进去就可以了
     * 注意可以勾选**替换原图**
+* 打开zhitu.exe之后有时候会跳出安装ImageDisk来(我已经装了啊)
+    * 我猜测原理是检查执行文件路径(环境变量)中有没有ImageDisk的执行文件
+    * 如果嫌麻烦直接把安装产生的ImageDisk可执行文件复制到智图的根目录底下就能跑了
 
 ## 本地调试
 

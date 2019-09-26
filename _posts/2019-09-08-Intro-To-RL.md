@@ -2,7 +2,7 @@
 layout:     post                    # 使用的布局（不需要改）
 title:      An Intro to RL              # 标题 
 subtitle:   Think Like An Agent    #副标题
-date:       2019-09-15                # 时间
+date:       2019-09-26                # 时间
 author:     tianchen                      # 作者
 header-img:  img/bg-street.jpg  #这篇文章标题背景图片
 catalog: true                       # 是否归档
@@ -28,8 +28,9 @@ tags:                               #标签
     * Model-Based**优势**为给与了agent根据environment而具有**Think Ahea**的能力，🤔(感觉体量都很大) -Example*AlphaZero*
     * Model-Based**劣势**在于这个model很难训练，需要完全通过experience来推测environment
     * 事实证明在大多数情况下model-free的方法都可以与model-based对等的效果，所以更为流行 
-* Policy-Based & Value-Based （What To Learn）
+* **Policy-Based & Value-Based** （What To Learn）
     * Policy-Based 基于概率的方法：通过分析所处的环境，对所有action（决策）给一个发生概率
+        * **直接对Policy进行参数化描述(是一种特殊的抽象)直接去拟合优化他**
     * 基本都是On-Policy（只基于most recent policy）
         * Policy Gradient
         * A2C、A3C
@@ -79,6 +80,7 @@ tags:                               #标签
 * Action State-决策空间
     * 可能连续（机器人在实际场景中）可能离散AlphaGO
 * Policy - a rule used by agent to decide which action to take ~~我好像想不到一个太好的中文翻译，决策方式？~~
+    * 物理意义是*状态动作价值函数Q(State,Action)取最大值时候的Action*
     * 可以是Deterministic（Hard） *Max*
     * 也可以是Stochastic （Soft） *Soft*
         * Categorical Policies - Used In Discrete
@@ -98,6 +100,7 @@ tags:                               #标签
     * 状态之间的转换是由Environment所决定的
     * 为了算法研究，一般具有马尔科夫性，即只依赖于前一状态
 * **Reward**  
+    * 有时候也叫做*基于策略的状态价值函数 V(s)=E[G_t|S_t=s]*
     * rt = R{st,at,st+1}
     * 经常被简化为R(st)或者是R(st,at)
     * The Goal Of a Agent is to get *Maxium cumulative reward*
@@ -144,6 +147,9 @@ $$ Q^*(s,a) = \max_\pi{E_{\tau\sim\pi}[R(\tau)|s=s_0,a=a_0]} $$
 $$ V^*(\pi) = \max_{a}{Q^*(s,a)}$$
 
 * **The Bellman Function**
+* 与*动态规划*紧密联系,Bellman Equation是一个递归的形式。
+    * 动态规划的本质： *将问题的求解转化为求解子问题来不断解决*而Markov性与动态规划对应
+    * 可以认为当前的Q(值)函数存储了上一步的决策的信息，因而处理下一步(下一个子问题)的时候不用重新计算，而是可以直接取上一次的值来使用
 * 🤔The Core Is *The Value Of Your Starting Point Is The Reward You Expect To Get Being There + Wherever You Land Next*
   * The [Bellman Equation](https://en.wikipedia.org/wiki/Bellman_equation) is a concept used In Dynamic Programming
 
@@ -228,6 +234,19 @@ $$ V^*(\pi) = \max_{a}{Q^*(s,a)}$$
 * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20190915142259.png)
 
 
+## Multi-agent
+
+> 2019.09.26 组会添加的内容
+
+* 单机到多机带来的新麻烦
+    * 非平稳
+        * 如果采用对单一Agent进行训练，而将其他Agent当做环境的一部分；多个Agent同时对环境进行作用，导致丧失平稳性，理论不能保证最优解
+        * **集中学习，分布执行**
+    * 更大的状态空间
+        * 单纯就是维度会变大
+        * **参数共享**
+    * 观测量更加分散，更难整合利用信息
+    * 当不同Agent异质的时候尤为难整
 
 ## Ref
 * [OpenAI SpinningUp](https://spinningup.openai.com/en/latest/spinningup/rl_intro2.html#id20)
