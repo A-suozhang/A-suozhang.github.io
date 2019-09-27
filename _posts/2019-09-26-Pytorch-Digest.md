@@ -11,7 +11,8 @@ tags:                               #标签
 ---
 
 # PyTorch
-
+* [跟着官方学下net应该咋子写](https://github.com/pytorch/vision/blob/master/torchvision/models/resnet.py#L38)
+    * 继承```nn.Module```的模块成Block类，init的时候一般需要调用父类的构造函数```super(BasicBlock,self).__init__()```
 
 
 # Python
@@ -25,3 +26,5 @@ tags:                               #标签
     * ```__name__``` 
     * ```__module__```类定义所在的模块
 * 约定俗称的规律```__foo```代表的是private变量
+* 而super方法则是通过*调用父类方法来显示调用父类*(可以避免需要用父类的名字来调用父类，需要将self传进去)
+    * ```super(BasicBlock, self).__init__()```
