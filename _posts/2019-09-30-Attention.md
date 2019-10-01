@@ -37,6 +37,7 @@ tags:                               #标签
         - 提出Transformer完全替代RNN&CNN
         * Transformer Architecture：![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20190928224114.png)
         * Attention implemention ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20190928224243.png)
+        
 ## Taxnomy
 * **Hard/Soft** 默认的Attention方式是参数化的(有梯度回传，参数在训练中被调节)，*会考虑到全部位置的信息*
     * Hard Attention相对而言更加硬盒*更加随机*，*只注重于当前位置的信息*,完全随机化,用monte-carlo来估计梯度
