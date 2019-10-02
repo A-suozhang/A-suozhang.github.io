@@ -15,6 +15,7 @@ tags:                               #标签
 ## MobileNet V1
 * [MobileNets: Efficient Convolutional Neural Networks for Mobile Vision Applications](https://www.zhihu.com/search?type=content&q=mobilenet)
 * 2017.4
+* vgg16的结果Conv换成DSC
 * 与Xception都用到了深度可分离卷积
 * **核心**：**深度可分离卷积(Depthwise Seperable Convolution)**
     * *可分离卷积*(说白了就是怎么简化卷积的计算)有
@@ -28,6 +29,23 @@ tags:                               #标签
             * 对比 
                 * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20191002101511.png)
             * 参数和计算量变成原先的1/N（对于3x3大概是8或者9分之一），而准确率几乎没下降
+            * **What's Lacking** DSC比较容易训练崩，原因是很多值容易变0，估计是*Relu出了问题*
+                * 对低维度做Relu很容易损失信息(可以理解为加起来的值比较小容易是负的，而DSC卷积核浅)
+                * 将ReLU变为Leaky ReLU （*然而MobileNet V2把某曾Relu直接变成了线性*）
             * **Why Could This Work？**
                 * 个人猜测是传统卷积的先在各个Channel做Conv然后逐channel叠加起来这一步损失了信息，而depthwise conv只用一层的卷积核，填补了这一部分
+                * *MobileNet主要利用了1x1卷积*其特殊之处在于*省去了im2col的过程*
+
+## MobileNet V2
+* [MobileNetV2: Inverted Residuals and Linear Bottlenecks](https://arxiv.org/abs/1704.04861)
+* **主要改进**
+    1. **Linear Bottleneck**把最后的一个Relu换成*线性激活*
+    2. **Expansion** 由于DepthConv不会改鬓FeatureMap通道数，所以该卷积都存在于稍浅层，为了学习到好的特征，先经过一个PointWiseConv进行升维之后，再进行维度压缩(*之前是先卷再升维度，现在是先拓张再卷积再收缩*)
+    3. **Inverted Residue**和ResBlock方法类似
+        * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20191002202729.png)
+        * Invert在Res是先降维，再3x3卷积，再拓展；而MobileNet是先拓展
+
+## MobileNet V3
+* [Searching for MobileNetV3](https://link.zhihu.com/?target=https%3A//arxiv.org/pdf/1905.02244.pdf)
+* NAS，告辞...
 
