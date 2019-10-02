@@ -35,6 +35,7 @@ tags:                               #标签
             * **Why Could This Work？**
                 * 个人猜测是传统卷积的先在各个Channel做Conv然后逐channel叠加起来这一步损失了信息，而depthwise conv只用一层的卷积核，填补了这一部分
                 * *MobileNet主要利用了1x1卷积*其特殊之处在于*省去了im2col的过程*
+                * 这篇文章用一图表解释为何 [为什么MobileNet及其变体如此之快？ - 机器之心的文章 - 知乎](https://zhuanlan.zhihu.com/p/64138403)
 
 ## MobileNet V2
 * [MobileNetV2: Inverted Residuals and Linear Bottlenecks](https://arxiv.org/abs/1704.04861)
@@ -48,4 +49,9 @@ tags:                               #标签
 ## MobileNet V3
 * [Searching for MobileNetV3](https://link.zhihu.com/?target=https%3A//arxiv.org/pdf/1905.02244.pdf)
 * NAS，告辞...
+
+## Refs
+* [为什么mobilenet，shufflenet在理论上速度很快，工程上并没有特别大的提升？](https://www.zhihu.com/question/343343895/answer/816049923)
+    * 更底层的思考
+    * 计算强度
 
