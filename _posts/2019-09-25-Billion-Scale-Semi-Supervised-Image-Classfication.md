@@ -73,6 +73,9 @@ tags:                               #标签
     * unbalanced会掉精度
 * 可以与Weakly Supervised方法结合，进一步提高
     * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20191012114227.png)
+    * weak-supervised是另外一篇文章里提出的Pretrain方法，经过这种方式pretrain也可以提点
+        * 就是从Social Media图片利用HashTag作为Weak Label先训一个网络，看做Feature Extractor
+        * 实际操作起来比较困难...说明了和这篇文章的效果可以叠加
 * 前人的文章说明了图像的背景的task-related语义信息(文中叫meta-information)能提升performance(有点玄乎了啊就)
     * 作者管这种方式叫weak-semi-supervision，然后好像意思说这种方式不是特别work...
     * 可以认为文中的排序选择的方式，强行给新的数据集做了Denoise和Class Balance，所以才能更好...
