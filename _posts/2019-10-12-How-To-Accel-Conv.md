@@ -20,6 +20,7 @@ tags:                               #标签
 * 最愚蠢的Numpy For Loop Conv(6层For循环，毫无并行)
     * 没有包含Dilation和Stride
 ``` python
+
 '''
 Convolve `input` with `kernel` to generate `output`    
 input.shape = [input_channels, input_height, input_width]    
