@@ -2,7 +2,7 @@
 layout:     post                    # 使用的布局（不需要改）
 title:      论文阅读笔记《Billion-scale semi-supervised learning for image classification》           # 标题 
 subtitle:   FaceBook的又一篇炼丹论文        #副标题
-date:       2019-10-11             # 时间
+date:       2019-10-12             # 时间
 author:     tianchen                      # 作者
 header-img:  img/bg-luomu.jpg  #这篇文章标题背景图片  
 catalog: true                       # 是否归档
@@ -77,7 +77,7 @@ tags:                               #标签
         * 就是从Social Media图片利用HashTag作为Weak Label先训一个网络，看做Feature Extractor
         * 实际操作起来比较困难...说明了和这篇文章的效果可以叠加
 * 前人的文章说明了图像的背景的task-related语义信息(文中叫meta-information)能提升performance(有点玄乎了啊就)
-    * 作者管这种方式叫weak-semi-supervision，然后好像意思说这种方式不是特别work...
+    * 作者管这种方式叫weak-semi-supervision，然后好像意思说这种方式可以和当前方式并行，并且没有当前方式好
     * 可以认为文中的排序选择的方式，强行给新的数据集做了Denoise和Class Balance，所以才能更好...
 * Transfer Learning测试
     * 数据集 Caltech-UCSD - CUB2011
@@ -126,6 +126,7 @@ tags:                               #标签
     * TL可以被认为是在Evaluate *Unsupervised Learning* 
 * Semi-Supervised Learning
     * 使用额外的未标注数据来提升监督学习的效果(和本文的主旨非常一致)
+    * 参考文献[11]-Few-Shot [35]-Transuctive 的做法
 * Distillation
     * 一开始是用来压缩的
     * 可以认为是一种Self-Training
