@@ -2,7 +2,7 @@
 layout:     post                    # 使用的布局（不需要改）
 title:      论文阅读笔记《Billion-scale semi-supervised learning for image classification》           # 标题 
 subtitle:   FaceBook的又一篇炼丹论文        #副标题
-date:       2019-09-25              # 时间
+date:       2019-10-11             # 时间
 author:     tianchen                      # 作者
 header-img:  img/bg-luomu.jpg  #这篇文章标题背景图片  
 catalog: true                       # 是否归档
@@ -36,6 +36,9 @@ tags:                               #标签
 * 获得的精度能够明显超过SOTA
 * Flow：
     * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20190925191933.png)
+    * 注意没有把新老的Training Set去Mix起来
+        * 作者解释说那样的话会需要确定一个Mix的因数，所以直接就没有这样
+    * 作者提到这里用KD效果会不好(因为我们要让student比teacher的效果好，所以就不能一味地模仿teacher)
 * 一些Requirement 
     * **A Good Teacher Model Is Required** 需要用它来从新的Wild Data当中获得Label
     * **Student Model最后需要拿原先的数据来再Finetune**
@@ -44,10 +47,7 @@ tags:                               #标签
 
 ## Experiments
 * Models
-* Hyperp=params
-    * Unlabeled Set的大小
-    * Pretrain轮数
-    * 
+    * Res18-Res50-ResNeXt101(很多不同宽度)
 * 学生的Performance会明显超过老师
     * 这很合理因为它exposed to更多的数据
 * 最后的Finetune过程非常关键
@@ -57,9 +57,32 @@ tags:                               #标签
     * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20190925203402.png)
     * 是否表示需要比较大的网络比较有提升的潜质(Res18就提升不上去了)
     * *作者表示Self-Training比较Risky，但是文章表明在最后加上利用GT数据的Finetune能够显著地提升效果*
+* 对不同的Teacher架构，Student的表现(Stu都为res50)
+    * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20191012105608.png)
+* 随着构建的新数据集大小越大，开始Performance有一个线性增长，后来趋缓
+    * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20191012105804.png)
+* Performance随着Training Epoch数的增多而改变
+    * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20191012105931.png)
+* Performance随着K值的变化
+    * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20191012110110.png)
+    * 不同的结构对应最大值的K值不一样
+    * 这里有一个最大值的原因是K越大，选进来的数据可能错误的越多(而更大的Teacher识别能力越强，能够兼容的K值越大)
+* 分析了如果DataSet设计
+    * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20191012112841.png)
+    * 作者认为Rank这一步起到了比较关键的作用
+    * unbalanced会掉精度
 * 前人的文章说明了图像的背景的task-related语义信息(文中叫meta-information)能提升performance(有点玄乎了啊就)
     * 作者管这种方式叫weak-semi-supervision，然后好像意思说这种方式不是特别work...
     * 可以认为文中的排序选择的方式，强行给新的数据集做了Denoise和Class Balance，所以才能更好...
+* 
+* 对参数的分析
+    * K - Image Selected per Class
+        * 16k/8k/4k分别对应100M,50M,25M
+        * K值变大之后错误率会增加(显然)
+    * P - being a parameter accounting for the fact that we expect only a few number of relevant classes to occur in each image
+        * 一张图片最多能够被识别为P类
+        * 选取P>1以在数据量不是很大的时候获得足够的Label
+        * 实验中一般取P=10，能够获得一个几乎balanced Set
 
 
 ## Fracs
