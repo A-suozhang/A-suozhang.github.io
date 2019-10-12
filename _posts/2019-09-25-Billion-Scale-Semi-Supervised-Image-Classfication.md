@@ -71,10 +71,16 @@ tags:                               #标签
     * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20191012112841.png)
     * 作者认为Rank这一步起到了比较关键的作用
     * unbalanced会掉精度
+* 可以与Weakly Supervised方法结合，进一步提高
+    * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20191012114227.png)
 * 前人的文章说明了图像的背景的task-related语义信息(文中叫meta-information)能提升performance(有点玄乎了啊就)
     * 作者管这种方式叫weak-semi-supervision，然后好像意思说这种方式不是特别work...
     * 可以认为文中的排序选择的方式，强行给新的数据集做了Denoise和Class Balance，所以才能更好...
-* 
+* Transfer Learning测试
+    * 数据集 Caltech-UCSD - CUB2011
+        * 200 Class Of Birds
+    * 流程类似[这篇知乎文章](https://zhuanlan.zhihu.com/p/32231847)
+    * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20191012133433.png)
 * 对参数的分析
     * K - Image Selected per Class
         * 16k/8k/4k分别对应100M,50M,25M
