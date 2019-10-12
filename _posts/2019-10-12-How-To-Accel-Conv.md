@@ -60,7 +60,9 @@ for filter in 0..num_filters
 * 卷积将**二维滤波器/图像块**展开为**矩阵**，这个操作叫im2col   
     * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20191012195241.png)
     * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20191012195308.png)
+
 * GEMM+IM2Col就是CPU上对卷积加速的标准操作
+
 ---
 * **Loop Reordering**
     * CPU操作对应的RAM表示的是内存(访问速度慢)更快的一层是CPU的Cache，CPU会*从内存中加载需要的数据和相近的数据到缓存中*
