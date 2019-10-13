@@ -2,7 +2,7 @@
 layout:     post                    # 使用的布局（不需要改）
 title:      Object Detection简述              # 标题 
 subtitle:   看看这一年目标检测领域又背着我发展了多少(雾)        #副标题
-date:       2019-09-24              # 时间
+date:       2019-10-13              # 时间
 author:     tianchen                      # 作者
 header-img:  img/bg-neon.jpg  #这篇文章标题背景图片
 catalog: true                       # 是否归档
@@ -155,6 +155,18 @@ tags:                               #标签
     2. RPN之类的网络出Region Proposal(必须对每个Region独立，参数不共享 - *体现在RPN对FeatureMap每个输出点做1x1xN的卷积*)
     2.5. Roi Pooling
     1. 最后的分类回归网络
+
+### Anchor Free方法
+* Anchor的缺陷
+    * 需要手动支持
+    * Anchor的匹配让极端尺度的判别很难
+    * Anchor的数量很多的时候需要一个不平衡的问题
+        * Focal Loss能一定程度上解决
+* 一开始的Yolo和DenseBox，目前的SOTA是CVPR2018的CornerNet
+    * 2019年，很多基于Keypoint的Anchor Free方法逐渐被提出
+        1. CornerNet
+        2. CentreNet
+        3. ExtremeNet
 
 
 ## SubFileds (~~术业有专攻~~)
