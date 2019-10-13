@@ -1,6 +1,6 @@
 ---
 layout:     post                    # 使用的布局（不需要改）
-title:      Slimmable Neural Network概览          # 标题 
+title:      论文阅读笔记《Slimmable Neural Network》          # 标题 
 subtitle:   可变Width的NN       #副标题
 date:       2019-10-2            # 时间
 author:     tianchen                      # 作者

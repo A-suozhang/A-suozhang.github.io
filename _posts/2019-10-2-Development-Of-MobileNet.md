@@ -8,6 +8,7 @@ header-img:  img/10_1/bg-jianxiong2.jpg  #这篇文章标题背景图片
 catalog: true                       # 是否归档
 tags:                               #标签
      - DL
+     - CNN
 ---
 # MobileNet
 * Google出品
@@ -41,7 +42,7 @@ tags:                               #标签
 * [MobileNetV2: Inverted Residuals and Linear Bottlenecks](https://arxiv.org/abs/1704.04861)
 * **主要改进**
     1. **Linear Bottleneck**把最后的一个Relu换成*线性激活*
-    2. **Expansion** 由于DepthConv不会改鬓FeatureMap通道数，所以该卷积都存在于稍浅层，为了学习到好的特征，先经过一个PointWiseConv进行升维之后，再进行维度压缩(*之前是先卷再升维度，现在是先拓张再卷积再收缩*)
+    2. **Expansion** 由于DepthConv不会改变FeatureMap通道数，所以该卷积都存在于稍浅层，为了学习到好的特征，先经过一个PointWiseConv进行升维之后，再进行维度压缩(*之前是先卷再升维度，现在是先拓张再卷积再收缩*)
     3. **Inverted Residue**和ResBlock方法类似
         * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20191002202729.png)
         * Invert在Res是先降维，再3x3卷积，再拓展；而MobileNet是先拓展

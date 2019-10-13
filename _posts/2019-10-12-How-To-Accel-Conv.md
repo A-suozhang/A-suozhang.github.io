@@ -7,8 +7,8 @@ author:     tianchen                      # 作者
 header-img:  img/10_1/bg-xueyuanroad0.jpg  #这篇文章标题背景图片  
 catalog: true                       # 是否归档
 tags:                               #标签
-     - DL
-     - 论文阅读
+     - CNN
+     - System
 ---
 
 # 如何加速卷积？

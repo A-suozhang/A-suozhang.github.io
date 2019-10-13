@@ -4,11 +4,11 @@ title:      迁移学习 Transfer Learning            # 标题
 subtitle:   咋还转移了呢！        #副标题
 date:       2019-10-12              # 时间
 author:     tianchen                      # 作者
-header-img:  img/bg-cat2.jpg  #这篇文章标题背景图片
+header-img:  img/bg-wukang.jpg  #这篇文章标题背景图片
 catalog: true                       # 是否归档
 tags:                               #标签
      - DL
-     - Survey
+     - 综述
 ---
 
 
