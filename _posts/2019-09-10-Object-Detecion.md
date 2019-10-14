@@ -29,7 +29,9 @@ tags:                               #标签
 * mAp - meanAP - AP是基于某一类的，mAp就是求AP关于类的平均
 
 ## Methods
+
 ### Faster-RCNN 2015
+
 * [参考解读文章](https://zhuanlan.zhihu.com/p/64817300)
 * ~~祖宗~~
 * CNN end2end训练，速度几乎实时
@@ -47,6 +49,7 @@ tags:                               #标签
 ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20190909152753.png)
 
 ### R-FCN 2016
+
 * *Full Conv + Position Sensitive*
 * 全卷积，所有参数在整张图片上是共享的
 ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20190910103115.png)
@@ -67,6 +70,7 @@ tags:                               #标签
 * 即使Roi偏了，也能正常识别
 
 ###  Yolo（You Only Look Once） 2015
+
 * **简单暴力**所有东西拿CNN硬干
 * 第一个1-Stage的网络，抛弃了区域提取+验证的2-stage思想，直接将原图分为S*S的grid cell,每个里面塞B个Bounding Box,推测C类，每个BBox预测5个value（xywh+conf）最后需要预测的Tensor为 ```S*S*(B*5+C)```
 * *How 2 Get Box* 每一个BBox都会对应一个confidence，等价于GT与该Bbox的IOU（如果这个Grid Cell里面没有Obj则conf=0，判断方式是gtbox的中心是否落在这个gridcell里面）然后Bbox的conf再和20个类别所得的置信度相乘，获得每一类的最终置信度，并经过一个NMS（防止一个Obj对应着太多的Box）
@@ -93,9 +97,11 @@ tags:                               #标签
         * Deeper
         * ResNet Backbone
 
-            
 ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20190909152711.png)
+
+
 ### SSD (Single Shot Detector)
+
 * 引入了多目标检测
     1. 多尺度特征图(大的特征图检测小物体（分辨率更高）) - 借鉴了金字塔结构
     2. 摈弃FC，用卷积作为来检测
@@ -104,6 +110,7 @@ tags:                               #标签
         * 而SSD则更为“谨慎”，对于每一个gt都找出图中所有的anchor box（比前面少了当前的grid cell中）与其IOU最大的，然而这样会造成负样本过多（超多的anchorbox没有对应的gt），因而需要降低标准，对每一个anchor，如果与gt的iou大于某一阈值，也看做匹配
 
 ### FPN（Feature Pyramid） CVPR 2017
+
 * 提出了一种新的特征提取器(在Object Detection中属于BackBone)
 * 金字塔的结构，更好适应多尺度,Pyramid体现在特征图的尺度,分为几个级别(每个级别是一个ResBlock)
 * 解决了之前的图像金字塔的*计算量过大的问题*
@@ -113,7 +120,9 @@ tags:                               #标签
 * **如何能够结合高低尺度分辨率的特征?** 把更抽象,语义信息更强的高层特征图(在更深的位置)把该层的特征横向链接(lateral connection)到前一级特征图,让高级特征得到增强(两个feature map尺度要相同-via*对更深层的feature map做上采样(via直接复制,不是插值或者是反卷积)*,才可以利用位置信息)
   * 浅层的feature map需要用1*1Conv把channel数目也弄得和深度的一样
   * 结合的方式是直接**逐像素相加**
+
 ---
+
 * NN中融合特征的方法
 * 直接逐像素Add相当于先Concat再让通道共享同一个卷积核-用Add其实更节省计算量和参数
 * **ADD Example**
@@ -121,7 +130,9 @@ tags:                               #标签
     * FPN中的多尺度Feature Map融合
 * **Concat**
     * Skip Connection其实很多时候用的都是concat - *DenseNet*
+
 ---
+
 
 * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20190924101053.png)
 * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20190924124837.png)
