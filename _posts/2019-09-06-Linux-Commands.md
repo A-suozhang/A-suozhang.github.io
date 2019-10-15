@@ -4,7 +4,7 @@ title:      Linux常用命令笔记              # 标题
 subtitle:   学了忘，忘了学(Learning and then Forget, then Forgot to Learn)     #副标题
 date:       2019-09-06              # 时间
 author:     tianchen                      # 作者
-header-img:  img/bg-april2.jpg   #这篇文章标题背景图片
+header-img:  img/bg-term.jpg   #这篇文章标题背景图片
 catalog: true                       # 是否归档
 tags:    
     - 常用                           #标签
@@ -51,7 +51,10 @@ tags:
             * ForwardX11Trusted yes
     * 下次登录的时候ssh后面加上 -X/-Y命令
     * 在本地（client） xhost +服务器IP
-    * 然后我就可以了，可能和服务器之前的配置有关系（正常这里还需要修改一下环境变量中的DISPLAY指向 “client'sIP：0.0”）
+    * 然后我就可以了，可能和服务器之前的配置有关系
+        * （正常这里还需要修改一下环境变量中的DISPLAY指向 “client'sIP：0.0”）
+        * 后续一次我的配置过程当中发现：由于X11Display Offset设置为10，在环境中把DISPLAY=:10.0然后好了，很神奇
+            * 参考了[这个链接](https://askubuntu.com/questions/61690/ssh-x-xt-error-cant-open-display-0-0)
     * 可以用xclock测试是否成功
 * scp -r IP_HOST:/home/xxx /local_directory
     * 实施证明vscode remote能吊打它
@@ -181,3 +184,5 @@ tags:
 * base64编码解码
   * ```echo 'a-suozhang.xyz' | base64```
   * ```echo $BASE^$_STRING | base64 -d ```
+* 开机自启动
+    * 最脑瘫的方式是命令行*gnome-session-properties*打开图形界面设置

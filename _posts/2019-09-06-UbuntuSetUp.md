@@ -41,6 +41,9 @@ tags:                               #标签
 ### 安装中文输入法
 * 我装的时搜狗，貌似还需要配置fctix（Ubuntu的输入法管理）
   * 参考[这个链接](https://www.cnblogs.com/BlackStorm/p/10359254.html)
+  * 或者直接搜索*搜狗输入法For Linux*下载deb安装，重启之后
+    * 在fcitx当中添加（首先取消勾选Only Show Current Language英文系统的化应该找不到），在最后应该能找到sougou pinyin
+    * 勾选并置顶
   
 ### 安装必要软件
 * 以下基本都可以通过直接在官网下载.deb安装
@@ -76,7 +79,8 @@ tags:                               #标签
 * [教程1](https://mystery0.vip/2017/01/12/Ubuntu%E4%BD%BF%E7%94%A8Shadowsocks-qt5%E7%A7%91%E5%AD%A6%E4%B8%8A%E7%BD%91/)
 * [教程2](https://note.janhui.xyz/blog/post/janhui/ubuntu%E5%AE%89%E8%A3%85shadowsocks)
 * *我个人没有采用带GUI的安装，因为它有点丑而且老*
-* 推荐采用教程二的pip安装方式
+* ~~推荐采用教程二的pip安装方式~~ 后来又试了一次教程一，也不错
+
 * 安装完成之后在根目录编辑 shadowsocks.json,然后调用
 ```bash
 sslocal -c PATH_TO_YOUR_SHADOWSOCKS_JSON (~/shadowsocks.json)
