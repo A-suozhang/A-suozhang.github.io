@@ -87,6 +87,10 @@ sslocal -c PATH_TO_YOUR_SHADOWSOCKS_JSON (~/shadowsocks.json)
   * 在Switchy Omega中首先建立一个情景模式
     * “Proxy” - 地址为本地地址 127.0.0.1 端口为你在shadowsocks.json里面配置的**本地端口**
     * “Auto Switch”模式也可以勾选了（这里可以导入PAC文件配置来选择哪些网站需要走ss那些不要）
+* 其他一些推荐的Extension
+    * Stylus - 改变网站的样式
+    * dark Chrome - 暗色模式
+    * Momentum 欢迎页面
 3. 开机自启
   * 参考[这个链接](https://blog.csdn.net/qq_25241325/article/details/80691271)
   * 可以选择开机自启动，也可以在指令后面加一个“&”（不然打开这行指令之后这个Terminal就不能干别的了，当然如果你关掉这个Term SS也失效了）
