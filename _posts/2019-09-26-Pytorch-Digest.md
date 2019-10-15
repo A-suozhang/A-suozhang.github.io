@@ -104,6 +104,8 @@ tags:                               #标签
 * JIT(Just In-Time Compilation)即时编译
     * 混合了静态和动态编译
     * 与C++相联系转化的时候会用到
+* REPL - 交互式命令行
+    * Ipython属于
 
 ---
 * argparse库
