@@ -9,6 +9,7 @@ catalog: true                       # 是否归档
 tags:                               #标签
      - DL
      - 综述
+     - 迁移学习
 ---
 
 
@@ -135,6 +136,7 @@ tags:                               #标签
 
 
 ### [Return of frustratingly easy domain adaptation.](https://arxiv.org/abs/1511.05547)
+
 * AAAI 2016
 * CORAL(Correlation Alignment) 
     * 将Source和Target Domain的Feature的Distribution Align起来
@@ -155,6 +157,7 @@ tags:                               #标签
 
 
 ### [Adaptive Batch Norm](https://arxiv.org/abs/1603.04779)
+
 * Peking Univ; TuSimple; SenseTime
 * Cite Surprising Low(Probably Beacuse There're no Open Source Code)
 * 解决的问题是Finetune的时候也需要大量带Label的图片
