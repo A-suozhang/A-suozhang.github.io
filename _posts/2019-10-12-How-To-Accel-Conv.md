@@ -19,6 +19,7 @@ tags:                               #标签
 
 * 最愚蠢的Numpy For Loop Conv(6层For循环，毫无并行)
     * 没有包含Dilation和Stride
+
 ``` python
 
 '''
@@ -37,6 +38,8 @@ for filter in 0..num_filters
                     kernel[filter, channel, k_h, k_w] *    
                     input[channel, out_h + k_h, out_w + k_w]
 ```
+
+
 * 用这种方式做MobileNet的第一层卷积，需要22s左右，经编译器优化可以到2.2s，但是Caffe中只要18ms
     * 在CPU中，很多时候卡到的是**内存访问的时间，For-Loop让内存访问非常频繁，无法充分利用缓存Cache，而且CPU的缓存本来就很弱**
 
@@ -50,12 +53,16 @@ for filter in 0..num_filters
 * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20191012194858.png)
 * 可以用Halide语言嵌入到C语言当中
     * 其能够分开**数据**和**调度策略**
+
     ``` c
     Halide::Buffer C, A, B;
     Halide::Var x, y;
     C(x,y) += A(k, x) *= B(y, k);  // loop bounds, dims, etc. are taken care of automatically
     ```
+
 ---
+
+
 * 矩阵乘法(Matmul)或者是GEMM(Generalized Matrix Multiplication)
     * 有Blas，Eigen等矩阵乘法库来处理这些问题
 * 卷积将**二维滤波器/图像块**展开为**矩阵**，这个操作叫im2col   
@@ -65,6 +72,8 @@ for filter in 0..num_filters
 * GEMM+IM2Col就是CPU上对卷积加速的标准操作
 
 ---
+
+
 * **Loop Reordering**
     * CPU操作对应的RAM表示的是内存(访问速度慢)更快的一层是CPU的Cache，CPU会*从内存中加载需要的数据和相近的数据到缓存中*
     * 一旦缓存中的数据不满足我们的需要(发生了缓存缺失*loop miss*)，就需要再一次*访问内存*就慢了
