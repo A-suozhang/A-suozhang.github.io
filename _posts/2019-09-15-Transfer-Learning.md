@@ -136,6 +136,48 @@ tags:                               #标签
 TODO: 回头精读一下
 
 ### [Adaptive Batch Norm](https://arxiv.org/abs/1603.04779)
+* Peking Univ; TuSimple; SenseTime
+* Cite Surprising Low(Probably Beacuse There're no Open Source Code)
+* 解决的问题是Finetune的时候也需要大量带Label的图片
+* 目标:增强模型的泛化性能
+    * 不需要额外的参数与其他的部分
+    * 证明可以Complementary其他工作
+
+
+> We hypothesize that the label related knowledge is stored in the weight matrix of each layer, whereas domain related knowledgeis represented by the statistics of the Batch Normalization (BN)
+
+
+* 这个假设的真实性存疑?但是实验上是Work的
+* ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20191017185803.png)
+* 本质上是通过让BatchNorm随着实际的数据改变而改变，从而解决*Covariance Shift*的问题
+    * 而默认情况是训练好了的网络里面的均值方差就是取的整个训练数据的
+    * 文中
+        > its core idea is to align the distribution of training data
+        * 客观上也比较合理，因为原本的模型是针对Training Data的，自然要满足Training Data的分布
+* Review BN
+    * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20191017191736.png)
+    * 有两个可以学习的参数，x针对每个Mini-Batch把数据normalize
+        * 保持每层的input distribution不变
+        * 在测试阶段，Global Statistic Of All Training Sample去把每个Mini-Batch Norm了
+* 做了一个实验证明了深层千层的Feature都可能受Domain Variance Shift
+    * 不能只在最后一层做迁移（学到的Feature同样会受到Domain影响）
+    * BN操作里面包含了Data Domain的相关信息
+        * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20191018090209.png) 
+* 实际Scheme
+    * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20191017194353.png)
+* 实际场景预估均值方差*有高效的办法[1999]*
+* 后续思考？
+    * 为什么一些简单的Rescale能够描述一个高度非线性的Domain Transfer
+    * 为何独立的调整这些neuron的值，而不是像Coral一样做Decorelation
+        * 作者认为由于Batch Size比较小所以Covariance Matrix不能完全反映
+        * 另外非常耗费计算资源
+* 实验结果
+    * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20191018090443.png)
+    * 还尝试了更大规模的Caltech-Bing数据集
+    * 当时主要对比的是CORAL这种方法，但是两者也可以结合起来
+        * 很意外的是CORAL的end2end Deep DNN办法Deep CORAL效果始终不如Coral好
+    * 由于需要截取Test Image的分布，做了一个*需要多少Test Image的问题*
+        * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20191018090845.png)
 
 
 ### [Deep Visual Domain Adaptation: A Survey](https://arxiv.org/abs/1802.03601.pdf)
