@@ -133,7 +133,12 @@ tags:                               #标签
 * 吹的效果很好
 * 实验很多
 
-TODO: 回头精读一下
+
+### [Return of frustratingly easy domain adaptation.](https://arxiv.org/abs/1511.05547)
+* AAAI 2016
+* 
+
+
 
 ### [Adaptive Batch Norm](https://arxiv.org/abs/1603.04779)
 * Peking Univ; TuSimple; SenseTime
