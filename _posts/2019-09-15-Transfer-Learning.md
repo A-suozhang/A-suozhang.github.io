@@ -138,6 +138,7 @@ tags:                               #标签
 * AAAI 2016
 * CORAL(Correlation Alignment) 
     * 将Source和Target Domain的Feature的Distribution Align起来
+    * 这里的Feature可以是NN给的
 * 通过将二阶统计量对齐（指Covariance）
 * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20191018132341.png)
     * A是对Source Domain做的一个Linear Transformation
@@ -148,7 +149,9 @@ tags:                               #标签
     * 常规的Whitening操作是加一个小的Regularization Diagnal Term在原本的Covariance Matrix上，让其显式地变成full Rank
     * 再将原来的Feature的Inverse Square Root乘上去，做*Re-Color*
     * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20191018133623.png)
+        * 这里的Eye就是那个regularization term
     * 这么来回的原因是采用SVD的方法不稳定，可能收敛慢
+
 
 
 ### [Adaptive Batch Norm](https://arxiv.org/abs/1603.04779)
