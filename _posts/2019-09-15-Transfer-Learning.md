@@ -2,7 +2,7 @@
 layout:     post                    # 使用的布局（不需要改）
 title:      迁移学习 Transfer Learning            # 标题 
 subtitle:   能不能举一反三呢？        #副标题
-date:       2019-10-12              # 时间
+date:       2019-10-18              # 时间
 author:     tianchen                      # 作者
 header-img:  img/bg-wukang.jpg  #这篇文章标题背景图片
 catalog: true                       # 是否归档
