@@ -1,6 +1,6 @@
 ---
 layout:     post                    # 使用的布局（不需要改）
-title:      论文阅读《Deep Visual Domain Adaptation: A Survey》          # 标题 
+title:      论文阅读《Deep Visual Domain Adaptation A Survey》          # 标题 
 subtitle:   又一个简单暴力的TL   #副标题
 date:       2019-10-18            # 时间
 author:     tianchen                      # 作者

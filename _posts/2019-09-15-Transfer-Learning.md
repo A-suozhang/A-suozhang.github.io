@@ -134,6 +134,18 @@ tags:                               #标签
 * 吹的效果很好
 * 实验很多
 
+### [Simultaneous Deep Transfer Across Domains and Tasks]()
+* UCB
+* 解决的问题：Finetune Deep Model Requires A Lot Of Labels
+* Soft-Label Distribution Margin Loss
+    * Combine Domain-Confusion & Softmax Loss
+* 一个很Deep的结构（ImageNet上Pretrain）    
+    * 再加一个Shallow的小网络来优化MMD Domain Transfer Loss
+    * 这样去尝试学到Domain Invariant Representation
+* 用到了Distillation的思想
+* Design Flow
+    * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20191018163135.png)
+
 
 ### [Return of frustratingly easy domain adaptation.](https://arxiv.org/abs/1511.05547)
 
