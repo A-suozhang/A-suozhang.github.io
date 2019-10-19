@@ -134,9 +134,37 @@ tags:                               #标签
 * 吹的效果很好
 * 实验很多
 
+### [Asymmetric Tri-training for Unsupervised Domain Adaptation](https://arxiv.org/pdf/1702.08400.pdf)
+* Univ. Of Tokyo
+* 解决的还是在Target Domain中标注数据过于Expensive
+* 之前的一些文章方向主要在于*Match The Distribution*
+    * 还有一些文章尝试去学出*共通的Feature Representation*
+    * 本文从*Artificially labelling Distribution入手*
+* 一些Transdutive的Method利用Target Sample与Source Sample的KNN
+* 有文章证明*Training A Network with Pseudo Data等价于Entropy regularization*
+* **Self-Training**的场景描述的是
+    * 当本身的置信度基本正确
+    * 通过Self-training可以Further Improve性能  
+    * *Co-Training*则是利用两个模型造成Pseudo-Data
+    * The generalization ability of co-training is theoretically ensured
+        * (Balcan et al., 2004; Dasgupta et al., 2001)
+    * 比Co-Training再更进一步*Tri-Training*
+        * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20191019125950.png)
+* **Asymmetric Tri-Training**
+    * Unsupervised场景下使用2个Classifier去构建Pseudo Label
+    * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20191019123908.png)
+* 号称比当时的SOTA能高10个点
+* ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20191018224415.png)
+    * 也是需要这样一个保险机制的
+* 文章中提到BN能够Whiten最后的OUTPUT Hidden layer
+    * 通过在最后一个BN层，让各个域的Distribution更接近
+    * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20191019131113.png)
+
+
 ### [Simultaneous Deep Transfer Across Domains and Tasks]()
 * UCB
 * 解决的问题：Finetune Deep Model Requires A Lot Of Labels
+* 本质上就是在Finetune，只不过是利用了比较少的Label就能tune出来
 * Soft-Label Distribution Margin Loss
     * Combine Domain-Confusion & Softmax Loss
 * 一个很Deep的结构（ImageNet上Pretrain）    
@@ -256,6 +284,8 @@ tags:                               #标签
                         * *需要在Taeget Domain中有少量的数据Label*主要是利用Pretrain模型对这些Label的结果，来修正模型来达到Transfer的效果
                         * 当有足够多的Label的时候*Soft-Label*&*Metric Learning*
                         * 当没有的时候，借助Pseudo Label
+                            * 基于最大后验估计maximum posterior probability.
+                            * [98]
                     * Statistics-Criterion:从数据的角度对齐两域的分布
                         * *MMD*&*CORAL*&*KL Divergence*
                     * Architecture-Criterion：通过修改网络的结构来学习到更Transferable的Feature
