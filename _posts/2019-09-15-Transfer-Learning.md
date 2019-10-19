@@ -147,7 +147,7 @@ tags:                               #标签
     * 通过Self-training可以Further Improve性能  
     * *Co-Training*则是利用两个模型造成Pseudo-Data
     * The generalization ability of co-training is theoretically ensured
-        * (Balcan et al., 2004; Dasgupta et al., 2001)
+        * ([Balcan et al., 2004](https://papers.nips.cc/paper/2578-co-training-and-expansion-towards-bridging-theory-and-practice) [Dasgupta et al., 2001](https://papers.nips.cc/paper/2040-pac-generalization-bounds-for-co-training))
     * 比Co-Training再更进一步*Tri-Training*
         * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20191019125950.png)
 * **Asymmetric Tri-Training**
@@ -173,6 +173,8 @@ tags:                               #标签
 * 用到了Distillation的思想
 * Design Flow
     * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20191018163135.png)
+* Training Flow
+    * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20191019195437.png)
 
 
 ### [Return of frustratingly easy domain adaptation.](https://arxiv.org/abs/1511.05547)
