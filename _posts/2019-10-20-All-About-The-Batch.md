@@ -4,7 +4,7 @@ title:      与Batch相关的一些思路          # 标题
 subtitle:   All About The Batch   #副标题
 date:       2019-10-20            # 时间
 author:     tianchen                      # 作者
-header-img:  img/10_1/bg-ucentre1.jpg  #这篇文章标题背景图片  
+header-img:  img/10_1/bg-dorm0.jpg  #这篇文章标题背景图片  
 catalog: true                       # 是否归档
 tags:                               #标签
      - DL
