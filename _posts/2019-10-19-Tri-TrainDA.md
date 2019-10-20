@@ -2,7 +2,7 @@
 layout:     post                    # 使用的布局（不需要改）
 title:      论文阅读《Asymmetric Tri-training for Unsupervised Domain Adaptation》          # 标题 
 subtitle:   和Semi-Supervised有点异曲同工？   #副标题
-date:       2019-10-18            # 时间
+date:       2019-10-19            # 时间
 author:     tianchen                      # 作者
 header-img:  img/10_1/bg-ucentre1.jpg  #这篇文章标题背景图片  
 catalog: true                       # 是否归档
