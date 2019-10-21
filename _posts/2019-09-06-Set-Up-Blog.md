@@ -33,12 +33,13 @@ tags:                               #标签
     * 修改运行权限即可
 * 启动之后会有一个方形的小窗口,右键查看详细
 * 需要在Git上建立一个repo,并且从这个[链接](https://github.com/settings/tokens)获取一个Token
+  * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20191021090349.png)
 * 设置Github为默认图床,并且输入配置(用户名+Token等)
+  * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20191021090245.png)
 * 之后有两个方式上床(雾)
     * 剪贴板上传,点开图床右键
         * 还需要安装一个xclip ```sudo apt-get install xclip```
     * 双击图床,可以上传图片,上传完成之后会直接获得图片链接(且是以markdown的格式)
-    * ![](https://github.com/A-suozhang/MyPicBed/blob/master//img/triangles-1430105_960_720.png)
 * 上面这种链接经过自己的测试,在本地不能渲染,但是在github的markdown可以渲染,**但是在JerkyII的博客里面是没有办法渲染的**
     * 查阅了一些文章,将上面链接里面的/blob改成/raw即可解决该问题
     * 修改图床软件的自定义域名里面的blob为raw

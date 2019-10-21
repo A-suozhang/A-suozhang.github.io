@@ -208,7 +208,8 @@ cd global-6.4
 
 4. 建立.vimrc
 
-```
+``` bash
+
 set nocompatible   " 必须, 关闭 vi 兼容模式
 filetype off       " 必须
  
@@ -366,9 +367,12 @@ let g:netrw_banner = 0
 ```
 
 5. 还有修改一个地方否则配色会报错(我不知道为啥)
+6. 
 * ~/.vim/bundle/molokai/colors/molokai.vim:line  132:
   * none -> NONE
 
+6. 效果
+   * * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20191021090009.png) 
 
 ## 一些其他软件
 * Shutter
@@ -376,3 +380,4 @@ let g:netrw_banner = 0
   * 设置快捷键
     * 在Settings->Keyboard->添加一个```shutter -s```，配合你想要的快捷键
 * PicGo
+    * 参考[建立博客的博客](http://a-suozhang.xyz/2019/09/09/Set-Up-Blog/)
