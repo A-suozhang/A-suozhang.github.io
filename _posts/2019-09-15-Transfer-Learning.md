@@ -103,10 +103,10 @@ tags:                               #标签
 
 ---
 
-### 1.1 [Wasserstein Distance Guided Representation Learning for Domain Adaptation](https://arxiv.org/abs/1707.01217)
+### [Wasserstein Distance Guided Representation Learning for Domain Adaptation](https://arxiv.org/abs/1707.01217)
 * 思路是降低Source和Task Domain之间的Wasserstein距离
 
-### 1.2 [Semi-supervised representation learning via dual autoencoders for domain adaptation](https://arxiv.org/pdf/1908.01342.pdf)
+### [Semi-supervised representation learning via dual autoencoders for domain adaptation](https://arxiv.org/pdf/1908.01342.pdf)
 * ~~2019年的一篇非常炫技的文章~~
 * 目前的大多数结构都把Source Data和Target Data放到一起来从分布上减少他们的区别，同时获得一个Global Feature representation。
     * 但是没有考虑不同Domain中同一类别的数据差异这一信息
@@ -117,10 +117,10 @@ tags:                               #标签
     * 别的几个都是文本的数据集，我输了
 
 
-### 2. [DEN - Deep Adaptation Networks]()
+### [DEN - Deep Adaptation Networks]()
 * Michael J Jordan UCB & Tsinghua School Of Software
 
-### 3. [Domain Separation Networks](https://arxiv.org/abs/1608.06019)
+### [Domain Separation Networks](https://arxiv.org/abs/1608.06019)
 * [code](https://github.com/fungtion/DSN)
 *  ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20191016173347.png)
 * 很直观，利用两个Encode去争取获得两个Domain数据的Global Representation
@@ -128,7 +128,7 @@ tags:                               #标签
 * ~~思路很明确，结构不是特别精巧~~
 * 最后的实验是在Mnist上面做的，尝试从纯mnist，到random背景的mnist
 
-### 4.[CSSA-Unified Deep Supervised Domain Adaptation and Generalization](https://arxiv.org/abs/1709.10190)
+### [CSSA-Unified Deep Supervised Domain Adaptation and Generalization](https://arxiv.org/abs/1709.10190)
 * [Code](https://github.com/samotiian/CCSA)
 * ICCV 2017
 * 吹的效果很好
@@ -243,6 +243,18 @@ tags:                               #标签
     * 由于需要截取Test Image的分布，做了一个*需要多少Test Image的问题*
         * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20191018090845.png)
 
+### [Open Set Domain Adaptation](http://openaccess.thecvf.com/content_ICCV_2017/papers/Busto_Open_Set_Domain_ICCV_2017_paper.pdf)
+* [这篇博客有简单介绍](https://blog.csdn.net/LiGuang923/article/details/83276069)
+* 后续有这样一篇文章[Open Set Domain Adaptation by Backpropagation](https://arxiv.org/abs/1804.10427)
+* ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20191021105255.png)
+  * 解决了这个问题
+
+
+### [Generalized Cross Entropy Loss for Training Deep Neural Networks with Noisy Labels](https://arxiv.org/abs/1805.07836)
+
+
+### [http://csr.bu.edu/ftp/visda/2019/tech_reports/semi-supervised-2nd.pdf](http://csr.bu.edu/ftp/visda/2019/tech_reports/semi-supervised-2nd.pdf)
+* 
 
 ### [Deep Visual Domain Adaptation: A Survey](https://arxiv.org/abs/1802.03601.pdf)
 

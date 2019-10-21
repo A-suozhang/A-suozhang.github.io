@@ -106,6 +106,11 @@ tags:                               #标签
     * 与C++相联系转化的时候会用到
 * REPL - 交互式命令行
     * Ipython属于
+* fastai-超快速上手的DL工具
+    > Make Deep Learning Uncool
+    * [Stuffs About It](https://github.com/zergtant/pytorch-handbook/blob/master/chapter4/4.3-fastai.ipynb)
+* CLI-Command Line Level
+
 
 ---
 * argparse库

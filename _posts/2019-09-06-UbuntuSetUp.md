@@ -78,14 +78,19 @@ tags:                               #标签
   * 本地端口（后面会一直用到）
 * [教程1](https://mystery0.vip/2017/01/12/Ubuntu%E4%BD%BF%E7%94%A8Shadowsocks-qt5%E7%A7%91%E5%AD%A6%E4%B8%8A%E7%BD%91/)
 * [教程2](https://note.janhui.xyz/blog/post/janhui/ubuntu%E5%AE%89%E8%A3%85shadowsocks)
+  * ```sudo pip install shadowsocks```
 * *我个人没有采用带GUI的安装，因为它有点丑而且老*
 * ~~推荐采用教程二的pip安装方式~~ 后来又试了一次教程一，也不错
 
 * 安装完成之后在根目录编辑 shadowsocks.json,然后调用
-```bash
+``` bash
 sslocal -c PATH_TO_YOUR_SHADOWSOCKS_JSON (~/shadowsocks.json)
 ```
-2. Chrome配置
+* 可能会出现问题 ```AttributeError: /usr/local/ssl/lib/libcrypto.so.1.1: undefined symbol: EVP_CIPHER_CTX_cleanup```
+  * 参考[这个博客的解决方案](https://kionf.com/2016/12/15/errornote-ss/)
+  * 我们实际的路径可能是 ```./.local/lib/python3.6/site-packages/shadowsocks/crypto```
+
+1. Chrome配置
 * 在[Chrome应用商店](https://chrome.google.com/webstore/)中安装Switchy Omega
   * （如果你不科学上网下不了这个插件...而你想要科学上网又需要这个插件，所以要么拷贝或者找国内分享吧）
   * 在Switchy Omega中首先建立一个情景模式
@@ -206,7 +211,8 @@ cd global-6.4
 ./configure && make && sudo make install
 ```
 
-4. 建立.vimrc
+4. 建立.vimrc (这个博客里格式显示好像有一点小问题)
+   * 这个脚本貌似不联网的话有点慢，但是总归能够跑完 
 
 ``` bash
 
@@ -364,9 +370,13 @@ let g:netrw_banner = 0
  
  
 " vim: ft=vim
+
 ```
 
-5. 还有修改一个地方否则配色会报错(我不知道为啥)
+
+5. 这个打开之后应该会有报错，不管他，进入vim，执行```：PluginInstall```
+   * 还有修改一个地方否则配色会报错(我不知道为啥)
+
 6. 
 * ~/.vim/bundle/molokai/colors/molokai.vim:line  132:
   * none -> NONE
@@ -381,3 +391,9 @@ let g:netrw_banner = 0
     * 在Settings->Keyboard->添加一个```shutter -s```，配合你想要的快捷键
 * PicGo
     * 参考[建立博客的博客](http://a-suozhang.xyz/2019/09/09/Set-Up-Blog/)
+* Filezilla 
+  * [this link](https://www.atechtown.com/install-filezilla-on-ubuntu/)
+  * 就是正常的apt配置
+  * **对于这些应用程序，不想开一个Term来打开的方法**
+    * 直接win，打开
+    * alt+f2输入

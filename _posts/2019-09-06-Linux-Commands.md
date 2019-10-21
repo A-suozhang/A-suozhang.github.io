@@ -23,6 +23,10 @@ tags:
     * top 查看cpu使用率
 * ps -p $$ (通过查看进程的名字)
     * 用 echo %SHELL (比如在zsh里面也会显示是bash)
+* apt的使用
+  * 检查某个东西是否有 ```apt-cache search filezilla```
+  * 安装 ```sudo apt-get install filezilla```
+  * 卸载 ```sudo apt remove filezilla && sudo apt autoremove```
 * tar -zxvf xxx.tag.gz
     * -jxvf xxx.tar.bz2
     * 其实都用　```tar -xvf```就行
