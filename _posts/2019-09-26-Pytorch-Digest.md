@@ -157,3 +157,8 @@ tags:                               #标签
 * 而super方法则是通过*调用父类方法来显示调用父类*(可以避免需要用父类的名字来调用父类，需要将self传进去)
     * ```super(BasicBlock, self).__init__()```
 
+
+# TroubleShooting
+
+* matplotlib
+

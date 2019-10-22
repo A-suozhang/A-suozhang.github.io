@@ -397,3 +397,18 @@ let g:netrw_banner = 0
   * **对于这些应用程序，不想开一个Term来打开的方法**
     * 直接win，打开
     * alt+f2输入
+
+
+# Win当中的Ubuntu - WSL(Windows SubSystem Linux)
+* 按[这篇文章进行了一些配置](https://zhuanlan.zhihu.com/p/57556340)
+    * 这篇文章里修改登录地点（建立/etc/wsl.conf之后我找不到Win的文件了，好迷...）删除文件并且重启之后恢复来
+    * Win的文件在 **/mnt/c/User/xxx** 下
+* 在配置ssh的时候出来一些很灵性的问题
+    * 最后在我的Moba Xterm里直接出现了一个Ubuntu WSL可以连，很奇特嗷
+    * 然后cmder里面用vim粘贴多行貌似有很奇特的格式bug（指回车被解析为“^M”） 
+* 和之前一样配置了vim
+    * 在编辑.vimrc的时候遇到了cmder的粘贴问题
+    * 用MobaXterm解决了
+* 配置ssh到跳板机器
+    * 我选择了把密钥复制过来(这个操作其实不是很好嗷)然后遇到了权限太高的问题
+    * 把id_rsa的权限改成600解决了
