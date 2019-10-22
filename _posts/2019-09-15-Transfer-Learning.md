@@ -2,7 +2,7 @@
 layout:     post                    # 使用的布局（不需要改）
 title:      迁移学习 Transfer Learning            # 标题 
 subtitle:   能不能举一反三呢？        #副标题
-date:       2019-10-18              # 时间
+date:       2019-10-22              # 时间
 author:     tianchen                      # 作者
 header-img:  img/10_1/bg-3.jpg  #这篇文章标题背景图片
 catalog: true                       # 是否归档
@@ -21,6 +21,35 @@ tags:                               #标签
 * 和数据挖掘等领域联系也很紧密
 * 会很玄幻...AAAI2017还有Distant Transfer Learning拿人脸来识别飞机 ...s
 * ⭐有一个非常全的王晋东的[git材料集合](https://github.com/jindongwang/transferlearning/)，对于Survey来说做的已经很好了，可以直接拜读
+
+---
+
+> 以下部分大多引用自WJD的git
+
+## [DataSets](https://github.com/jindongwang/transferlearning/blob/master/data/dataset.md)
+![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20191022205938.png)
+* Office+Caltech 办公室场景，最基础的类别
+  * 数量太少了啊...
+* Mnist+USPS 图片太小了...
+* VLSC
+    * VOC+LabelMe+SUN09+Caltech101+ImageNet
+    * 5类，分类任务比较简单
+* OfficeHomeDataSet
+    * 量大一些，是从绘画到实际场景的数据
+    * 感觉差距有点大了？不是很能证明场景
+* VisDa - 现在主流的
+  * 仿真模型 -> 实际场景
+  * 体量很大，Task很难
+
+
+* *我需要的是一个*
+
+
+
+
+
+
+---
 
 
 ## What 2 Solve 能做啥
@@ -252,9 +281,14 @@ tags:                               #标签
 
 ### [Generalized Cross Entropy Loss for Training Deep Neural Networks with Noisy Labels](https://arxiv.org/abs/1805.07836)
 
+### ⭐ [Accelerating Deep Unsupervised Domain Adaptation with Transfer Channel Pruning](https://arxiv.org/pdf/1904.02654.pdf)
+* Online Pruning
+* With [Code](https://github.com/jindongwang/transferlearning/tree/master/code/deep/TCP)
+  * 还是作者原创的
 
-### [http://csr.bu.edu/ftp/visda/2019/tech_reports/semi-supervised-2nd.pdf](http://csr.bu.edu/ftp/visda/2019/tech_reports/semi-supervised-2nd.pdf)
-* 
+
+### [Multi-Source Domain Adaptation and Semi-Supervised Domain Adaptation with Focus on Visual Domain Adaptation Challenge 2019](http://csr.bu.edu/ftp/visda/2019/tech_reports/semi-supervised-2nd.pdf)
+* （不是特别有用）
 
 ### [Deep Visual Domain Adaptation: A Survey](https://arxiv.org/abs/1802.03601.pdf)
 
