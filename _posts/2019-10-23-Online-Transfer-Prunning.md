@@ -4,7 +4,7 @@ title:      论文阅读《Accelerating Deep Unsupervised Domain Adaptation with
 subtitle:   是不是我的所有idea都被人想过了呢...   #副标题
 date:       2019-10-23            # 时间
 author:     tianchen                      # 作者
-header-img:  img/10_1/bg-ucentre1.jpg  #这篇文章标题背景图片  
+header-img:  img/10_1/bg-nmb3.jpg  #这篇文章标题背景图片  
 catalog: true                       # 是否归档
 tags:                               #标签
      - 论文阅读
@@ -69,3 +69,4 @@ tags:                               #标签
 
 ### 🤔THINK
 * 拿AdaBN过来到底怎么样(但是ADABN不是UDA呀!fintune得拿东西过来tune啊)
+  * 但是AdaBN也不拿过来Train呀!所以说其实它也不需要去训练

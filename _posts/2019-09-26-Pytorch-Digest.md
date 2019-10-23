@@ -48,7 +48,7 @@ tags:                               #标签
        
       ```
       for i,j in enumerate(state_dict):
-        print () # j is the keys()
+      print () # j is the keys()
       ``` 
 
 
@@ -68,6 +68,7 @@ tags:                               #标签
    ```
    * ```next(iter(trainset{是一个pytorch当中的DataSet}))```返回一个tuple，第一个元素为Data，是一个图。第二个元素为Label，是一个数
    * 获取Batch内部的数据
+
    ``` python
    def getBatch():
       for batch_idx, (input, target) in enumerate(trainloader):
@@ -75,6 +76,7 @@ tags:                               #标签
    batch_data = next(getBatch())
    # 返回的是一个Tensor [Batch_size,C,W,H]
    ```
+
     * 或者直接 
         * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20191014154232.png)
 
@@ -98,6 +100,7 @@ tags:                               #标签
 ```optim.SGD(net.parameters(), lr=args.lr, momentum=0.9, weight_decay=5e-4)```
 * 所有的optimizer都会实现一个step()方法，利用它来*实现参数的更新*（前提是之前执行过计算图的```loss.backward()```）
 * loss的两个输入参数形式是（可能会有long tensor的要求）
+
 ``` py
 input = torch.Tensor([[0.1,0.8,0.1],[0.4,0.6,0]])
  # 3 Class, 2 Batch_size
@@ -110,7 +113,7 @@ target = torch.Tensor([1,1])
     * 查看LR
       * ```optimizer.param_groups[0]['lr']```
     * [torch.optim.lr_scheduler.MultiStepLR(optimizer, milestones, gamma=0.1, last_epoch=-1)](https://pytorch.org/docs/stable/optim.html?highlight=lr_scheduler#torch.optim.lr_scheduler.MultiStepLR)
-    * 
+
     ``` py
     >>> # Assuming optimizer uses lr = 0.05 for all groups
     >>> # lr = 0.05     if epoch < 30
@@ -122,6 +125,7 @@ target = torch.Tensor([1,1])
     >>>     validate(...)
     >>>     scheduler.step()
     ``` 
+
     * 在执行一次scheduler.step()之后，epoch会加1，因此scheduler.step()**要放在epoch的for循环**当中执行。
 
 
@@ -224,7 +228,8 @@ target = torch.Tensor([1,1])
 * 当显存不够的时候(不是现在)导致Batch-Size上不去，有一个奇技淫巧（其实现在已经是常规操作了，叫Accumulating Gradients）
   * 模拟大Batch-Size
   * 做多次前向和一次反向，这样模拟出16xBatchSize
-  ```
+
+  ``` py
   # clear last step
   optimizer.zero_grad()
 
@@ -256,9 +261,11 @@ losses.append(loss.item())
   * 查看多卡的信息 ```torch.cuda.get_device_name(i)```
 
 ``` py
+model = resnet18()
 model = nn.DataParallel(model, device_ids=device_ids)
 result = model(input)
 ```
+
 * 下午炼了好久以为自己用的是res50其实是EfficientNet,,按照文章里参数吧BatchSize整贼大,然后效果不好,换会Res50一看,256的BatchSize就把显存拉满炼
   * ~~网络的体量差距好大啊~~
   * 另外还深刻感受到了BatchSize不能太大,太大了在第一次LR Decay之后就是肉眼可见的过拟合,而且前期震荡
