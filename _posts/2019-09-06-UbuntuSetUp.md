@@ -397,6 +397,11 @@ let g:netrw_banner = 0
   * **对于这些应用程序，不想开一个Term来打开的方法**
     * 直接win，打开
     * alt+f2输入
+* PDF阅读软件 [Mendeley](https://www.mendeley.com/?interaction_required=true)
+    * 我貌似没有用apt安装成功，所以是直接用wget下的
+* 发现Vscode窗口很多个认不出来
+  * 安装[Peacock插件](https://papapeacockstorage.z13.web.core.windows.net/)每个窗口整一个颜色
+  * ~~曾经我认为这个插件很脑瘫,没想到真的用到了~~
 
 
 # Win当中的Ubuntu - WSL(Windows SubSystem Linux)
