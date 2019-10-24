@@ -53,6 +53,11 @@ tags:                               #标签
 
 
 ### 读取数据集
+   * 这里是直接调用了官方提供给*特定数据集*的Loader方式
+     * 也可以采用[官方示例中的读取方式](https://github.com/bearpaw/pytorch-classification/blob/master/imagenet.py)
+     * 但是也可以用torchvison.datasets.ImageFolder($DIR, xxx,xxx)
+     * 是直接按照默认方式进行读取(读取一个文件夹下的所有东西,直接按照下一级的文件夹名字作为分类标准)
+       * trainset.classs_to_idx 自动分配了对应的类别,都是对应的list
    ``` python
    trainset = torchvision.datasets.CIFAR10(root='./data', train=True, download=False, transform=transform_train)
    trainloader = torch.utils.data.DataLoader(trainset, batch_size=128, shuffle=True, num_workers=2)
@@ -77,24 +82,24 @@ tags:                               #标签
    # 返回的是一个Tensor [Batch_size,C,W,H]
    ```
 
-    * 或者直接 
-        * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20191014154232.png)
+  * 或者直接 
+      * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20191014154232.png)
 
-    * 数据集是什么样的类型:
-      * ```trainset = torchvision.datasets.CIFAR10(root='./data', train=True, download=True, transform=transform_train)```
-      * trainset的形式:
-        * ```Dataset CIFAR10
-              Number of datapoints: 50000
-              Root location: ./data
-              Split: Train
-          ```
-        * train.set.data是一个numpy array(因为我没有apply transform中将其tensor化```transforms.toTensor()```)
-          * shape为[50000,32,32,3]
-        * trainset.class_to_index各个类别的对应label
-      * 本质上是继承了```torch.utils.data.DataSet```
-        * 实现了getitem和len方法
-        * 所以可以被```torch.utils.data.DataLoader```
-          * 使用了```torch.multiprocessing```来多线程读取
+  * 数据集是什么样的类型:
+    * ```trainset = torchvision.datasets.CIFAR10(root='./data', train=True, download=True, transform=transform_train)```
+    * trainset的形式:
+      * ```Dataset CIFAR10
+            Number of datapoints: 50000
+            Root location: ./data
+            Split: Train
+        ```
+      * train.set.data是一个numpy array(因为我没有apply transform中将其tensor化```transforms.toTensor()```)
+        * shape为[50000,32,32,3]
+      * trainset.class_to_index各个类别的对应label
+    * 本质上是继承了```torch.utils.data.DataSet```
+      * 实现了getitem和len方法
+      * 所以可以被```torch.utils.data.DataLoader```
+        * 使用了```torch.multiprocessing```来多线程读取
 
 ### 优化器 (来自torch.optim)
 ```optim.SGD(net.parameters(), lr=args.lr, momentum=0.9, weight_decay=5e-4)```
