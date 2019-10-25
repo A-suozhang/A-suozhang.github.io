@@ -54,14 +54,18 @@ tags:                               #标签
 
 ### 读取数据集
    * 这里是直接调用了官方提供给*特定数据集*的Loader方式
-     * 也可以采用[官方示例中的读取方式](https://github.com/bearpaw/pytorch-classification/blob/master/imagenet.py)
+     * ~~也可以采用[官方示例中的读取方式](https://github.com/bearpaw/pytorch-classification/blob/master/imagenet.py)~~
+       * 对不起上面那个只是民间复现,[这才是官方范例](https://github.com/pytorch/examples/blob/master/imagenet/main.py)
+       * ~~(但是他们读取数据的方法是一致的)~~
      * 但是也可以用torchvison.datasets.ImageFolder($DIR, xxx,xxx)
      * 是直接按照默认方式进行读取(读取一个文件夹下的所有东西,直接按照下一级的文件夹名字作为分类标准)
        * trainset.classs_to_idx 自动分配了对应的类别,都是对应的list
-   ``` python
+        
+   ``` py
    trainset = torchvision.datasets.CIFAR10(root='./data', train=True, download=False, transform=transform_train)
    trainloader = torch.utils.data.DataLoader(trainset, batch_size=128, shuffle=True, num_workers=2)
    ``` 
+
    * 需要经过一个* [Transform(From Torchvision)](https://pytorch.org/docs/stable/torchvision/transforms.html?highlight=transform)，不仅做了一些对去均值之类的操作，而且是将原本的PIL图像转化为tensor
    ``` python
    transform_train = transforms.Compose([
@@ -71,7 +75,9 @@ tags:                               #标签
       transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010)),
    ])
    ```
-   * ```next(iter(trainset{是一个pytorch当中的DataSet}))```返回一个tuple，第一个元素为Data，是一个图。第二个元素为Label，是一个数
+    * 这边初始数据一定要Crop一下,否则会报错 ```RuntimeError: invalid argument 0: Sizes of tensors must match except in dimension 0. Got 375 and 500 in dimension 2 at /opt/conda/conda-bld/pytorch_1570910687650/work/aten/src/TH/generic/THTensor.cpp:689```
+      * 参考[这里](https://github.com/marvis/pytorch-yolo2/issues/89)
+   * ```next(iter(trainloader{是一个pytorch当中的DataLoader}))```返回一个tuple，第一个元素为Data，是一个图。第二个元素为Label，是一个数
    * 获取Batch内部的数据
 
    ``` python
@@ -84,6 +90,10 @@ tags:                               #标签
 
   * 或者直接 
       * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20191014154232.png)
+      ```
+      it = iter(train_loader)
+      image, label = it.next()
+      ``` 
 
   * 数据集是什么样的类型:
     * ```trainset = torchvision.datasets.CIFAR10(root='./data', train=True, download=True, transform=transform_train)```
@@ -133,6 +143,34 @@ target = torch.Tensor([1,1])
 
     * 在执行一次scheduler.step()之后，epoch会加1，因此scheduler.step()**要放在epoch的for循环**当中执行。
 
+* WarmUp的LR
+  * 官方没有给,所以需要我们**自己写**
+  ``` py
+
+  from torch.optim.lr_scheduler import _LRScheduler
+
+  class WarmUpLR(_LRScheduler):
+    """warmup_training learning rate scheduler
+    Args:
+        optimizer: optimzier(e.g. SGD)
+        total_iters: totoal_iters of warmup phase
+    """
+    def __init__(self, optimizer, total_iters, last_epoch=-1):
+        
+        self.total_iters = total_iters
+        super().__init__(optimizer, last_epoch)
+
+    def get_lr(self):
+        """we will use the first m batches, and set the learning
+        rate to base_lr * m / total_iters
+        """
+        return [base_lr * self.last_epoch / (self.total_iters + 1e-8) for base_lr in self.base_lrs]
+  ``` 
+  * 继承官方的_LRScheduler  
+    * 需要实现一个get_lr方法吧我们需要的lr写在里面
+    * self.last_epoch表示上一个epoch数
+
+
 
 * optimizer.param_groups是一个list
   * 其[0]是一个dict
@@ -143,16 +181,23 @@ target = torch.Tensor([1,1])
 ### [Tensor](https://pytorch.org/docs/stable/tensors.html)
 
 #### Autograd
-    * 声明Tensor的时候默认的require_grad是False哦 ```x = torch.tensor([[1., -1.], [1., 1.]], requires_grad=True)```
-        * 用torch.tensor来声明Tensor，torch.Tensor是一个Class
-    * 经过计算backward之后，每个tensor的梯度被存在Tensor.grad内部
-        * *只有是item单个数目之后的结果才可以做backward哦-很合理这样才是一个计算图*
+* 声明Tensor的时候默认的require_grad是False哦 ```x = torch.tensor([[1., -1.], [1., 1.]], requires_grad=True)```
+    * 用torch.tensor来声明Tensor，torch.Tensor是一个Class
+* 经过计算backward之后，每个tensor的梯度被存在Tensor.grad内部
+    * *只有是item单个数目之后的结果才可以做backward哦-很合理这样才是一个计算图*
 * torch.apply_(callable) - 对Tensor里的每一个元素执行一样的操作
     * *只能被用在CPU Tensor上而且不能用于高性能需求的时候*
 
 * 可视化(Tensorboard被包含到了torch里面)
     * ```from torch.utils.tensorboard import SummaryWriter```
     * [官方给的Tensorboard的Tutorial](https://pytorch.org/tutorials/intermediate/tensorboard_tutorial.html)
+
+### Tensorboard
+* [一个教程](https://www.pytorchtutorial.com/pytorch-builtin-tensorboard/)
+* ~~```from torch.utils.tensorboard import SummaryWriter```~~
+  * 官方给的功能没有
+* add_scalar(tag, scalar_value, global_step=None, walltime=None)
+  * tag值可以手动设置为```section/plot```可以分为不同的scope
 
 
 # Some Resoueces
@@ -175,7 +220,24 @@ target = torch.Tensor([1,1])
     > Make Deep Learning Uncool
     * [Stuffs About It](https://github.com/zergtant/pytorch-handbook/blob/master/chapter4/4.3-fastai.ipynb)
 * CLI-Command Line Level
-
+* LMDB (lightning-Memory-Mapped DataBases)内存映射数据库
+  * 内部一个数据文件,一个锁文件
+  * 将所有图片存在一个文件里面,可以减少机械硬盘的读取时间(IO开销)
+    * 可以*提高磁盘利用率*
+  * 用*内存映射的方式存储文件*
+  * 不需要额外的数据库进程
+* hd5会存储每个像素的值,会超级大
+  * 对tf有tfrecords格式去压缩数据
+* ImageNet
+  * 全部的数据集有1.25M,2w多类,1T左右
+  * 我们一般用到的是ILVSRC比赛的,大概160G不到一点
+    * Train - 每个类别1k多张 1281167
+    * Val - 5W - 1000x50
+    * Test - (比赛中不公开label)
+  * 文件结构
+    * train.txt Test.txt 包含了对应的lable信息
+* Cifar100-文件大小同cifar10 (32x32x3)
+  * 50000张
 
 
 # Python
@@ -185,6 +247,7 @@ target = torch.Tensor([1,1])
     * **Format()** - 用“{}”来代替“%”
         * {}里面带数字可以替换顺序 ```print("{0}>{1}".format(1,2))```
         * {}里面“:x”可以进行进制转换
+        * {}里面":.2f"表示保留小数点后几位
 * enumerate()返回一个枚举对象
     * 输入参数是以一个iterable的对象，比如list
     * 返回的是一个tuple  ```(index, content_of_iter)```
@@ -275,9 +338,23 @@ result = model(input)
   * ~~网络的体量差距好大啊~~
   * 另外还深刻感受到了BatchSize不能太大,太大了在第一次LR Decay之后就是肉眼可见的过拟合,而且前期震荡
 
+
+# Troubleshooting!
+* 2019-10-24-eve: 在ImageNet预处理中,把第一步的RandomSizeCrop(224)写成了RandomCrop(224),导致整体崩溃了
+  * 出bug的地方在trainloader Load数据的时候,报了一个```ValueError: empty range for randrange() (0,-23, -23)```
+  * ~~最尼玛骚的是这个在num_of_works < batch_size的时候不会被触发,太迷了!!~~
+* 在使用tensorboard尝试构建graph的时候
+  * Cannot insert a Tensor that requires grad as a constant. Consider making it a parameter or input, or detaching the gradient
+  * 悬而未决
+
+
+
+
 ---
 
-# Matplotlib
+# Other Packages
+
+## Matplotlib
 
 * [这里有一个简要上手教程](https://www.jianshu.com/p/c495e663f0ed)\
    
@@ -304,7 +381,7 @@ plt.show()
 * 存图
   * ```plt.savefig("test.jpg")```
 
-# argparse
+## argparse
 
  ``` python
  parser = argparse.ArgumentParser(description='PyTorch CIFAR10 Training')

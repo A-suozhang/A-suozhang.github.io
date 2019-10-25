@@ -112,6 +112,9 @@ tags:
         * -w　显示加宽
         * -au　包含详细信息
     * ```ps -aug | grep xxx```
+* 安装```sudo apt-get install sysstat```
+  * 用```iostat -s 1 -kh```
+    * ```-kh```的含义其实单位在```df -kh中同理```
 * 查看当前系统的所有服务
     * *服务*　支持系统运行的一些必要进程的集合，本质还是进程
     * ```service --status-all　｜ grep running```  
@@ -161,7 +164,6 @@ tags:
         * -o 只输出匹配到的内容，而不是整行
         * -n 输出包含行数
         * -i 忽略大小写
-    * 
 * rename command
     * 可以使用通配符，也可以使用正则(re)
         * **通配** （默认配置，比如grep默认也是用通配）
