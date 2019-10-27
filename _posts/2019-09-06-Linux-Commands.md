@@ -197,3 +197,6 @@ tags:
   * ```echo $BASE^$_STRING | base64 -d ```
 * 开机自启动
     * 最脑瘫的方式是命令行*gnome-session-properties*打开图形界面设置
+
+# Bash Scripts
+* 

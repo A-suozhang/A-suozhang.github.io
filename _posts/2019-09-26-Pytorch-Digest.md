@@ -50,6 +50,15 @@ tags:                               #标签
       for i,j in enumerate(state_dict):
       print () # j is the keys()
       ``` 
+    10. named_xxx()系列返回一个Generator
+  
+    ``` py
+    for int,tuple in enumerate(net.named_parameters()):
+        # int 是index
+        # Tuple第一个元素是一个string, 后一个是Parameter形的
+        # layer4.1.conv1.weight <class 'torch.nn.parameter.Parameter'>
+
+    ```
 
 
 ### 读取数据集
@@ -113,6 +122,10 @@ tags:                               #标签
 
 ### 优化器 (来自torch.optim)
 ```optim.SGD(net.parameters(), lr=args.lr, momentum=0.9, weight_decay=5e-4)```
+* optim的第一个输入参数是一个list(也就是```net.parameters()```返回的)
+  * 里面的元素是一个dict
+  * 默认的list长度是1
+  * **当你需要对于每一层不同的lr的时候,可以手动改这个list,把它变长,然后dict里面的lr取不同的值**
 * 所有的optimizer都会实现一个step()方法，利用它来*实现参数的更新*（前提是之前执行过计算图的```loss.backward()```）
 * loss的两个输入参数形式是（可能会有long tensor的要求）
 
@@ -127,6 +140,7 @@ target = torch.Tensor([1,1])
 * 分段的LR
     * 查看LR
       * ```optimizer.param_groups[0]['lr']```
+    * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20191027195406.png)
     * [torch.optim.lr_scheduler.MultiStepLR(optimizer, milestones, gamma=0.1, last_epoch=-1)](https://pytorch.org/docs/stable/optim.html?highlight=lr_scheduler#torch.optim.lr_scheduler.MultiStepLR)
 
     ``` py
@@ -353,6 +367,11 @@ result = model(input)
 ---
 
 # Other Packages
+
+
+## OS
+* getcwd() - 等价于pwd()
+* listdir() - 返回一个当前地址的list
 
 ## Matplotlib
 

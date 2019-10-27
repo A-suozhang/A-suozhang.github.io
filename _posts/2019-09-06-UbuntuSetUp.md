@@ -183,6 +183,10 @@ sslocal -c PATH_TO_YOUR_SHADOWSOCKS_JSON (~/shadowsocks.json)
   * [教程1](https://blog.csdn.net/qq_28869927/article/details/80917997)
   * [教程2](https://zhuanlan.zhihu.com/p/71588449)
 
+## 多工作区
+* CTRL+ALT+上下方向箭
+  * 可以有效提高效率
+
 
 ## Vim Set Up
 
