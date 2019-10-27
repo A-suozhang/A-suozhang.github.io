@@ -33,6 +33,9 @@ tags:
     * 压缩用　```tar -zcvf XXX.tar.gz XXX/```
     * unzip xxx.zip
     * cpio -idmv < xxx.cpio(解压到当前目录)
+* 安装一下rar和unrar
+  * ```unrar x xxx.rar```正常的操作方式
+  * args中国的x换成e是全部解压到当前目录
 * vivado -source xxx.tcl
 * 退出qemu: CTRL+A + X
 * 命令行挂载一系列操作：
