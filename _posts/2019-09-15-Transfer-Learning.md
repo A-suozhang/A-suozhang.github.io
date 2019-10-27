@@ -290,6 +290,9 @@ tags:                               #标签
 ### [Multi-Source Domain Adaptation and Semi-Supervised Domain Adaptation with Focus on Visual Domain Adaptation Challenge 2019](http://csr.bu.edu/ftp/visda/2019/tech_reports/semi-supervised-2nd.pdf)
 * （不是特别有用）
 
+
+### [Drop to Adapt: Learning Discriminative Features for Unsupervised Domain Adaptation](https://arxiv.org/pdf/1910.05562.pdf)
+
 ### [Deep Visual Domain Adaptation: A Survey](https://arxiv.org/abs/1802.03601.pdf)
 
 * 2018(~~后面出来的一些模型基本上也不太好实现~~) 北邮

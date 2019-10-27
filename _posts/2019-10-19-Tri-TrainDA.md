@@ -37,3 +37,6 @@ tags:                               #标签
 * 文章中提到BN能够Whiten最后的OUTPUT Hidden layer
     * 通过在最后一个BN层，让各个域的Distribution更接近
     * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20191019131113.png)
+
+* 选取方式
+  * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20191025202011.png)

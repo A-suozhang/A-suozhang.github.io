@@ -381,6 +381,10 @@ plt.show()
 * 存图
   * ```plt.savefig("test.jpg")```
 
+* 用plt.imshow()函数来可视化图像的时候
+  * 图像应该为 [W,H,C] - 而一般DataLoader出来的时候是[$BATCH_SIZE,C,W,H]
+  * 需要permute一下
+
 ## argparse
 
  ``` python

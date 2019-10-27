@@ -22,6 +22,7 @@ tags:                               #标签
   1. 其场景是Supervised Learning,需要Label去Finetune,但是我们的场景没有
   2. 传统的方式没有考虑Distribution Discrepancy,会导致Negative Transfer
      * AdaBN的方法是否有效?  
+* 该种方法:对实际场景(Targert Domain)中的数据其实只用到了数据去做前向
 
 ### Related Works
 * UDA(无监督自适应迁移)

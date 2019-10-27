@@ -124,6 +124,8 @@ tags:
     *  按照资源分配来排序服务  ```systemd-cgtop```
     *  ```pstree```层次列出
     *  查看某个服务的运行状态```service xxx status```
+* 反复刷新某个命令 ```watch -n 0.5 -d $COMMAND```
+    * ```－d表示hightlight变化的部分W```
 *  生成分辨率
       *  ```gtf 1920 1080 60 -x```
       *   Modeline "1920x1080_60.00"  172.80  1920 2040 2248 2576  1080 1081 1084 1118  -HSync +Vsync

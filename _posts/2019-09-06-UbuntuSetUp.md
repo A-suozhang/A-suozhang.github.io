@@ -44,6 +44,7 @@ tags:                               #标签
   * 或者直接搜索*搜狗输入法For Linux*下载deb安装，重启之后
     * 在fcitx当中添加（首先取消勾选Only Show Current Language英文系统的化应该找不到），在最后应该能找到sougou pinyin
     * 勾选并置顶
+  * SHift+Space是全角半角切换   
   
 ### 安装必要软件
 * 以下基本都可以通过直接在官网下载.deb安装
@@ -402,6 +403,8 @@ let g:netrw_banner = 0
 * 发现Vscode窗口很多个认不出来
   * 安装[Peacock插件](https://papapeacockstorage.z13.web.core.windows.net/)每个窗口整一个颜色
   * ~~曾经我认为这个插件很脑瘫,没想到真的用到了~~
+* 设置默认程序的打开方式
+  * 一个文件右键```"properties->open with->set as default"```
 
 
 # Win当中的Ubuntu - WSL(Windows SubSystem Linux)
