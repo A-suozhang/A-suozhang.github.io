@@ -2,7 +2,7 @@
 layout:     post                    # 使用的布局（不需要改）
 title:      Understanding&Debugging PyTorch           # 标题 
 subtitle:   Also A Bit About Python        #副标题
-date:       2019-10-23              # 时间
+date:       2019-10-28              # 时间
 author:     tianchen                      # 作者
 header-img:  img/bg-nmb-corner.jpg  #这篇文章标题背景图片  
 catalog: true                       # 是否归档
@@ -59,6 +59,40 @@ tags:                               #标签
         # layer4.1.conv1.weight <class 'torch.nn.parameter.Parameter'>
 
     ```
+    11. 如何操作net
+      * **如何解构一个net?**
+        * *官方给的mode一般都像套娃一样*
+        * 首先net.children() net.modules()这些东西都是generator
+        * 我们可以直接用一个list(net.childern)一下把它的东西给全部包起来
+          * 然后用len()或者是index直接索引来看
+          * *活用type和pytorch官方文档了解模块的封装形式*
+      * 我们发现net.children()中的元素是一个tuple
+        * 第一个元素是名字
+        * 第二个元素就是torch.Sequential了 
+      * Sequential是一个小婊砸:
+        * 一开始我被难住了,后来发现它可以当做list用,直接索引
+      * 下一级就是这样的一个具体的block了
+       
+      ```
+      InvertedResidual(
+          (conv): Sequential(
+            (0): ConvBNReLU(
+              (0): Conv2d(32, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=32, bias=False)
+              (1): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU6(inplace=True)
+            )
+            (1): Conv2d(32, 16, kernel_size=(1, 1), stride=(1, 1), bias=False)
+            (2): BatchNorm2d(16, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          )
+        )
+      ``` 
+
+        * 对这种block直接按照里面的名字索引,比如这里```xxx.conv``` 
+      * 这样抽丝剥茧总能到一个具体的Function
+        * 比如```Conv2d(32, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=32, bias=False)```
+        * 对于这个具体的Function
+          * xxx.weight就是一个nn.parameter
+      * 对这个Parameter,的.data就是一个Tensor
 
 
 ### 读取数据集
@@ -205,6 +239,16 @@ target = torch.Tensor([1,1])
 * 可视化(Tensorboard被包含到了torch里面)
     * ```from torch.utils.tensorboard import SummaryWriter```
     * [官方给的Tensorboard的Tutorial](https://pytorch.org/tutorials/intermediate/tensorboard_tutorial.html)
+
+### S/L
+* 存储
+  * torch.save(dict, 'xxx.pth')
+* 读取
+  * 读取的是'.pth',内部是一个dict,keys有net,acc,epoch
+    * 这个里面的内容是自己打包的,可以选择
+  * 读取pth出来的net是一个OrderedDict
+
+
 
 ### Tensorboard
 * [一个教程](https://www.pytorchtutorial.com/pytorch-builtin-tensorboard/)
@@ -360,6 +404,16 @@ result = model(input)
 * 在使用tensorboard尝试构建graph的时候
   * Cannot insert a Tensor that requires grad as a constant. Consider making it a parameter or input, or detaching the gradient
   * 悬而未决
+* Tensor往gpu传的时候不能做到inplace
+  * 对于model可以用```model.to(device)```就可以了
+  * 但是tensor必须```t = t.to(device)```
+    * 不支持inplace
+  * 如果没有操作对的话就会报```RuntimeError```
+* ```Unexpected key(s) in state_dict: "module.conv1.weight", "module.bn1.weight", "module.bn1.bias"```
+  * 是因为训练保存模型的时候用了DataParallel与读取的时候不一致了,可以在读取的时候加上
+  * *模型保存的时候和卡的张数和device_id都有关系有些不合理*
+* 注意如果```device='cuda'```的话默认是用0卡的相当于```cuda:0```如果要用其他卡作为主卡,则需要让```device:2```,之后再XXX.to(device)
+  * 注意net多卡时候的DataParallel中的device_ids,第一个最好设置为主卡
 
 
 

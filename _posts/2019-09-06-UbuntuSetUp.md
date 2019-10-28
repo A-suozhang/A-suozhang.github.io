@@ -186,6 +186,10 @@ sslocal -c PATH_TO_YOUR_SHADOWSOCKS_JSON (~/shadowsocks.json)
 ## 多工作区
 * CTRL+ALT+上下方向箭
   * 可以有效提高效率
+  
+## Trouble Shooting
+* 硬盘识别不出来```Mount error: “unknown filesystem type 'exfat'”```
+  * ```sudo apt-get install exfat-fuse exfat-utils```
 
 
 ## Vim Set Up
