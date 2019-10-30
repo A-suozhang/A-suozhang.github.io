@@ -26,6 +26,7 @@ tags:                               #标签
   * Pi Model： 每个Unlabel数据过两遍，每次经过不同的Dropout（等数据增强） 
     * 有一个Unsupervised的loss1是两者推断的一个Squared Difference
   * Temporal Model: 通过一个滑动平均来鼓励模型prediction与平均一致
+    * 滑动平均就相当于对各个模型做了一个Ensemble
     * 有一个改进：不是对prediction而是对Weight来做
       * 有一个TCH，STU
       * TCH的weight是STU的moving average
@@ -95,5 +96,15 @@ tags:                               #标签
     * 这个下字数是一个Batch中有多少Sample Pass了Confidence Threshold
   * 这个思想和*Entropy Maximization Loss*有一些接近
   * 作者也思考到了如果Target Domain具有Class Imbalance，那这个方法反而会不work
+* 两个Term理解为一个让Source的数据对 - 具有基本的数据分辨能力,或者说是学习到Domain-Invariant的Feature和分辨
+  * 并且只在Target上尝试获得一个Consistent的模型(比较好的分类器)
+  * 
+* 其实思路和原本只用在Semi上的Mean-Teacher很类似,只是将两个域隔离开来(毕竟我们无所谓Source上的Performance如何)
+
 
 ### Expermient
+
+### What To Modify
+* 尝试去做Prunning,思路和TCP;类似,边训练边Prunning
+  * 看用什么loss,可以做一做实验
+* 
