@@ -1,13 +1,17 @@
 ---
 layout:     post                    # 使用的布局（不需要改）
 title:      论文阅读《Mean teachers are better role models》          # 标题 
-subtitle:   又一个自己的idea...   #副标题
+subtitle:   所以它到底是为啥Work呢...   #副标题
 date:       2019-10-28            # 时间
 author:     tianchen                      # 作者
-header-img:  img/10_1/bg-nmb4.jpg  #这篇文章标题背景图片  
+header-img:  img/bg-cat1.jpg  #这篇文章标题背景图片  
 catalog: true                       # 是否归档
 tags:                               #标签
      - 论文阅读
+---
+
+
+
 ---
 
 # [Mean teachers are better role models: Weight-averaged consistency targets improve semi-supervised deep learning results](https://arxiv.org/abs/1703.01780))

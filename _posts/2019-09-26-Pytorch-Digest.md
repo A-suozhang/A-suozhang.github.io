@@ -467,4 +467,15 @@ plt.show()
  args = parser.parse_args()
  ```
 
+## tqdm
+* 一个很实用的进度条库
+* 注意要用```from tqdm import *```这样来import哦
+
+``` py
+t = tqdm(range(10))
+for i in t:
+  t.set_description("WWW{}".format(i))
+```
+
+* 对于enumerate的case就把enumerate里的对象套上tqdm
 
