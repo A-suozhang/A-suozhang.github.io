@@ -329,6 +329,13 @@ target = torch.Tensor([1,1])
         * *下一次从当前位置开始继续运行！*
     * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20191014142842.png)
         * 由于用到了yield，所以虽然返回了，但是下一次也是在while循环里面的
+* zip
+  * [iter, (等待被batchup的元素)]
+  * 返回的是一个tuple的迭代器 
+  ``` py
+  l = ['a', 'b', 'c', 'd', 'e','f']
+  print zip(l[:-1],l[1:])
+  ```
         
 
 
@@ -446,6 +453,12 @@ result = model(input)
   * *模型保存的时候和卡的张数和device_id都有关系有些不合理*
 * 注意如果```device='cuda'```的话默认是用0卡的相当于```cuda:0```如果要用其他卡作为主卡,则需要让```device:2```,之后再XXX.to(device)
   * 注意net多卡时候的DataParallel中的device_ids,第一个最好设置为主卡
+* logits再归一化的结果是softmax
+  * logits是在概率上又套了一个log
+  * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20191103120554.png)
+* pytorch原生dataloader的shuffle是不是每次从dataset中取数据也是随机的?
+  * 比如我每次都固定iter一半的dataloader的长度,是不是总是在对数据集的前一半分析呢?
+
 
 
 

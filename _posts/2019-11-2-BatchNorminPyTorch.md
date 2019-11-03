@@ -4,7 +4,7 @@ title:      Pytorch里的BatchNorm究竟是怎么工作的?!          # 标题
 subtitle:   不讨论一下还不知道大家对这个东西的认知居然真的不一样...   #副标题
 date:       2019-11-2           # 时间
 author:     tianchen                      # 作者
-header-img:  img/bg-cat1.jpg  #这篇文章标题背景图片  
+header-img:  img/bg-court0.jpg  #这篇文章标题背景图片  
 catalog: true                       # 是否归档
 tags:                               #标签
      - debug
