@@ -2,7 +2,7 @@
 layout:     post                    # 使用的布局（不需要改）
 title:      Understanding&Debugging PyTorch           # 标题 
 subtitle:   Also A Bit About Python        #副标题
-date:       2019-10-28              # 时间
+date:       2019-11-2             # 时间
 author:     tianchen                      # 作者
 header-img:  img/bg-nmb-corner.jpg  #这篇文章标题背景图片  
 catalog: true                       # 是否归档
@@ -153,6 +153,17 @@ tags:                               #标签
       * 实现了getitem和len方法
       * 所以可以被```torch.utils.data.DataLoader```
         * 使用了```torch.multiprocessing```来多线程读取
+
+### Layers
+* Instacne Normalization  
+  * 均值和方差是per dimension进行统计的
+  * 第一个参数 Num_Features一般和Channel数目一样
+  * eps是为了保持Numerical Stability加的一个很小的数字,默认1e-5
+  * track_running_stats是维护一个当前Set的均值方差的滑动平均,momentum参数则表示内部的系数
+    * 如果设置为False的话不管是train还是eval都会采用当前batch的均值方差(*在这里默认是False*)
+  * 当affine设置为True的时候会有一个可以学习的参数wx+b (*但是这里默认为False*)
+  * 输入输出的尺度是一致的
+  * *IN可以被认为是只对应一张图片的*
 
 ### 优化器 (来自torch.optim)
 ```optim.SGD(net.parameters(), lr=args.lr, momentum=0.9, weight_decay=5e-4)```
@@ -395,6 +406,27 @@ result = model(input)
 * 下午炼了好久以为自己用的是res50其实是EfficientNet,,按照文章里参数吧BatchSize整贼大,然后效果不好,换会Res50一看,256的BatchSize就把显存拉满炼
   * ~~网络的体量差距好大啊~~
   * 另外还深刻感受到了BatchSize不能太大,太大了在第一次LR Decay之后就是肉眼可见的过拟合,而且前期震荡
+
+* **BatchNorm的正确用法**
+  * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20191102194152.png)
+  * 就是它,有这样的几个输入参数
+      * Num_features - 和输入数据的Channel数目保持一致
+      * eps - 保持数值稳定的一个很小的数,我们不care
+      * keep_tracking_stats - 如果设置为True的话,就保存下当前的一个个Batch的均值方差的一个Runing Mean
+      * Affine 有没有一个可以learn的wx+b (默认为True)
+  * **非常关键!!**
+    * Batchnorm中的均值和方差到底是什么东西呢?
+    * 首先,在完全默认的情况下,momentum=0.1,keep_tracking_stat = True
+    * 在net.train()的时候
+      * **虽然在keep_tracking_stats = True**的时候,记录下了这个滑动平均
+      * 但是**在训练阶段前向传播的时候这个平均值并没有被用到**,实际用的是**每个MiniBatch的均值方差**
+    * 而在net.eval()的时候
+      * 使用的是之前记录下来的滑动平均了,均值方差不会再被更新
+      * 当然如果又是eval又*keep_tracking_stats = False*的话,eval的时候也是不会使用一个滑动平均的(因为完全没有被记录下来desu)
+*  对于数据集的transform,现在是不是可以不加Normalize,而是在网络的一开始加一个Instance Normalization~~
+   *  因为本身Instance Norm就是对每个Channel做的,而且是每张图做的
+   *  (还不是特别确定)
+
 
 
 # Troubleshooting!
