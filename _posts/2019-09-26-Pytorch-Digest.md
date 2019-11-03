@@ -2,7 +2,7 @@
 layout:     post                    # 使用的布局（不需要改）
 title:      Understanding&Debugging PyTorch           # 标题 
 subtitle:   Also A Bit About Python        #副标题
-date:       2019-11-2             # 时间
+date:       2019-11-3             # 时间
 author:     tianchen                      # 作者
 header-img:  img/bg-nmb-corner.jpg  #这篇文章标题背景图片  
 catalog: true                       # 是否归档
@@ -458,6 +458,20 @@ result = model(input)
   * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20191103120554.png)
 * pytorch原生dataloader的shuffle是不是每次从dataset中取数据也是随机的?
   * 比如我每次都固定iter一半的dataloader的长度,是不是总是在对数据集的前一半分析呢?
+* 一个比较hacky的方式来实现 *Infinite Dataloader*
+  * 正确的方法是使用原生的*IterableDataSet*,但是我这里使用了Salad库,封装在里面,不是很方便重构
+  * 我们的操作方式是,检测StopIteration异常的出现,如果异常了,就重置一个iter
+   
+  ``` py
+
+  try:
+      input_t0, input_t1, label_t1 = it_t.next()
+  except StopIteration:
+      it_t = iter(digitloader.datasets[1])
+      input_t0, input_t1, label_t1 = it_t.next()
+  input_s, target_s = it_s.next()
+
+  ```
 
 
 
