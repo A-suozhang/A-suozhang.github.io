@@ -473,7 +473,7 @@ result = model(input)
 
   ```
 
-
+* 在我的代码里使用inplace的方法```tensor.mul_()```和使用赋值的方法差距很大,原因不是那么知道
 
 
 

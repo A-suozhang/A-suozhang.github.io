@@ -4,7 +4,7 @@ title:      Salad代码阅读?!          # 标题
 subtitle:   这是什么专业框架啊(战术后仰)...   #副标题
 date:       2019-11-2           # 时间
 author:     tianchen                      # 作者
-header-img:  img/bg-ucentre2.jpg  #这篇文章标题背景图片  
+header-img:  img/bg-cat1.jpg  #这篇文章标题背景图片  
 catalog: true                       # 是否归档
 tags:                               #标签
      - DL
@@ -40,3 +40,8 @@ tags:                               #标签
 * 定义出的net会有一些conditional param
   * 在定义的时候,需要确定n_domains
   * 在前向的时候,需要确定d=?
+
+* 定义了一个自己的_batch_norm
+  * 因此BN相关的一些参数并不在 state_dict当中也不会被更新
+    * 这也就是我那个多卡的bug产生的来源 - 因为不在state dict中的BN的running mean参数并没有在net init的时候被DataParallel复制到多卡上
+  * 同时放弃了BN的afine trasnform,其实严格来说是不好的
