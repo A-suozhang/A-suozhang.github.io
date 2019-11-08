@@ -474,7 +474,7 @@ result = model(input)
   ```
 
 * 在我的代码里使用inplace的方法```tensor.mul_()```和使用赋值的方法差距很大,原因不是那么知道
-
+* 由于我在整个代码的最后加了一个writer.add_scalar但是没有运行到那里就停了,导致认为是writer没有close,tensorboard里没有数据
 
 
 ---

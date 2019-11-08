@@ -11,7 +11,7 @@ github_repo: "https://github.com/A-suozhang/A-suozhang.github.io" # you code rep
 
 # Sidebar settings
 sidebar: true                           # whether or not using Sidebar.
-sidebar-about-description: "六畳一间のドンキホーテ\n a-suozhang，本科在北京飞机汽修学院的电信诈骗专业就读\n 研究生不出意外会续约北航\n 除了写代码和玩电路之外的爱好暂时被搁置"
+sidebar-about-description: "六畳一间のドンキホーテ\n a-suozhang，本科在北京飞机汽修学院的电信诈骗专业就读(已续约)，目前短暂在NICS EFC打杂学习"
 sidebar-avatar: /img/head.jpg      # use absolute URL, seeing it's used in both `/` and `/about/`
 
 
