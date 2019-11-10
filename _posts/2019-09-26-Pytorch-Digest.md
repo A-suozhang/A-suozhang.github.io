@@ -93,6 +93,16 @@ tags:                               #标签
         * 对于这个具体的Function
           * xxx.weight就是一个nn.parameter
       * 对这个Parameter,的.data就是一个Tensor
+      * 对parameter做对应的操作(比如对不同层选取不同的lr)
+
+      ``` py
+      param_group = []
+      for k, v in net.named_parameters():
+                  if not k.__contains__('fc'):
+                      param_group += [{'params': v, 'lr': learning_rate}]
+                  else:
+                      param_group += [{'params': v, 'lr': learning_rate * 10}]
+      ```
 
 
 ### 读取数据集
@@ -164,6 +174,10 @@ tags:                               #标签
   * 当affine设置为True的时候会有一个可以学习的参数wx+b (*但是这里默认为False*)
   * 输入输出的尺度是一致的
   * *IN可以被认为是只对应一张图片的*
+* nn.Sequential(nn.Conv2d, nn.Linear)
+  * 比如说我不想改变网络的forward函数,而想增加一个fc层(比如对固定好的res50)可把原来的net.fc替换成一个两个fc的SequentialModel 
+  * 当然Sequential里面也可以塞一个OrderedDict
+    * 这样Sequential对象里面的模块也可有名字
 
 ### 优化器 (来自torch.optim)
 ```optim.SGD(net.parameters(), lr=args.lr, momentum=0.9, weight_decay=5e-4)```
@@ -475,6 +489,7 @@ result = model(input)
 
 * 在我的代码里使用inplace的方法```tensor.mul_()```和使用赋值的方法差距很大,原因不是那么知道
 * 由于我在整个代码的最后加了一个writer.add_scalar但是没有运行到那里就停了,导致认为是writer没有close,tensorboard里没有数据
+* 使用多卡的时候出现bug,检查一下是否先```to(device)```再```Data Parallel```
 
 
 ---
