@@ -118,6 +118,22 @@ tags:                               #标签
    trainset = torchvision.datasets.CIFAR10(root='./data', train=True, download=False, transform=transform_train)
    trainloader = torch.utils.data.DataLoader(trainset, batch_size=128, shuffle=True, num_workers=2)
    ``` 
+   * ImageFolder类型的Dataset
+     * 把图片按照类存在一个文件夹下,相当于有了Label
+     * dataset.samples,可以来索引数据
+     * dataset.classes
+   * DataLoader内部还会有一个DataSampler来提供取Dataset的Indice
+     * 分为Sampler和BatchSampler（在dataloader定义时候作为arg输入，默认都为False）
+       * Sampler用于产生indices
+       * BatchSampler则是将indices打包为Batch
+     * Pytorch官方实现了Random，Sequential， Weighted，SubsetRandom
+     * 纯默认情况，如果shuffle = True，就用Random，否则用Sequential
+     * 如果自己定义了BatchSampler，shuffle需要设置成false
+   * SubsetRandomSampler - Sampler的一种
+     * 从输入的indice list中随机抽取
+     * replacement不满足(同一个indice不会被重复输出)
+   * BatchSample(sampler, batch_size, drop_last = True)
+     * 基于一个sampler依据BatchSize进行打包
 
    * 需要经过一个* [Transform(From Torchvision)](https://pytorch.org/docs/stable/torchvision/transforms.html?highlight=transform)，不仅做了一些对去均值之类的操作，而且是将原本的PIL图像转化为tensor
    ``` python
@@ -535,10 +551,10 @@ plt.show()
 ## argparse
 
  ``` python
- parser = argparse.ArgumentParser(description='PyTorch CIFAR10 Training')
- parser.add_argument('--lr', default=0.1, type=float, help='learning rate')
- parser.add_argument('--resume', '-r', action='store_true', help='resume from checkpoint')
- args = parser.parse_args()
+ parser = argparse.ArgumentParser(description='PyTorch CIFAR10 Training') # 首先建立一个Parser
+ parser.add_argument('--lr', default=0.1, type=float, help='learning rate') # 然后加上arg
+ parser.add_argument('--resume', '-r', action='store_true', help='resume from checkpoint') 
+ args = parser.parse_args() # 然后parse_arg
  ```
 
 ## tqdm
