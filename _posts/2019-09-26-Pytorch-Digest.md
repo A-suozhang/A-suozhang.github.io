@@ -194,6 +194,27 @@ tags:                               #标签
   * 比如说我不想改变网络的forward函数,而想增加一个fc层(比如对固定好的res50)可把原来的net.fc替换成一个两个fc的SequentialModel 
   * 当然Sequential里面也可以塞一个OrderedDict
     * 这样Sequential对象里面的模块也可有名字
+* 调用的是torch.nn中的Conv2d函数(这个返回的是一个nn.functional和nn.functional.conv2d等价)
+  * 输入args
+    * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20191112185933.png)
+    * inplane/outplane 输入输出Channel数目,很直观
+    * Kernel_size
+    * Stride (默认为1))
+    * padding (默认为0)
+    * bias(默认为True)这里设置为None    
+      * bias是直接加在每个Output Channel上的
+      * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20191112185239.png)       
+    * groups(描述了input和output之间的Connection)这里设置为了1
+      * inplane和outplane要都能被groups整除
+      * groups = 1 - 正常的卷积
+      * groups = 2 -  相当于有两个卷积层,每个处理一半的inputchannel,产生一般的outputchannel,最后再Concat起来 (*相当于切断了一半的in_channel之间的联系*)
+      * groups = in_channel - 相当于每个in_channl都和(OUTC/INC)个卷积和去卷,最后输出的结果全部concat起来
+    * dilation - 默认为1
+      * [图示](https://github.com/vdumoulin/conv_arithmetic/blob/master/README.md)
+    * *dilation和stride之类的东西都可以是一个int或者是一个tuple*
+      * 可以用来描述横纵不一样时候的情况
+      * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20191112185933.png)
+
 
 ### 优化器 (来自torch.optim)
 ```optim.SGD(net.parameters(), lr=args.lr, momentum=0.9, weight_decay=5e-4)```
@@ -366,6 +387,20 @@ target = torch.Tensor([1,1])
   l = ['a', 'b', 'c', 'd', 'e','f']
   print zip(l[:-1],l[1:])
   ```
+* assert 
+  * 断言
+
+``` py
+import traceback
+
+try:
+  assert a == 1
+except AssertionError as er:
+  print ("Whatever you Want")
+``` 
+
+* Python使用":"进行索引的时候,和直接索引不一样
+  * 比如说对于一个长为32的数组,取后16个 [15:31]并不是取了最后16个,而[16:32]才是
         
 
 
@@ -506,7 +541,18 @@ result = model(input)
 * 在我的代码里使用inplace的方法```tensor.mul_()```和使用赋值的方法差距很大,原因不是那么知道
 * 由于我在整个代码的最后加了一个writer.add_scalar但是没有运行到那里就停了,导致认为是writer没有close,tensorboard里没有数据
 * 使用多卡的时候出现bug,检查一下是否先```to(device)```再```Data Parallel```
+* 突然出现loss直接炸裂的情况,在每个batch_iter,都需要先将optimizer做```zero_grad```,再进行train,再去做step
+  * 由于Pytorch的每一步操作都是独立的,所以backward的时候并没有清零梯度,backward默认会让梯度累加
+  * 也就是按照模板
+  ``` py
 
+  optimizer.zero_grad()             ## 梯度清零
+  preds = model(inputs)             ## inference
+  loss = criterion(preds, targets)  ## 求解loss
+  loss.backward()                   ## 反向传播求解梯度
+  optimizer.step()                  ## 更新权重参数
+
+  ```
 
 ---
 
@@ -568,4 +614,6 @@ for i in t:
 ```
 
 * 对于enumerate的case就把enumerate里的对象套上tqdm
+  * ```for i in enumerate(tqdm(list))```
+    * 
 
