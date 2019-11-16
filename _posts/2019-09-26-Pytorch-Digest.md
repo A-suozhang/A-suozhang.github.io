@@ -144,6 +144,9 @@ tags:                               #标签
       transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010)),
    ])
    ```
+    * Pytorch原生的Transform针对的是从图片中读取出来的PIL对象
+      * 如果输入已经是一个Tensor再做Transform会报错 ```TypeError: cannot unpack non-iterable builtin_function_or_method object```
+      * 同理输入是Numpy的话也需要基于Numpy做操作
     * 这边初始数据一定要Crop一下,否则会报错 ```RuntimeError: invalid argument 0: Sizes of tensors must match except in dimension 0. Got 375 and 500 in dimension 2 at /opt/conda/conda-bld/pytorch_1570910687650/work/aten/src/TH/generic/THTensor.cpp:689```
       * 参考[这里](https://github.com/marvis/pytorch-yolo2/issues/89)
    * ```next(iter(trainloader{是一个pytorch当中的DataLoader}))```返回一个tuple，第一个元素为Data，是一个图。第二个元素为Label，是一个数
@@ -615,5 +618,5 @@ for i in t:
 
 * 对于enumerate的case就把enumerate里的对象套上tqdm
   * ```for i in enumerate(tqdm(list))```
-    * 
+
 

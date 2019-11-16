@@ -36,7 +36,22 @@ tags:                               #标签
   * 也是一种Channel Prunning了 (~~一剪剪一片~~)
 * 对Training中引入Prunning
   * 对梯度更新的时候进行了分析,发现只需要对所有的梯度的一部分就可以达到之前的效果
-  * *那么这个排序的过程的多余的支出有没有算进去呢>*
+  * *那么这个排序的过程的多余的支出有没有算进去呢*
+
+
+* [Channel Prunning](https://arxiv.org/abs/1707.06168v2)
+  * 起初的一篇文章,旷视
+  * ICLR 2017
+
+* [ThiNet](https://arxiv.org/pdf/1707.06342.pdf)
+* SJTU    
+
+* [Rethinking the value of network pruning](https://arxiv.org/pdf/1810.05270.pdf)
+  * ICLR 2019
+  * 通过对比直接对修建之后的模型train from scratch，比先训练再finetune起到了相当甚至更好的效果
+  * 证明了首先训练一个over-param的大模型是不必要的,其实剪枝真正起效果是在**学习到了有价值的网络结构**,而*学到的那些参数其实用处不大*
+  * 等于说用NAS把剪枝的命革了
+
 
 ### Quantize
 * 目前最热的其实是DataFreeQ
