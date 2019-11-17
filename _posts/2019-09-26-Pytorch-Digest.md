@@ -144,9 +144,18 @@ tags:                               #标签
       transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010)),
    ])
    ```
+    * 
     * Pytorch原生的Transform针对的是从图片中读取出来的PIL对象
       * 如果输入已经是一个Tensor再做Transform会报错 ```TypeError: cannot unpack non-iterable builtin_function_or_method object```
       * 同理输入是Numpy的话也需要基于Numpy做操作
+      * PIL和能够直接plt.imshow()的对象都是[32,32,3]这样的,而从Tensor过来的一般都是[3,32,32],所以transforms的ToTensor方法默认安排了一个Permute操作
+    
+    ```
+    n_out = np.random.rand(100,100,3)
+    t_out = transforms.ToTensor()(n_out)
+    img2 = transforms.ToPILImage()(t_out.float())  #强制类型转换
+    ```
+
     * 这边初始数据一定要Crop一下,否则会报错 ```RuntimeError: invalid argument 0: Sizes of tensors must match except in dimension 0. Got 375 and 500 in dimension 2 at /opt/conda/conda-bld/pytorch_1570910687650/work/aten/src/TH/generic/THTensor.cpp:689```
       * 参考[这里](https://github.com/marvis/pytorch-yolo2/issues/89)
    * ```next(iter(trainloader{是一个pytorch当中的DataLoader}))```返回一个tuple，第一个元素为Data，是一个图。第二个元素为Label，是一个数
@@ -556,6 +565,10 @@ result = model(input)
   optimizer.step()                  ## 更新权重参数
 
   ```
+* 终于搞清楚了Tensorboard的那个Bug:有的时候运行的时候会出现```Failed To Unpack byte of 4```
+  * 应该是当开着该目录下的tensorboard,同时**该目录下的某个任务被CTRL+C终止了,或者是新的开始了?**,这样会导致写坏一个eventOut
+  * 修复办法: 不要这么做
+
 
 ---
 
