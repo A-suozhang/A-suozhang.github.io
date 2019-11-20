@@ -2,7 +2,7 @@
 layout:     post                    # 使用的布局（不需要改）
 title:      Compression相关的一些内容...          # 标题 
 subtitle:   将来吹牛逼可能会用到?...   #副标题
-date:       2019-11-5           # 时间
+date:       2019-11-17           # 时间
 author:     tianchen                      # 作者
 header-img:  img/10_1/ucentre2.jpg  #这篇文章标题背景图片  
 catalog: true                       # 是否归档
