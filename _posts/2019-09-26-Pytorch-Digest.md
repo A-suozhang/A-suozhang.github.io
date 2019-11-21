@@ -568,6 +568,13 @@ result = model(input)
 * 终于搞清楚了Tensorboard的那个Bug:有的时候运行的时候会出现```Failed To Unpack byte of 4```
   * 应该是当开着该目录下的tensorboard,同时**该目录下的某个任务被CTRL+C终止了,或者是新的开始了?**,这样会导致写坏一个eventOut
   * 修复办法: 不要这么做
+* ```AttributeError: ‘DataParallel’ object has no attribute ‘xxxx’```
+  * 需要通过DataParallel.module调用原来的网络
+  * 比如```net.module.set_fix_method()```
+* 查看Tensor的type
+  * tensor.dtype
+* ``` result type Float can't be cast to the desired output type Long```
+  * state_dict里面的BN层的Num_batched_tracked是个int64(也就是long型)
 
 
 ---

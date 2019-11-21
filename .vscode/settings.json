@@ -1,6 +1,6 @@
 {
     "C_Cpp.errorSquiggles": "Enabled",
-    "python.pythonPath": "C:\\Users\\A_suozhang\\AppData\\Local\\Programs\\Python\\Python36\\python.exe",
+    "python.pythonPath": "/usr/bin/python3",
     "workbench.colorCustomizations": {
         "activityBar.background": "#1f6fd0",
         "activityBar.activeBorder": "#ee90bb",
