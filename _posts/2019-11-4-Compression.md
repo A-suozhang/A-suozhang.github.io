@@ -57,6 +57,11 @@ tags:                               #标签
           * (稍有不准确因为实际的量化感知训练不仅包括了训练这个Range也包括了最直接的WA量化)
       * *训练时*将寻找区间和量化合并,叫做**Calibration**,在Nvidia TensorRT以及MXNet中都有
         * 相当于把原来的2 Stage变成一个1 Stage
+* 目前飞哥的量化工具支持的方案就是
+  * 在前向的时候，首先遍历这一层的所有weight，找到range，做均匀量化，之后再计算
+  * 算出Activation之后的操作同理
+  * Loss的Backward的传播是STE的形式，就是保留原本的Weight
+  * 参数更新也同理
 
 # [Development Of Quantize](https://jackwish.net/neural-network-quantization-resources.html)
 
@@ -111,9 +116,168 @@ tags:                               #标签
     * 不能很好的处理Float分布biased的情况
     * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20191117163235.png)
 
+# [Analysis Of Quantized Network]()
+* 分析了weight和gradient的quantize带来的影响
+  * 量化weight的问题是为了分布式训练的时候传输weight快
+  * 提出量化weight多少都会给最后的结果带来影响
+  * Weight Clipping能够有效防止由于Range带来的问题
+
+
+# [A Survey on Methods and Theories of Quantized Neural Networks](https://arxiv.org/pdf/1808.04752.pdf)
+
+* Dec 2018 
+
+### Background
+* Use Bit-wise operation instead of floating operation
+* Category
+  * Deterministic: 一对一
+  * Stochastic
+* Codebook
+  * Fixed
+  * adptive: Codebook中的值是训练出来的
+* Quantize网络的一个主要问题是很需要tunning
+
+### Quantize Technique
+
+#### Rounding
+
+* 最简单的Binarize用了Sign函数，但是不可导
+  * 用hardtan来近似
+  * Hinton提出的STE(Staight-Through Estimation) - 用这样的一个函数(只有原来的x绝对值小于1的时候才计算梯度)，来替代本身应该的binary函数的导数
+    * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20191123152610.png)
+    * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20191123152829.png)
+* 拓展到多bit的Rounding（把一个浮点数round到离他最近的fix-point representation）
+  * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20191123153356.png)
+  * 一般都会首先做一个Clip  
+* 有的时候rounding的fix-point不是等距离的，是拿对数的
+* 有一些缺点
+  * 虽然实现起来很简单，但是性能下降明显
+  * 一般都需要把全精度的值存下来，为了训练，所以memory overhead还是很高
+  * 否则可能的param space比较小了，就更难收敛了
+  * 同时并没有用到结构信息
+  
+#### Vector Quantize
+
+* cluster参数成一个group并且用centroid来代表这一簇，然后用其代替
+* 最早的就是用k-means
+  * 单纯使用k-means不能控制精度损失
+  * 也没有constraint rate的ratio
+  * 改进了一个*Hessian-Weighted K-Meanss*
+* 据说基本能在imagnet上达到16~25倍左右的compression rate
+* 后续有人做过Product Quantize（更加细粒度(物理)的VectorQ）
+  * 把一个matrix分成几个sub-matrix，并且对他们分别做Quantize
+* 问题
+  * k-means computation expensive
+  * 只能用于Pretrained Model
+
+#### View Of Optimization
+
+* XNORNet中作者就有这样的思路
+  * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20191123160503.png)
+  * W是原本的weight mat，a是一个scale factor（是所有w中元素L2范数的mean），B对应着Binary的mat
+  * *我理解是将其看成一个优化问题，注意到了整个层的weight分布，而不是像STE一样对每一个weight独立处理*
+  * 后续的一些工作改动为了多个scale factors，因为考虑到了正负值之间的不对称性
+  * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20191123161351.png)
+* 另外一种流派是 Loss-Aware-Quantizing  
+  * 抽象为数学优化问题
+  * ADMM
+* 缺点
+  * 收敛性能不能很好的被保证
+
+--- 
+
+#### Random Rounding
+* ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20191123162226.png)
+  * 本质就是让一个fp去按照概率被归类到他接近的fixed点上
+  * 相当于给训练过程加上了噪声，也可以认为是一个*Regularizer*
+* 缺陷
+  * Random Sample会使得Gradient的variance大，而导致训练曲线震荡
+
+#### Probabilistic Quantize
+
+* 受到整个weight的参数都比较小而且基本是正态的
+  * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20191123163024.png)
+  * 以这个为依据（中心极限定理）去加入算法调整
+
+
+
+
+### Methods
+
+* 都可以认为是基于CodeBook的，内部内容是否固定也可分为以下几种
+  * * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20191123163638.png) 
+  * *A small codebook means that we can only search the parameters in a limited space, which makes the optimization problem very hard. With predefined*
+  * Codebook不固定的又分为Hard或者是Soft的
+* 也可以分为Quantize While Training
+  * BinaryConnect
+    * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20191123171658.png)
+  * XNORNet
+    * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20191123171719.png)
+  * DoReFa
+    * 对XNOR的rounding加了一些操作，改进了
+  * ABC
+    * 分析了为什么binary可能会fail
+      * 用更小的lr
+      * 用了pRelu
+* Quantize After Training
+  * DeepCompression
+  * EntropyConstraintScalarQuantization
+    * 对loss做泰勒展开，舍弃高阶项，尝试去寻找那些weight重要
+  * IncrementalQuantization
+    * weight parttion - group-Q
+    * 每一次一半的weight被量化，另外一半保留，去fintune，直到最后全部的都被量化
+
+---
+
+### Quantize Components
+
+* ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20191123165729.png)
+
+#### Quantize Weights
+
+* Layer-Wise的weight Quantize可以提升性能
+* 有的工作尝试去找到每个layer所需要的bit-width
+* 有人用很多个binary base的加权去近似weight（？？？这是再干啥）
+* 特点
+  * weight-Q的网络更难收敛，一般都需要更小的lr
+  * 由于准确的weight不可得到，需要找到low variance，small bias的weight
+  * 怎么locally完成quantize也是一个问题
+
+#### Quantize Activation
+
+* 只有完成了activation的quantize才能让计算变成bitwise的
+  * *只quantize weight是不行的，严格来说松哥的那篇并没有加速计算*
+* 一开始quantize activation的时候是用了sigmoid当激活函数，因为这样可以将activation限制在有界范围内
+* WRPN(Wide Reduced-precision Netowrk)发现了其实weight所占用的内存没有activation大，所以用很多的filter堆起来保证性能(不带劲)
+
+* activationQ比weightQ难的原因
+  * 需要backprop过一个不可微分的算子
+  * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20191123165417.png)
+    * 如果这里的gj是一个binary的operator，导数几乎就是0
+  * 即使做了处理，也可能出现*Gradient Mismatch*
+    * *the gradients flow through the discrete neurons*
+
+
+#### Quantize Gradient
+
+* 应用场景在Distributed Training需要很多的Sub-Gradient
+* QSGD - Grad的random rounding
+* 有人选择每次选择一定比例地去Q（和我们的应用场景不一致）
+
+* 对于单机来说，甚至有人直接用2bit的Weight
+* 有文章表示随机的rounding会更有效果
+* ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20191123170702.png)
+* 梯度量化特别难的原因是
+  * 幅度值和符号都很重要
+  * naive的方式不太能成立
+
+### 从Codebook角度
+
+* ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20191123170838.png)
 
 
 ---
+
 
 > [VALSE 2018年度进展报告 | 深度神经网络加速与压缩 - 计算机视觉life的文章 - 知乎](https://zhuanlan.zhihu.com/p/36616989)
 
