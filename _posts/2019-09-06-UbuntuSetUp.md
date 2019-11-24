@@ -2,7 +2,7 @@
 layout:     post                    # 使用的布局（不需要改）
 title:      Ubuntu 配置心得               # 标题 
 subtitle:   已经不知道是第几次安装Ubuntu了 #副标题
-date:       2019-10-20            # 时间
+date:       2019-11-24            # 时间
 author:     tianchen                      # 作者
 header-img:     #这篇文章标题背景图片
 catalog: true                       # 是否归档
@@ -186,6 +186,33 @@ sslocal -c PATH_TO_YOUR_SHADOWSOCKS_JSON (~/shadowsocks.json)
 ## 多工作区
 * CTRL+ALT+上下方向箭
   * 可以有效提高效率
+
+## 内存相关
+
+> 参考了[This Blog](https://www.xilinx.com/products/design-tools/ai-inference/ai-developer-hub.html#edge)
+
+> 以及[This](https://www.howtoforge.com/tutorial/linux-swappiness/)
+
+> 还有[CSDN的这个](https://blog.csdn.net/xingyu15/article/details/5570225)
+
+* 创建交换空间
+  * 查看目前的空间 ```free -m```,或者进```system-monitor```看图形界面,或者用```grep SwapTotal /proc/meminfo```
+  * 首先取消目前的交换空间```sudo swapoff -a```
+  * 创立swap文件  ```sudo dd if=/dev/zero of=/swap bs=1G count=8```
+    * dd是分配磁盘空间的函数,if表示输入文件,of表示输出文件地址
+      * 其中```/dev/zero```是linux系统中的特殊文件[是一个伪文件](https://www.cnblogs.com/lishihai/p/7986565.html)
+    * 一个block 1G,一共8个
+  * 让文件被用于swap```sudo mkswap /swap```
+  * 激活 ```sudo swapon /swap```
+    * (中间可能会报一个关于权限的错误,但是无所谓)
+  * 再次查看应该就对了
+
+* 修改**Swappiness**
+  * 表示了使用swap空间的倾向,Ubuntu默认是60(如果为0的话物理空间用完之后才会使用swap空间)
+  * 查看``` cat /proc/sys/vm/swappiness ```,系统`默认是60
+  * 临时修改```sudo sysctl vm.swappiness=10```
+    * 这样修改之后下次开机还会继续改为60,所以,修改```sudo vim /etc/sysctl.conf```加上```vm.swappiness=10```
+
   
 ## Trouble Shooting
 * 硬盘识别不出来```Mount error: “unknown filesystem type 'exfat'”```
