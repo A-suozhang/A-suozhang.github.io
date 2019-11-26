@@ -2,7 +2,7 @@
 layout:     post                    # 使用的布局（不需要改）
 title:      赵赵的奇妙梯度下降          # 标题 
 subtitle:   魔幻炼丹  #副标题
-date:       2019-11-24            # 时间
+date:       2019-11-25            # 时间
 author:     tianchen                      # 作者
 header-img:  img/10_1/bg-xueyuanroad1.jpg  #这篇文章标题背景图片  
 catalog: true                       # 是否归档
@@ -66,3 +66,17 @@ tags:                               #标签
     * 牛顿法(代表二阶梯度)理论上一定能够好于SGD
     * SGD理论上是利用了数据分布之间的跳动性给梯度下降过程带来了随机性,对最后的泛化起到了好的效果
       * 作者认为Adam,Adadelta这中方法本质上还是SGD,虽然尝试了对牛顿法去近似,理论不能保证高于SGD
+
+## Batch Size
+
+> 参考了[这个知乎专栏](https://zhuanlan.zhihu.com/p/64864995)
+
+* 今天的核心问题在于BatchSize上
+  * 影响模型收敛的关键问题: **LR和BatchSize**
+  * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20191125205717.png)
+* 当我Dataparallel换到单卡的时候,同样的lr和batchsize性能有非常明显的区别
+* 大的batchsize容易落入local minimum,而小的容易掉到平坦的
+  * batchsize先增大可以有效提升性能,但是到了一定程度之后就没用了
+* 大的batchsize可以保障稳定性,而且训练还快
+* 有些人表示batchsize大之后性能下降其实是因为*Iter的次数变少了*
+* 严格来说batchsize和lr需要线性正比例增,但是实际上学习率可以增长慢一点

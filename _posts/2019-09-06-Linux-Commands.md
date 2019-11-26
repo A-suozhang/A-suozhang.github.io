@@ -15,6 +15,7 @@ tags:
 
 # Ubuntu(Linux) Commands
 * lsb_release -a 查看**系统**版本
+* ```mv```命令没有-r,直接加"/"就默认地递归移动文件
 * uname -a 查看**内核**版本
 * ping google.com
     * -f 极限检测
@@ -199,4 +200,4 @@ tags:
     * 最脑瘫的方式是命令行*gnome-session-properties*打开图形界面设置
 
 # Bash Scripts
-* 
+* (见单独的博文))

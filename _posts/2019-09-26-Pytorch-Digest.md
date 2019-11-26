@@ -135,6 +135,10 @@ tags:                               #标签
    * BatchSample(sampler, batch_size, drop_last = True)
      * 基于一个sampler依据BatchSize进行打包
 
+   *　[PyTorch torchvision.transforms - 胡今朝的文章 - 知乎](https://zhuanlan.zhihu.com/p/52325016)
+   *  [Official Doc](https://pytorch.org/docs/stable/torchvision/transforms.html?highlight=torchvision%20transforms )
+   *  有关transform的example写在```DataAug.ipynb```中
+      *    
    * 需要经过一个* [Transform(From Torchvision)](https://pytorch.org/docs/stable/torchvision/transforms.html?highlight=transform)，不仅做了一些对去均值之类的操作，而且是将原本的PIL图像转化为tensor
    ``` python
    transform_train = transforms.Compose([
@@ -331,6 +335,15 @@ target = torch.Tensor([1,1])
 * add_scalar(tag, scalar_value, global_step=None, walltime=None)
   * tag值可以手动设置为```section/plot```可以分为不同的scope
 
+### Multi-GPU
+
+> 参考了[Pytorch多机多卡分布式训练 - 谜一样的男子的文章 - 知乎](https://zhuanlan.zhihu.com/p/68717029)
+
+* DataParallel的batchsize需要设置为单卡情况的4倍,而分布式的Distributed不用
+* 单纯的DataParallel的wrapper是浅复制model到所有可用的显卡中
+* 在代码中将数据丢到多卡的第一张(controler)上
+* 实际运行的时候每个batch被**平分**到多张卡上
+  * 最后的Loss和G都x4了(当然在求的时候也平均了,所以相当于就是用了一个大Batch)
 
 # Some Resoueces
 
@@ -510,6 +523,8 @@ result = model(input)
 *  对于数据集的transform,现在是不是可以不加Normalize,而是在网络的一开始加一个Instance Normalization~~
    *  因为本身Instance Norm就是对每个Channel做的,而且是每张图做的
    *  (还不是特别确定)
+* Batchsize大了效果会好
+* lr与batch的大小成正比
 
 
 
