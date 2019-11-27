@@ -441,7 +441,87 @@ except AssertionError as er:
 * 约定俗称的规律```__foo```代表的是private变量
 * 而super方法则是通过*调用父类方法来显示调用父类*(可以避免需要用父类的名字来调用父类，需要将self传进去)
     * ```super(BasicBlock, self).__init__()```
+* 本身是不能直接执行一个对象的
+  * 需要对类中添加```__call__()```方法,这样就可以直接执行对象
+  ```
 
+  t = T()
+  t()
+
+  ``` 
+
+## 装饰器
+
+> [参考了谈谈Pyhton装饰器](jianshu.com/p/ab702e4d4ba7)
+
+* *使用装饰器把函数注册为事件的处理程序*
+* 其实本质上是一种设计模式
+  * 对已经存在的对象加上一些功能
+  * 装饰器本身是一个函数,它的参数是另外一个函数,参数列表与原函数一致
+  * 一个简单的例子
+  ``` py
+
+  import time  
+     
+  def foo():  
+      print 'in foo()'  
+     
+  # 定义一个计时器，传入一个，并返回另一个附加了计时功能的方法  
+  def timeit(func):  
+         
+      # 定义一个内嵌的包装函数，给传入的函数加上计时功能的包装  
+      def wrapper():  
+          start = time.clock()  
+          func()  
+          end =time.clock()  
+          print 'Time Elapsed:', end - start  
+         
+      # 将包装后的函数返回  
+      return wrapper  
+     
+  foo = timeit(foo)   #可以直接写成@timeit + foo定义，python的"语法糖"
+  foo()
+
+  ```
+  * 相当于在装饰的前后对原本的foo函数加上了timeit的功能,做到了*调用函数同时增加执行代码(指timeit的部分)*
+  * 顺序的作用 **"Hamburg Model"
+   
+  ``` py
+
+  def bread(func) :  
+    def wrapper() :  
+        print "</'''       '''\>"  
+        func()  
+        print "<\______/>"  
+    return wrapper  
+   
+  def ingredients(func) :  
+      def wrapper() :  
+          print "#tomatoes#"  
+          func()  
+          print "~salad~"  
+      return wrapper  
+
+  @bread  
+  @ingredients  
+  def sandwich(food="--ham--") :  
+      print food  
+     
+  sandwich()
+
+      #</''''''\>  
+      # #tomatoes#  
+      # --ham--  
+      # ~salad~  
+      #<\______/>  
+
+  ```
+  * 内置装饰器
+    * staticmethod  转变为静态
+    * classmethod  转变为类方法
+    * property  转变为类属性
+  * 对于有返回值的函数,在装饰器的wrapper里面也要把返回值返回回去
+* ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20191126125727.png)
 
 # 炼丹心得
 * 按照默认的参数配置发现需要比*想象得多的Epoch*才能获得一个比较好的模型，虽然当前Loss基本上不往下走了，还是要训它
