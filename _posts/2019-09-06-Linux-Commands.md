@@ -166,7 +166,7 @@ tags:
     * args 
         * -v 反选(打印除了匹配的)
         * --color=auto
-        * -E 使用正则表达式 （或者用egrep）
+        * -E 使用正则表达式 （或者用egrep）****
         * -o 只输出匹配到的内容，而不是整行
         * -n 输出包含行数
         * -i 忽略大小写
@@ -198,6 +198,10 @@ tags:
   * ```echo $BASE^$_STRING | base64 -d ```
 * 开机自启动
     * 最脑瘫的方式是命令行*gnome-session-properties*打开图形界面设置
+* vim编辑之前忘记sudo无法保存
+  * 键入```:w !sudo tee % ```
+* ```tree -s```显示文件大小
+
 
 # Bash Scripts
 * (见单独的博文))
