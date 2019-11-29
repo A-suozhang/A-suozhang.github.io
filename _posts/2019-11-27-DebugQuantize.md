@@ -4,7 +4,7 @@ title:      多卡定点的bug调试          # 标题
 subtitle:   感恩飞哥，我是飞哥的舔狗！  #副标题
 date:       2019-11-25            # 时间
 author:     tianchen                      # 作者
-header-img:  img/10_1/bg-eva.jpg  #这篇文章标题背景图片  
+header-img:  img/11_30/bg-mb.jpg  #这篇文章标题背景图片  
 catalog: true                       # 是否归档
 tags:                               #标签
      - 碎片知识
