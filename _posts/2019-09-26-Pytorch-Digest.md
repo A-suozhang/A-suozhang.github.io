@@ -2,7 +2,7 @@
 layout:     post                    # 使用的布局（不需要改）
 title:      Understanding&Debugging PyTorch           # 标题 
 subtitle:   Also A Bit About Python        #副标题
-date:       2019-11-3             # 时间
+date:       2019-11-30             # 时间
 author:     tianchen                      # 作者
 header-img:  img/bg-nmb-corner.jpg  #这篇文章标题背景图片  
 catalog: true                       # 是否归档
@@ -427,6 +427,26 @@ except AssertionError as er:
 * Python使用":"进行索引的时候,和直接索引不一样
   * 比如说对于一个长为32的数组,取后16个 [15:31]并不是取了最后16个,而[16:32]才是
 * ```range(0,10,2)```返回```[0,2,4,6,8,10]```
+* ipython reload模块
+  * 对于ipython,可以支持动态热重载
+  ``` py
+  %load_ext autoreload
+  %autoreload 2
+  ``` 
+  * 对于一般python,3.4之后
+  ``` py
+  import importlib
+  importlib.reload(MODULE)
+  ``` 
+  *   * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20191130164309.png)
+* ```*args```和```**kwargs```
+  * 目的是让不定量的参数输入给函数(指的**调用的时不确定输入几个参数**)
+  * args通过将参数放到一个tuple里面,通过```*```索引来做到输入一个参数来传入多个参数,但是默认顺序
+  * kwargs将一个不定长的键值对(以一个dict的形式输入)传送给函数
+  * *比较常用的一种应用 - 猴子补丁 Monkey Patch*
+    * 在runtime的时候修改某些代码
+  * 使用修饰器的时候也用到
+
         
 
 
