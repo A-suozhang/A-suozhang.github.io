@@ -533,6 +533,8 @@ result = model(input)
   * tensor.dtype
 * ``` result type Float can't be cast to the desired output type Long```
   * state_dict里面的BN层的Num_batched_tracked是个int64(也就是long型)
+* 当出现莫名其妙的```No Module Named XXX```的时候怀疑一下是不是自己命名的时候文件名和内置库的名字冲突了(比如pdb.py)
+* 
 
 
 ---
