@@ -4,7 +4,7 @@ title:      Compression相关的一些内容...          # 标题
 subtitle:   将来吹牛逼可能会用到?...   #副标题
 date:       2019-11-17           # 时间
 author:     tianchen                      # 作者
-header-img:  img/10_1/ucentre2.jpg  #这篇文章标题背景图片  
+header-img:  img/11_30/road0.jpg  #这篇文章标题背景图片  
 catalog: true                       # 是否归档
 tags:                               #标签
      - DL
@@ -337,24 +337,3 @@ tags:                               #标签
 
 
 ---
-
-# 飞哥的定点工具
-* 主要库 ```import nics_fix_pt as nfp```
-* nnf就等价与nn
- * ```import nics_fix_pt.nn_fix as nnf```
-* 对每个model要做一个```model.set_fix_method(fix_method)```
- * fix method有三种
-   * FIX_AUTO/ FIX_FIX / FIX_NONE
-* 这样定义model
- * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20191105211057.png)
-* ```net.fc1_fix_params['weight']['method']```
-  * 这一步操作在model.train()之前
-  * **这个东西是要作为nnf.Linear(nf_fix_params)加入的**
-  * 两层都是dict,里面存着Config的信息
-  * 第一层就是generate config里的names,也就是weight/bias以及其他
-* ```net.print_fix_config()```
-  * 一次性打印下所有的config  
-
----
-
-* 如果已经有了网络结构，可以通过```from nics_fix_pt import register_fix_module```来获得定点

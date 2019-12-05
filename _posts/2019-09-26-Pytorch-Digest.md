@@ -2,9 +2,9 @@
 layout:     post                    # 使用的布局（不需要改）
 title:      Understanding&Debugging PyTorch           # 标题 
 subtitle:   Also A Bit About Python        #副标题
-date:       2019-11-30             # 时间
+date:       2019-12-06             # 时间
 author:     tianchen                      # 作者
-header-img:  img/bg-nmb-corner.jpg  #这篇文章标题背景图片  
+header-img:  img/11_30/bg-road1.jpg  #这篇文章标题背景图片  
 catalog: true                       # 是否归档
 tags:                               #标签
      - Coding
@@ -534,7 +534,7 @@ result = model(input)
 * ``` result type Float can't be cast to the desired output type Long```
   * state_dict里面的BN层的Num_batched_tracked是个int64(也就是long型)
 * 当出现莫名其妙的```No Module Named XXX```的时候怀疑一下是不是自己命名的时候文件名和内置库的名字冲突了(比如pdb.py)
-* 
+* 对于一个(300,)的tenso，其实本质上是一维的，第二维度可以是任意值，和(300,1)有本质的区别 
 
 
 ---
