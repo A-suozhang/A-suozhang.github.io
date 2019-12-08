@@ -2,7 +2,7 @@
 layout:     post                    # 使用的布局（不需要改）
 title:      Understanding&Debugging PyTorch           # 标题 
 subtitle:   Also A Bit About Python        #副标题
-date:       2019-12-06             # 时间
+date:       2019-12-07             # 时间
 author:     tianchen                      # 作者
 header-img:  img/11_30/bg-road1.jpg  #这篇文章标题背景图片  
 catalog: true                       # 是否归档
@@ -105,7 +105,7 @@ tags:                               #标签
       ```
 
 
-### 读取数据集
+### Datasets
    * 这里是直接调用了官方提供给*特定数据集*的Loader方式
      * ~~也可以采用[官方示例中的读取方式](https://github.com/bearpaw/pytorch-classification/blob/master/imagenet.py)~~
        * 对不起上面那个只是民间复现,[这才是官方范例](https://github.com/pytorch/examples/blob/master/imagenet/main.py)
@@ -232,7 +232,7 @@ tags:                               #标签
       * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20191112185933.png)
 
 
-### 优化器 (来自torch.optim)
+### Optimizer
 ```optim.SGD(net.parameters(), lr=args.lr, momentum=0.9, weight_decay=5e-4)```
 * optim的第一个输入参数是一个list(也就是```net.parameters()```返回的)
   * 里面的元素是一个dict
@@ -306,7 +306,45 @@ target = torch.Tensor([1,1])
 
 ### [Tensor](https://pytorch.org/docs/stable/tensors.html)
 
+* 直接赋值其实两个变量是指向同一个内存地址的
+  * 需要两个一样值的，用 Variable(x.data.clone())
+  * clone是**神拷贝**,而一般的赋值传的是**引用**
+* 而copy和"="的区别其实在Python中
+  * 前者是建立新对象,后者是传一个引用
+  * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20191207191020.png)
+
+#### 尺度变化
+
+* **想要使用尺度变化,首先要清楚计算的Broadcast原理**
+  * *本质,想象为一个先拓展到和另外一个一样大,再做逐点乘*
+  * 成立条件: 每个对应维度大小要么相同,要么其中有**一个是1**,要么其中有一个不存在
+  * 如果x,y的维度不同,会优先给空着的维度补0 ```[3,2,4,4]*[2,4,1]``` 
+    * 注意在这里,最低维y为1,x为4,可以,但是如果y的最低维为2就不行
+  * 对于每个维度.计算结果是xy中较大的那个
+* 尽量避免使用Permute操作,比较费时间,如果是为了做broadcast还是使用更加直接的方式
+  * 一个比较好的例子: BN的mean是[c]但是输入参数是[N,c,w,h]我们需要将mean broadcast过去
+    * 将mean reshape为[1,c,1,1],再做加减法 ```mean.reshape([1,-1,1,1])```
+    * 另外一种方式是将其拓展为 [c,1,1] ,然后再做 ```mean[:,None,None]```
+      * **这种做法必须向后对齐,很神奇**
+* 当我想制作一个fake data的时候 ```[Batch, Channel, W, H]```
+  * 拓展数据,使用```tensor.expand([1,1,3,3])``` 
+  * 或者是使用```torch.stack([x,x,x], dim = 0)```
+    * stack会直接新建一个维度,而cat则不会
+    * 比如```[1,2,2]```做一个```torch.stack([x,x], dim = 2)``` 
+      * stack ```[1,2,2,2]```
+      * cat  ```[1,2,4]```
+  * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20191207200443.png)
+
+
+
 #### Autograd
+* 注意**在0.4.0之后Tensor默认就是Variable，所以不要出现```Variabe(torch.tensor(3))```这样的写法，甚至可能会重置该tensor的grad**
+  * 但是注意```require_grad```还是需要加的，定义input的时候将其grad设置为True
+* 注意对Scalar对象进行backward的时候
+  * retain graph = True才能反复backward
+* 默认只有Leaf Variable有grad（也就是除了x-也就是源头之外所有中间结果的grad都没有存下来）
+  * 不会报错但是对所有的Leaf Variable，都有require—grad True, 但是grad为None
+  * 可以对一个对象进行retain_grad()方法来解决 (在backward之前)
 * 声明Tensor的时候默认的require_grad是False哦 ```x = torch.tensor([[1., -1.], [1., 1.]], requires_grad=True)```
     * 用torch.tensor来声明Tensor，torch.Tensor是一个Class
 * 经过计算backward之后，每个tensor的梯度被存在Tensor.grad内部
@@ -383,6 +421,10 @@ target = torch.Tensor([1,1])
     * train.txt Test.txt 包含了对应的lable信息
 * Cifar100-文件大小同cifar10 (32x32x3)
   * 50000张
+* ctx (出现在尝试重写nn.function的时候,在forward的时候调用了ctx.save_for_backward)
+  * 包含了function运行时候的存储参数
+  * 可以和class中的self来类比 
+  * 和staticmethod搭配使用,由于使用staticmethod的时候,是直接利用的classtype,而不是一个class的instance(所以不用self)
 
 
 
@@ -535,6 +577,7 @@ result = model(input)
   * state_dict里面的BN层的Num_batched_tracked是个int64(也就是long型)
 * 当出现莫名其妙的```No Module Named XXX```的时候怀疑一下是不是自己命名的时候文件名和内置库的名字冲突了(比如pdb.py)
 * 对于一个(300,)的tenso，其实本质上是一维的，第二维度可以是任意值，和(300,1)有本质的区别 
+* ```super(type, obj) obj must be an instance``` 可能是ipython reload模块导致的,需要重新更新
 
 
 ---
