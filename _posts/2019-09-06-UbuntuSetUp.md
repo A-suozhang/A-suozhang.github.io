@@ -2,7 +2,7 @@
 layout:     post                    # 使用的布局（不需要改）
 title:      Ubuntu 配置心得               # 标题 
 subtitle:   已经不知道是第几次安装Ubuntu了 #副标题
-date:       2019-11-24            # 时间
+date:       2019-12-09            # 时间
 author:     tianchen                      # 作者
 header-img:     #这篇文章标题背景图片
 catalog: true                       # 是否归档
@@ -458,3 +458,11 @@ let g:netrw_banner = 0
 
 
 # 关于服务器上Ubuntu的配置[EVA 开发日记](http://a-suozhang.xyz/1024/10/20/Eva/)
+
+## Jupyter Notebook 
+* 安装没有问题了
+* 启动的时候，初次登陆需要验证token，就是term中的这种
+  * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20191209123716.png)
+* 安装jupyterthemes，直接用pip安装即可
+  * 然后导入配置 ```jt -t onedork -f roboto -fs 14 -nfs 14 -tfs 14 -ofs 11```
+  * (如果用apt安装jupyter可能会出现无法往.jupyter目录写的问题，手动修改权限即可)

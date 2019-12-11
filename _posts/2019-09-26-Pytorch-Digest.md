@@ -2,7 +2,7 @@
 layout:     post                    # 使用的布局（不需要改）
 title:      Understanding&Debugging PyTorch           # 标题 
 subtitle:   Also A Bit About Python        #副标题
-date:       2019-12-07             # 时间
+date:       2019-12-11             # 时间
 author:     tianchen                      # 作者
 header-img:  img/11_30/bg-road1.jpg  #这篇文章标题背景图片  
 catalog: true                       # 是否归档
@@ -576,6 +576,14 @@ target = torch.Tensor([1,1])
   * 包含了function运行时候的存储参数
   * 可以和class中的self来类比 
   * 和staticmethod搭配使用,由于使用staticmethod的时候,是直接利用的classtype,而不是一个class的instance(所以不用self)
+* 所谓的MetaClass,继承Type类,也就是它的instance是和int/float同级别的
+  * 通过修改它的__new__方法,做了一个register的操作
+    * 每当一个基类创建对象的时候都首先会调用MetaClass的New方法(相当于Type的构造方法))
+  * 鉴别方式```isinstance(module.__class__, FixMeta)```
+    * module是一个具体类的instance,它的class是具体类,而具体类如果是一个FixMeta
+    * isinstance(module, Conv2d) 
+    * module本身是一个conv0
+  * 官方有一个ABC库做了类似的事情
 
 
 
@@ -729,7 +737,8 @@ result = model(input)
 * 当出现莫名其妙的```No Module Named XXX```的时候怀疑一下是不是自己命名的时候文件名和内置库的名字冲突了(比如pdb.py)
 * 对于一个(300,)的tenso，其实本质上是一维的，第二维度可以是任意值，和(300,1)有本质的区别 
 * ```super(type, obj) obj must be an instance``` 可能是ipython reload模块导致的,需要重新更新
-
+* jupyter notebok和argparse不匹配,只需要在最后```args = parser.parse_args()```改成````args = parser.parse_args(args = [])```
+  * 但是问题是如果这样的话就不能看help,调用--help会直接开始按照默认参数跑(看上去无伤大雅先这样把)
 
 ---
 
