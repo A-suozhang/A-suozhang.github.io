@@ -2,9 +2,9 @@
 layout:     post                    # 使用的布局（不需要改）
 title:      Ubuntu 配置心得               # 标题 
 subtitle:   已经不知道是第几次安装Ubuntu了 #副标题
-date:       2019-12-09            # 时间
+date:       2019-12-14            # 时间
 author:     tianchen                      # 作者
-header-img:     #这篇文章标题背景图片
+header-img:  img/11_30/bg-desk0.jpg #这篇文章标题背景图片
 catalog: true                       # 是否归档
 tags:                               #标签
     - 环境配置
@@ -417,8 +417,16 @@ let g:netrw_banner = 0
 * ~/.vim/bundle/molokai/colors/molokai.vim:line  132:
   * none -> NONE
 
-6. 效果
+7. 效果
    * * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20191021090009.png) 
+
+8. 额外安装一些包来支持剪贴板
+   * ```sudo apt-get install vim-gtk vim-scripts vim-gnome```
+   * 用````vim --version | grep clipboard```来检查是不是支持
+   * 用```+"y```来剪切vim中的内容到系统剪贴板 
+   
+
+
 
 ## 一些其他软件
 * Shutter
@@ -466,3 +474,83 @@ let g:netrw_banner = 0
 * 安装jupyterthemes，直接用pip安装即可
   * 然后导入配置 ```jt -t onedork -f roboto -fs 14 -nfs 14 -tfs 14 -ofs 11```
   * (如果用apt安装jupyter可能会出现无法往.jupyter目录写的问题，手动修改权限即可)
+
+## Tmux
+* Tmux-Config
+* 解决tmux下的vim配色错误）
+  * 用```echo $TERM```如果是screen那就不对，需要改为xterm
+  * ```set -g default-terminal "screen-256color"```
+* 进入tmux，CTRL+B然后冒号输入指令
+  * ```source-file ~/.tmx.conf```
+
+## SSH 配置
+
+* Secure Shell，其产生初衷是因为FTP/TelNet等传明文上不安全
+* 安全验证方式
+  * 基于密码的登录
+    * 远程主机将自己的公钥分发给需要登录的客户端,客户端访问主机的操作利用该公钥加密,远程主机则使用自己的私钥来解解密数据
+    * 登录时,本机给远程主机发请求,远程主机把公钥给本机(这一步本机可以通过指纹验证主机真实性)
+      * ```The authenticity of host 'host (***.***.***.***)' can't be established.RSA key fingerprint is 98:2e:d7:e0:de:9f:ac:67:28:c2:42:2d:37:16:58:4d.Are you sure you want to continue connecting (yes/no)?```
+    * 本机将密码用远程主机给的公钥加密时候,给远程主机
+    * 远程主机用私钥解码登录密码验证完成之后登录
+  * 基于秘钥的登录
+    * 客户端将公钥上传到服务器(ssh-copy-key)登录时向服务器发送请求,服务器向用户随机发一串字符串,用户用自己的私钥加密之后,传到服务器,服务器使用之前上传上去的用户公钥,如果解密成功,就允许用户登录
+      * 上传服务器的过程,ssh-copy-key指令实际做的是,将公钥内容(本地id_rsa.pub)的内容append到服务器的~/.ssh/authorized_keys中,重启服务之后即可成功
+    * 整个过程不需要上传密码
+  * 如何生成ssh秘钥对?
+    * 秘钥总是成对出现,一公一私
+    * 使用RSA/DSA/ECDSA等方法
+  * 
+* MyConfig
+
+``` py
+
+Host eva
+	HostName 101.6.64.169
+	Port 22
+	User zhaotianchen
+	ProxyCommand ssh zhaotianchen@101.6.64.67 -p 42222 -W %h:%p
+Host fpga
+	HostName 101.6.68.236
+	Port 22
+	User ztc
+	ProxyCommand ssh zhaotianchen@101.6.64.67 -p 42222 -W %h:%p
+
+Host 205
+  HostName 101.6.64.67
+  User zhaotianchen
+  Port 42222
+
+Host eva*
+  HostName %h.nics.cc
+  User zhaotianchen
+  ProxyCommand ssh zhaotianchen@205 nc %h %p
+
+Host *-eva10
+  User zhaotianchen
+  ProxyCommand ssh -p 32222 zhaotianchen@eva10 nc %h %p
+
+Host proxy-eva10
+  HostName eva10.nics.cc
+  Port 32222
+  User zhaotianchen
+
+Host ztc.eva10
+  HostName foxfi-eva10
+  User zhaotianchen
+  ProxyCommand ssh -p 32222 zhaotianchen@eva10 nc %h %p
+
+Host *.eva*
+  HostName %h.nics.cc
+  User zhaotianchen
+  ForwardAgent yes
+  ProxyCommand ssh zhaotianchen@205 nc %h %p
+```
+
+* [使用 SSH config 文件](http://daemon369.github.io/ssh/2015/03/21/using-ssh-config-file)
+  * 仅支持逻辑通配 */?/!
+  * IdentityFile指定秘钥位置(默认.ssh/)
+  * %P (Port) %h(Host)
+  * nc表示这个是中间跳板(~~不要停下来啊~~)
+* [Multi](https://www.cyberciti.biz/faq/linux-unix-ssh-proxycommand-passing-through-one-host-gateway-server/)
+* ```scp FILE ztc.eva0:~/```
