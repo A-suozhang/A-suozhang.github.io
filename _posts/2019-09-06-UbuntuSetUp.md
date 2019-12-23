@@ -475,6 +475,18 @@ let g:netrw_banner = 0
   * 然后导入配置 ```jt -t onedork -f roboto -fs 14 -nfs 14 -tfs 14 -ofs 11```
   * (如果用apt安装jupyter可能会出现无法往.jupyter目录写的问题，手动修改权限即可)
 
+##　pip3
+* 首先需要给它换源,在~目录下建立```.pip/pip.conf```
+  * 里面输入 ``` [global] \n index-url = https://pypi.tuna.tsinghua.edu.cn/simple ```
+* which pip3 查看目前pip指向的python
+  * 在文件开头,默认应该是/usr/bin/python3
+  * 在这里我们修改为我们anaconda中的python环境 ```~/anaconda3/bin/python3``` 
+    * 如果不是很确定的话,当确保使用python3能够对应到conda的python版本的时候,用```which python3```就可以找到在哪了
+* 然后使用pip的时候会报错```Import Error:cannot import name main```
+    * (这个错误貌似和pip版本升级有关)
+    * 把pip文件中的 ```from pip import main``` 修改为 ```from pip._internal import main``` 即可
+
+
 ## Tmux
 * Tmux-Config
 * 解决tmux下的vim配色错误）

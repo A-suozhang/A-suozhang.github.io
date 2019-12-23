@@ -2,7 +2,7 @@
 layout:     post                    # 使用的布局（不需要改）
 title:      Mathematica 学习笔记              # 标题 
 subtitle:   总是学不会的优雅的函数式编程     #副标题
-date:       2019-09-06              # 时间
+date:       2019-12-23             # 时间
 author:     tianchen                      # 作者
 header-img:     #这篇文章标题背景图片
 catalog: true                       # 是否归档
@@ -65,13 +65,18 @@ tags:                             #标签
     {Slider[Dynamic[x]], Dynamic[Plot[Sin[10 y x], {y, 0, 2 Pi}]]}
     ```
     * **Manipulate**
+
     ```Manipulate[Plot[Sin[x (1 + a x)], {x, 0, 6}], {a, 0, 2}]```
+
+
     ```Manipulate[Plot[Sin[a x + b], {x, 0, 6}], {a, 2(初值), "Multiplier"}, 1, 4（范围）}, {b, 4, "Phase Parameter"}, 0, 10}]```
+
+
      
 ## List
 * 核心数据结构，Mat与Tensor都可以由list嵌套而来
-* Apply把list的头部编程新的
-* Map将表达式对list的每一个元素做
+* Apply把list的头部变成新的
+* Map将表达式(Expr)对List的每一个元素做
 * 可以利用Sequence将list变为seq，便于作为函数的输入
 
 ### 构造List
@@ -119,10 +124,14 @@ tags:                             #标签
     f/@{a,b,c,d}
     ```
 * Apply 
+
     ```
     Apply[f,{a,b,c,d}]
     f@@{a,b,c,d}
+    ```
+
     * Map与Apply的区别
+  
     ```f /@ { 1,2  , 2, 3}```
     ```>>> {  1, 8  , 8, 27} // 更符合常规认知```
     ```f @@ {  1, 2, 3, 4  ,   2, 3, 3  , 3}```
