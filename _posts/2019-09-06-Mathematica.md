@@ -80,6 +80,10 @@ tags:                             #标签
   * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20191223103924.png)
     * 第一种是对表达式赋值，第二种是对函数赋值的方法
     * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20191223104149.png)
+* Table VS. Map
+  * Map对函数，将后面的参数直接塞进f中(如果前面是个expr的话就输出为```expr[$VALUE]```)
+  * Table则可以想象为在循环中暂时给特定参数赋值了，这样可以给Expr赋值了
+    * 但是如果要Manipulate的话貌似还需要套一层？这个还没很好的解决问题
     
 
 ## 绘图
