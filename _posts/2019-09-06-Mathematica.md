@@ -30,6 +30,27 @@ tags:                             #标签
     Clear["Global`*"]
     ```
 
+## 格式输入
+* ```CTRL + /``` 对应/frac
+* ```CTRL + ^``` 对应/power
+
+## 表达式
+* 可以用FullForm展开表达式的每个部分    
+  * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20191223090110.png)
+* Head可以用来分离表达式的“头部”
+  * 有那么一些类似于Type?
+  * （还没有完全弄清楚这个应该怎么整）
+* 和函数的使用方式区别
+  * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20191223092638.png)
+  * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20191223093111.png)
+  * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20191223093218.png)
+* 对于一个含参数的表达式调整参数绘图
+  * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20191223095324.png)
+  * 分析：
+    * 首先对于一个多变量的表达式，首先需要Table来对其赋值```a1 = a```
+    * 然后外面先套一层Plot，Manipulate套在最外面，控制这里的参数```a```
+
+
 ## 函数
 * 纯函数
     * “#”表示自变量，末尾加上&
@@ -44,6 +65,22 @@ tags:                             #标签
     Function[{u, v}, u^2 + v^4][x, y]
     (#1^2 + #2^4) &[x, y]
     ```
+* 如果需要Manipulate含参数的函数，需要这样
+    * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20191223094537.png)
+
+
+## Expr VS. Func
+
+* 赋值方式不同
+  * 对于函数直接用 ```f[2]```就可以得到结果，对于expr，可用```Table[expr, {x,{2}}]```来得到类似效果
+* Head原理不同
+  * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20191223104743.png)
+* 迭代器的例子
+  * Table是对expr赋值的，赋值方式可以理解为**暂时把值置为c，然后计算表达式**（与之对应的需要把参数塞进函数内部）
+  * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20191223103924.png)
+    * 第一种是对表达式赋值，第二种是对函数赋值的方法
+    * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20191223104149.png)
+    
 
 ## 绘图
 * 基础绘图
@@ -110,13 +147,22 @@ tags:                             #标签
 
 ## 迭代器
 * Table
-    ```
-    Table[f[i],{i,0,10}]
-    ```
-* Array
-    ```
-    Array[f,{i,j}] // 如果函数的自变量小于后面的维度，多余的维度被舍弃
-    ```
+    * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20191223103248.png)
+    * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20191223103629.png)
+      * 这里的{0,1}表示0到1，按照整数递增
+      * 注意对于expr这样可以直接赋值，如果打印出来是
+    * *对于x来说*
+      * ```{x,5}```表示对x从0到5
+      * ```{x,0,5}``` 表示x开始从0到5
+      * ```{x,0,5,0.5}```表示从0开始到5间隔0.5
+      * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20191223105536.png)
+* Array(依据function给出一系列)
+  * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20191223100656.png)
+  * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20191223100904.png)
+    * {2，2}表示生成[2,2]这么大的内容
+    * {0，1}表示横纵轴分别从0，1开始
+  * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20191223102408.png)
+
 * Map
     * 将 f 应用到 expr 中第一层的每个元素.
     ```
