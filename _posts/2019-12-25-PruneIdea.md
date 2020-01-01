@@ -143,3 +143,6 @@
   * 而不用像我们这样拉
   * Bayesian+ADMM - 太松
   * T-NAS
+* Netadpat argue说FLOPs之类的限制条件，很难真正反映Budget
+  * 用细粒度剪枝剪出来的东西其实没有用
+  * （是否PruneRatio相比于Flops可以是更好的限制？）
