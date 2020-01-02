@@ -2,7 +2,7 @@
 layout:     post                    # 使用的布局（不需要改）
 title:      Understanding&Debugging PyTorch           # 标题 
 subtitle:   Also A Bit About Python        #副标题
-date:       2019-12-11             # 时间
+date:       2020-01-02             # 时间
 author:     tianchen                      # 作者
 header-img:  img/11_30/bg-road1.jpg  #这篇文章标题背景图片  
 catalog: true                       # 是否归档
@@ -710,6 +710,9 @@ result = model(input)
   ```
 
 * 在我的代码里使用inplace的方法```tensor.mul_()```和使用赋值的方法差距很大,原因不是那么知道
+	* inplace 和 ```x = ...```
+	* ! Inplace的替换和赋值有区别,比如说都是对bn.weight赋值,用第二种方式相当于将bn层的weight指向了一个新的tensor,但是我们一开始加到optimizer中的还是原来那个Tensor,导致了新的参数没有被更新
+	* ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20200102224419.png)
 * 由于我在整个代码的最后加了一个writer.add_scalar但是没有运行到那里就停了,导致认为是writer没有close,tensorboard里没有数据
 * 使用多卡的时候出现bug,检查一下是否先```to(device)```再```Data Parallel```
 * 突然出现loss直接炸裂的情况,在每个batch_iter,都需要先将optimizer做```zero_grad```,再进行train,再去做step
