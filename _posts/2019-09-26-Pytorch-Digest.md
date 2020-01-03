@@ -459,7 +459,7 @@ target = torch.Tensor([1,1])
 
 * 直接赋值其实两个变量是指向同一个内存地址的
   * 需要两个一样值的，用 Variable(x.data.clone())
-  * clone是**神拷贝**,而一般的赋值传的是**引用**
+  * clone是**深拷贝**,而一般的赋值传的是**引用**
 * 而copy和"="的区别其实在Python中
   * 前者是建立新对象,后者是传一个引用
   * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20191207191020.png)
@@ -485,6 +485,11 @@ target = torch.Tensor([1,1])
       * stack ```[1,2,2,2]```
       * cat  ```[1,2,4]```
   * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20191207200443.png)
+* 对于一个正常的Tensor,需要做转置的时候用```x.T```,但是如果这个tensor只有1维度,比如```torch.tensor([1.,2.,3.])```,对其做T得到的shape和原来一样
+	* 这时候就可以用```x[:,None]```
+* 对于想要在For-loop中将一些Tensor给concat起来
+	* 可以先利用一个List将需要concat的存放,然后用```torch.stack(list, dim=0)```进行拼接
+	* 生成这个list可以用list comprehension来做
 
 
 
@@ -709,10 +714,11 @@ result = model(input)
 
   ```
 
-* 在我的代码里使用inplace的方法```tensor.mul_()```和使用赋值的方法差距很大,原因不是那么知道
+* 在我的代码里使用inplace的方法```tensor.mul_()```和使用赋值的方法差距很大,原因不是那么知道!
 	* inplace 和 ```x = ...```
 	* ! Inplace的替换和赋值有区别,比如说都是对bn.weight赋值,用第二种方式相当于将bn层的weight指向了一个新的tensor,但是我们一开始加到optimizer中的还是原来那个Tensor,导致了新的参数没有被更新
 	* ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20200102224419.png)
+	* **注意inplace修改和替代的区别!这个坑经常会遇到!**
 * 由于我在整个代码的最后加了一个writer.add_scalar但是没有运行到那里就停了,导致认为是writer没有close,tensorboard里没有数据
 * 使用多卡的时候出现bug,检查一下是否先```to(device)```再```Data Parallel```
 * 突然出现loss直接炸裂的情况,在每个batch_iter,都需要先将optimizer做```zero_grad```,再进行train,再去做step

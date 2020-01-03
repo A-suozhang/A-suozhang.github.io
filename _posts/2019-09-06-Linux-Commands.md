@@ -2,7 +2,7 @@
 layout:     post                    # 使用的布局（不需要改）
 title:      Linux常用命令笔记              # 标题 
 subtitle:   学了忘，忘了学(Learning and then Forget, then Forgot to Learn)     #副标题
-date:       2019-09-06              # 时间
+date:       2020-01-03              # 时间
 author:     tianchen                      # 作者
 header-img:  img/bg-term.png   #这篇文章标题背景图片
 catalog: true                       # 是否归档
@@ -201,7 +201,9 @@ tags:
 * vim编辑之前忘记sudo无法保存
   * 键入```:w !sudo tee % ```
 * ```tree -s```显示文件大小
+* 在文件夹下搜索
+	* ```ll | grep -i XXX```
+		* 其中的-i忽略大小写
+	* ```find -iname "*XXX*"```
+		* find命令中的两个星号还比较关键
 
-
-# Bash Scripts
-* (见单独的博文))
