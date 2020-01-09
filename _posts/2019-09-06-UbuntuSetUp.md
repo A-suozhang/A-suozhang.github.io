@@ -2,7 +2,7 @@
 layout:     post                    # 使用的布局（不需要改）
 title:      Ubuntu 配置心得               # 标题 
 subtitle:   已经不知道是第几次安装Ubuntu了 #副标题
-date:       2019-12-14            # 时间
+date:       2020-01-08            # 时间
 author:     tianchen                      # 作者
 header-img:  img/11_30/bg-desk0.jpg #这篇文章标题背景图片
 catalog: true                       # 是否归档
@@ -448,6 +448,11 @@ let g:netrw_banner = 0
   * ~~曾经我认为这个插件很脑瘫,没想到真的用到了~~
 * 设置默认程序的打开方式
   * 一个文件右键```"properties->open with->set as default"```
+* GoldenDict - 速查词典
+	* ```sudo apt-get install goldendict```
+	* 打开之后进入edit-dictionary-sources-Wikipedia-取消注释/Websites添加有道
+		* 连接为 ```http://dict.youdao.com/search?q=%GDWORD%&ue=utf8```
+	* 然后挂在后面就可以用CTRL+C+C翻译鼠标选中的单词了!
 
 
 # Win当中的Ubuntu - WSL(Windows SubSystem Linux)
