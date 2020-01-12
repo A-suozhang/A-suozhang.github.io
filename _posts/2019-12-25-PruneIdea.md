@@ -146,3 +146,36 @@
 * Netadpat argue说FLOPs之类的限制条件，很难真正反映Budget
   * 用细粒度剪枝剪出来的东西其实没有用
   * （是否PruneRatio相比于Flops可以是更好的限制？）
+
+
+## Paper
+
+
+
+### Related Work
+
+* 引导思路: 
+  * 结构化剪枝(Structured Prun)-大部分是regularization
+    * 细粒度的剪枝需要额外的硬件设计,起不到实际的效果
+    * 早期的一些工作,怎么怎么样
+    * Xiaotian Zhu, Wengang Zhou, and Houqiang Li. Improving deep neural network sparsity through decorrelation regularization. In IJCAI, pages 3264–3270, 2018.
+  * Budget-Aware Prune
+    * 一些人不用L1 Norm,而是用FLOPs或者是Params作为Regularization
+    * NetAdpat...
+    * 但是都是需要找一个Trade-Off,**不可控**
+  * Resource-Constraint Iterative Prune
+    * 在一个明确的Budget下的prune
+    * 有明确的prune ratio的建模.且都是layer-wise的,**搜索耗时**,调整prune ratio的策略
+  * Topological Grouping
+    * 有人直接不剪,有人一起剪,有人剪一样的
+    * Lasso提出来了
+    * Morph Preserving Network Topology
+    * BAR
+      * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20200109201056.png)
+      * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20200109201125.png)
+      * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20200109201139.png)
+      * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20200109201257.png)
+    * AMC,LeGR - 1st
+
+* 素材
+  * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20200109215608.png)

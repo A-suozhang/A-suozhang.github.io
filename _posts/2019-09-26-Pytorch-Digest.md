@@ -103,6 +103,7 @@ tags:                               #标签
                   else:
                       param_group += [{'params': v, 'lr': learning_rate * 10}]
       ```
+	* load_state_dict(strict=False)可以忍受Missing Keys
 
 
 ### Datasets
