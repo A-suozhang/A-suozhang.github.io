@@ -160,16 +160,6 @@ tags:
     * [卸载](https://www.cnblogs.com/txg198955/p/5990295.html)
         * 进入Build或者Release目录　```sudo make uninstall```
     * 多版本共存可以几个版本都源码build，然后进入目录用```make install或者是make uninstall来选择版本```
-* grep (Global search for RE & Print)
-    * 基本用法： ```grep -X MATCH_PATTERN filename1 filename2```
-    * 还可以在shell中直接使用 ```COMMAND | grep -X XXX```
-    * args 
-        * -v 反选(打印除了匹配的)
-        * --color=auto
-        * -E 使用正则表达式 （或者用egrep）****
-        * -o 只输出匹配到的内容，而不是整行
-        * -n 输出包含行数
-        * -i 忽略大小写
 * rename command
     * 可以使用通配符，也可以使用正则(re)
         * **通配** （默认配置，比如grep默认也是用通配）
@@ -209,4 +199,35 @@ tags:
 * 查看当前目录下的文件里的内容,用grep
 	* 和查看当前目录下的文件名字用 ```ll | grep -i xx```类似
 	* 如果需要递归 ```-r```
+
+
+---
+
+### Grep
+
+* grep (Global search for RE & Print)
+    * 基本用法： ```grep -X MATCH_PATTERN filename1 filename2```
+    * 还可以在shell中直接使用 ```COMMAND | grep -X XXX```
+      * 从数据流中匹配
+      * 比如用 ```cat a.txt | grep X```,就等价于```grep X a.txt```
+    * *注意只有使用了-E的时候才是使用正则，默认是直接使用逻辑通配，不应该加```*NAME*```用```"NAME" or NAME```即可*
+    * args 
+        * -v 反选(打印除了匹配的)
+        * --color=auto
+        * -E 使用正则表达式 （或者用egrep）
+        * -o 只输出匹配到的内容，而不是整行
+        * -n 输出包含行数
+        * -i 忽略大小写
+        * -c 匹配的个数
+        * -r 递归查找 （此时的后面的文件名可以是文件夹名）
+
+* 逻辑通配符
+  * 是Shell内置的功能，对应Re
+  * find和grep默认采用的格式
+  * 常用
+    * ```*``` - 匹配任意字符串
+    * ```？``` - 匹配单个字符
+    * ```[]``` - 匹配括号内字符（类似re）
+    *  
+
 

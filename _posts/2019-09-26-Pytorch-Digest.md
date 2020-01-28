@@ -749,6 +749,16 @@ result = model(input)
 * ```super(type, obj) obj must be an instance``` 可能是ipython reload模块导致的,需要重新更新
 * jupyter notebok和argparse不匹配,只需要在最后```args = parser.parse_args()```改成````args = parser.parse_args(args = [])```
   * 但是问题是如果这样的话就不能看help,调用--help会直接开始按照默认参数跑(看上去无伤大雅先这样把)
+* Random Seed
+
+  ```python
+  if args.manualSeed is None:
+      args.manualSeed = random.randint(1, 10000)
+  random.seed(args.manualSeed)
+  torch.manual_seed(args.manualSeed)
+  if args.use_cuda:
+      torch.cuda.manual_seed_all(args.manualSeed)
+  ```
 
 ---
 
