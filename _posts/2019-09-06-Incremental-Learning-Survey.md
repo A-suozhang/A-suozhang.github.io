@@ -23,6 +23,7 @@ tags:                               #标签
     * 其训练本质和Stochastic的训练方式类似（SGD,especially Batch），区别在于Hyper-param是依据整个数据分布设定的，而这里数据分布未知且变化（Concept Drift）
 
 # 应用场景  
+
 * **使模型更加贴合用户的使用习惯**
 
 * 终端     

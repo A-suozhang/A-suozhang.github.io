@@ -4,7 +4,7 @@ title:      Tensor 操作速查           # 标题
 subtitle:   提键盘忘操作        #副标题
 date:       2020-01-27            # 时间
 author:     tianchen                      # 作者
-header-img:  img/11_30/bg-mb.jpg  #这篇文章标题背景图片  
+header-img:  img/1_28/nantong-0.jpg  #这篇文章标题背景图片  
 catalog: true                       # 是否归档
 tags:                               #标签
      - 常用
