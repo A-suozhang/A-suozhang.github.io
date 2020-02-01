@@ -2,7 +2,7 @@
 layout:     post                    # 使用的布局（不需要改）
 title:      Mathematica 学习笔记              # 标题 
 subtitle:   总是学不会的优雅的函数式编程     #副标题
-date:       2019-12-23             # 时间
+date:       2020-01-29             # 时间
 author:     tianchen                      # 作者
 header-img:     #这篇文章标题背景图片
 catalog: true                       # 是否归档
@@ -99,6 +99,7 @@ tags:                             #标签
         * ListLinePlot
     * ArrayPlot
     * MatrixPlot
+* ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20200129211908.png)
 * 动态绘图
     * [tutorial/IntroductionToManipulate]()
     * Slider (如果只是需要画图的话建议用Manipulate)
@@ -111,6 +112,11 @@ tags:                             #标签
 
 
     ```Manipulate[Plot[Sin[a x + b], {x, 0, 6}], {a, 2(初值), "Multiplier"}, 1, 4（范围）}, {b, 4, "Phase Parameter"}, 0, 10}]```
+* 3-D绘图
+  * Plot3D中用Mesh来指示某个切面
+  * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20200129193437.png)
+  * Mesh的一些属性 ```Thickness[0.01]```  ```RGBColor[120,50,30] RGBColor["#0F3EF4"]```
+  * 用plotrange来限定range
 
 
      
