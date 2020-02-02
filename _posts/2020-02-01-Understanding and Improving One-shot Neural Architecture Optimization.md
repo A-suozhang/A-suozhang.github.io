@@ -1,6 +1,6 @@
 ---
 layout:     post                    # 使用的布局（不需要改）
-title:      OnlineLearning内容梳理           # 标题 
+title:      论文阅读《Understanding and Improving One-Shot NAS》           # 标题 
 subtitle:            #副标题
 date:       2020-02-01            # 时间
 author:     tianchen                      # 作者
