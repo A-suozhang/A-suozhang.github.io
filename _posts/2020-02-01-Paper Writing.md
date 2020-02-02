@@ -30,6 +30,7 @@ tags:                               #标签
 * Grammarly
 * [Liggle](https://linggle.com/)
 * [Synonym](https://www.synonym.com/synonyms/)
+* [New Better Synonym](https://www.thesaurus.com/browse/optimize?s=t)
 * 有道翻译
 
 
