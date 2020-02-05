@@ -552,6 +552,16 @@ Host proxy-eva10
   Port 32222
   User zhaotianchen
 
+Host proxy-eva8
+  HostName eva8.nics.cc
+  Port 32222
+  User foxfi
+
+Host ztc.eva8
+  HostName foxfi-eva8
+  User foxfi
+  ProxyCommand ssh -p 32222 foxfi@eva8 nc %h %p
+
 Host ztc.eva10
   HostName foxfi-eva10
   User zhaotianchen
