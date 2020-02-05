@@ -15,19 +15,6 @@ tags:                               #标签
 
 * 对一个section用```\label{sec:method-grouping}```来指定，在别的地方用```~\ref{sec:method-grouping}```
 * 在cite前面加一个```~```表示小于一个空格的空间
-* 多人协作
-
-```
-\usepackage{xcolor}
-\usepackage{xspace}
-\newcommand{\says}[3]{{\color{#3}\textbf{#1:} \emph{#2}\color{black}}\xspace}
-\newcommand{\nxfsays}[1]{\says{nxf}{#1}{red}}
-\newcommand{\ztcsays}[1]{\says{ztc}{#1}{blue}}
-\newcommand{\zslsays}[1]{\says{zsl}{#1}{green}}
-\newcommand{\zksays}[1]{\says{zk}{#1}{cyan}}
-
-```
-
 
 # Digest
 
