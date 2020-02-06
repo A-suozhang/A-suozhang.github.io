@@ -81,6 +81,10 @@ tags:
 * 建立用户
     * useradd -s 'bin/bash' -m -G adm,sudo %username  (带了sudo权限)
     * passwd %username
+    * 给他sudo权限
+      * 在su情况下修改 /etc/sudoers 权限为可写
+      * 然后加上一行 ```$USERNAME ALL=(ALL) ALL```
+      * 再把权限改回来就可以了
 * 换源
     * /etc/apt/source.list
 * 切换用户
