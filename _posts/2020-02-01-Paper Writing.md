@@ -15,6 +15,7 @@ tags:                               #标签
 
 * 对一个section用```\label{sec:method-grouping}```来指定，在别的地方用```~\ref{sec:method-grouping}```
 * 在cite前面加一个```~```表示小于一个空格的空间
+* 排图片一般默认[ht]，h表示是当前位置，t表示在最上面（指的是下一页的最上面）
 
 # Digest
 
@@ -33,12 +34,13 @@ tags:                               #标签
   * 前者的主语稍微小一些
 * seek to do
 * be prone to 有倾向
+* put forward
 
 
 ### 常用语句
 
 * To sum up, we make the following contributions:
-* The rest of this paper is organized as follows. The related studies are introduced in Sec.~\ref{sec:related}. In Sec.~\ref{sec:methods}, we introduced our fixed-point training. Then in Sec.~\ref{sec:exp}, the effectiveness of our method is illustrated by experiments. We further discuss XXX  in Sec.~\ref{sec:discuss}.Finally, we conclude our work in Sec.~\ref{sec:conclusion}.
+* The rest of this paper is organized as follows. The related studies are introduced in Sec.~\ref{sec:related}. In Sec.~\ref{sec:methods}, we introduced our fixed-point training. Then in Sec.~\ref{sec:exp}, the effectiveness of our method is illustrated by experiments. We further discuss XXX in Sec.~\ref{sec:discuss}.Finally, we conclude our work in Sec.~\ref{sec:conclusion}.
 
 # 心得 (他人经验)
 
@@ -48,6 +50,14 @@ tags:                               #标签
 * 每一段的第一句话要总（最好是总分总）
 * method中需要给出challenge
 * 不要写进去节外生枝的
+* 对应，图里有的一定要对应到文字
+* 每个段还有一个单词，缩句缩排版
+* 用连字符来把每一行填满
+* 需要检查的
+  * 名词不是复数就要加a或者the
+  * 大小写！
+* 图要放在最上面
+* 截稿前注意备份overleaf（活用overleaf的history功能）
 
 # Resources
 
