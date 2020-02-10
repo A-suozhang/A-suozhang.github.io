@@ -2,7 +2,7 @@
 layout:     post                    # 使用的布局（不需要改）
 title:      Linux常用命令笔记              # 标题 
 subtitle:   学了忘，忘了学(Learning and then Forget, then Forgot to Learn)     #副标题
-date:       2020-01-03              # 时间
+date:       2019-09-06              # 时间
 author:     tianchen                      # 作者
 header-img:  img/bg-term.png   #这篇文章标题背景图片
 catalog: true                       # 是否归档
@@ -225,6 +225,11 @@ tags:
         * -i 忽略大小写
         * -c 匹配的个数
         * -r 递归查找 （此时的后面的文件名可以是文件夹名）
+* 在grep的正则中，首先空格需要转意
+* grep命令行中的正则是默认贪婪的，需要把原来的```*改为.*?```来阻止贪婪匹配
+  * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20200209153345.png)
+  * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20200209153417.png)
+  * 可以看到改动了之后只有完全匹配的打印了出来
 
 * 逻辑通配符
   * 是Shell内置的功能，对应Re
