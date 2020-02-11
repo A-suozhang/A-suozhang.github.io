@@ -58,4 +58,6 @@ tags:                               #标签
 
 # Numpy Ops
 
+* Cheat Sheet
+* ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20200211145511.jpg)
 

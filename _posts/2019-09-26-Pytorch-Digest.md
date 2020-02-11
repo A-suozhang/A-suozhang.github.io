@@ -677,6 +677,26 @@ result = model(input)
 * lr与batch的大小成正比
 
 
+### Distributed Training
+
+> 多卡中单纯使用DataParallel会导致很慢，GPU利用率低
+
+* 执行指令加前缀```CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7 python -m torch.distributed.launch --nproc_per_node 8 main.py```
+* 以上指令会给代码输入一个叫```--local-rank```的arg，代表这是第几个process，一般一卡一个
+  * 如果没有用distributed，会是-1
+  * 然后从0，1，2，3
+* 需要两行代码来启动distributed
+  * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20200211113845.png)
+* 设置gpus
+  * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20200211113952.png)
+* Dataloader的Sampler需要对应着改变
+  * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20200211114030.png)
+  * Testloader不需要用distributed，不然会给出多个test结果
+* 还有一些小的地方需要处理
+  * 比如打印和保存，应该只在0号上进行，不然会向控制台打印多份
+  * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20200211114316.png)
+
+
 
 # Troubleshooting!
 * 2019-10-24-eve: 在ImageNet预处理中,把第一步的RandomSizeCrop(224)写成了RandomCrop(224),导致整体崩溃了
