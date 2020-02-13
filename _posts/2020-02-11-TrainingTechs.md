@@ -74,3 +74,14 @@ tags:                               #标签
   * imagenet跑100个epoch lr-0.1，decay10 every30，batchsize 256
   * Cifar 300 epoch，bs-128，lr-0.1-[150,225]by0.1,
 
+* [LeGR]()
+  * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20200213141659.png)
+
+
+## Tricks
+
+* [Label-Smoothing])(https://arxiv.org/pdf/1906.02629.pdf)
+  * 发现了当teacher用label-smoothing来训练的时候，KD的效果没有之前好了
+  * smoothing encourages the representations of training examples from the same class to group in tight clusters
+  * 一般取0.1
+

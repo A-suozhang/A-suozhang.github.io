@@ -1,8 +1,8 @@
 ---
 layout:     post                    # 使用的布局（不需要改）
 title:      Understanding&Debugging PyTorch           # 标题 
-subtitle:   Also A Bit About Python        #副标题
-date:       2020-01-02             # 时间
+subtitle:   火炬心法！        #副标题
+date:       2020-02-12             # 时间
 author:     tianchen                      # 作者
 header-img:  img/11_30/bg-road1.jpg  #这篇文章标题背景图片  
 catalog: true                       # 是否归档
@@ -696,6 +696,8 @@ result = model(input)
   * 比如打印和保存，应该只在0号上进行，不然会向控制台打印多份
   * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20200211114316.png)
 
+* [还有一个教程没看](https://zhuanlan.zhihu.com/p/98535650)
+
 
 
 # Troubleshooting!
@@ -779,9 +781,35 @@ result = model(input)
   if args.use_cuda:
       torch.cuda.manual_seed_all(args.manualSeed)
   ```
+* 有时Control-C中止运行后GPU存储没有及时释放，需要手动清空 ```torch.cuda.empty_cache()```
+  * 或者kill进程 ```ps aux | grep python; kill -9 [pid]```
+  * 最不济强制```nvidia-smi --gpu-reset -i [gpu_id]```
+* 于PIL转化
+
+``` py
+# torch.Tensor -> PIL.Image.
+image = PIL.Image.fromarray(torch.clamp(tensor * 255, min=0, max=255
+    ).byte().permute(1, 2, 0).cpu().numpy())
+image = torchvision.transforms.functional.to_pil_image(tensor)  # Equivalently way
+
+# PIL.Image -> torch.Tensor.
+tensor = torch.from_numpy(np.asarray(PIL.Image.open(path))
+    ).permute(2, 0, 1).float() / 255
+tensor = torchvision.transforms.functional.to_tensor(PIL.Image.open(path)) 
+```
 
 ---
 
+* [一些常用操作](https://zhuanlan.zhihu.com/p/59205847)
+* 初始化网络 ```init.xavier_uniform(net1[0].weight)  ```
+  * 或者手动用numpy做
 
+  ``` py
+  for layer in net1.modules():
+    if isinstance(layer, nn.Linear): # 判断是否是线性层
+        param_shape = layer.weight.shape
+        layer.weight.data = torch.from_numpy(np.random.normal(0, 0.5, size=param_shape)) 
+        # 定义为均值为 0，方差为 0.5 的正态分布
+  ```
 
 
