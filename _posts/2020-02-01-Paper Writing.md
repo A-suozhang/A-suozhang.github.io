@@ -16,6 +16,12 @@ tags:                               #标签
 * 对一个section用```\label{sec:method-grouping}```来指定，在别的地方用```~\ref{sec:method-grouping}```
 * 在cite前面加一个```~```表示小于一个空格的空间
 * 排图片一般默认[ht]，h表示是当前位置，t表示在最上面（指的是下一页的最上面）
+* 表格中cmidr，表示加一部分横线 \cmidrule(lr){1-2}
+  * \hline是一整条线
+* [合并表格](https://blog.csdn.net/sinat_36301420/article/details/79334767)
+* ```\multirow{2}{*}{$n_i$}``` 当表格同一行的东西占的列数目不一样的时候
+* [常见错误](https://www.weibo.com/ttarticle/p/show?id=2309403955741387052924)
+* [Table相关](https://zhuanlan.zhihu.com/p/19749566)
 
 # Digest
 
