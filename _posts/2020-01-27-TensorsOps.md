@@ -61,3 +61,6 @@ tags:                               #标签
 * Cheat Sheet
 * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20200211145511.jpg)
 * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20200217174234.png)
+
+
+* np中的topk，np中的argpartition(x,k)找到第k大的，并且将它按这个数分成两部分
