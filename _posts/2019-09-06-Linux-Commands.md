@@ -206,6 +206,7 @@ tags:
 	* 如果需要递归 ```-r```
 * ```readlink -f XX```
   * 查看连接的指向
+* 查看目录的磁盘占用 ```du -sh```
 
 
 ---
@@ -243,4 +244,91 @@ tags:
 
 * 批量修改命令sed
   * ```sed -i "s/Re0/Re1/g" a.txt``` 按照正则的方式替换
+* 批量重命名 rename 与上同理
 
+
+---
+
+
+### Bash
+
+> 参考了[简书-Bash](https://www.jianshu.com/p/e1c8e5bfa45e)
+
+> 以及[This Tutorial](https://linuxhint.com/bash_scripting_tutorial_beginners/#b4)
+
+#### Basics
+
+* Shell本身就是在OS和用户之间的一个命令解释器
+* 起手 ```#！/bin/bash```选择bash作为解释器
+* 可以直接 ```bash hello.sh```或者先赋予可执行权限```chmod a+x ./hello.sh```然后直接```./hello.sh```
+* 变量可以直接定义（类似Python）但是注意“=”左右不能有空格（类似bashrc嘛）
+* 本质上变量都是字符串
+  * 只有当变量为纯数字的时候才可以被认为是“数字变量”，否则都是字符串  
+  * ```d=${c/BB/12}```可以替换c中的BB为12
+  * 注意数字变量和字符变量的区别
+    * 数字变量用 ``` $a -ge $b``` 这样的模式来比较
+    * 字符串变量用 ```$a = $b```这样的链接
+* 引用变量用 ```${my_var}```大括号也可以不加
+* 单引号内部的内容会被全部输出（不会带转义）但是双引号之间的可以
+  * echo出一个变量要么不用引号要么双引号
+* 注意赋值的时候要加括号与引用，不然会被解析为字符串
+  * 类似```x = $[i**2]``` 
+  * (貌似这个里面引用别的变量不需要引号)
+* 传入args直接用 ```$1```
+  
+* 条件语句
+
+``` bash
+if [ condition1 ]
+then
+    command1
+elif [ condition2 ]
+    command2
+else
+    commandN
+fi
+```
+
+* 循环语句
+
+``` bash
+
+for var in item1 item2 ... itemN
+do
+    command1
+    command2
+    ...
+    commandN
+done
+
+while [ condition ]
+do
+    command
+done
+
+```
+
+* 数组
+
+``` bash
+
+arr=(1 2 3 5 8 13)
+
+total={#arr[*]}
+echo "Num of Elements:"${total}
+
+echo "Array Values:"
+for var in ${arr[*]}; do
+        printf "%d " ${var}
+done
+
+echo "Array Value with Index"
+for key in ${!arr[*]}; do
+        printf "%d: %s\n " ${key} ${arr[${key}]}
+done
+
+```
+
+* 循环，range
+
+```for i in (sed 0 ${END); do echo ${i}; done ```

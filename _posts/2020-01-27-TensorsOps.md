@@ -64,3 +64,9 @@ tags:                               #标签
 
 
 * np中的topk，np中的argpartition(x,k)找到第k大的，并且将它按这个数分成两部分
+* ```random.randn()```返回的不是0到1，要0到1用```np.random.uniform(0,1)```
+* 排序```pred_inds = np.argsort(predict_scores)[::-1]```
+* 转化为int(For indexing) ``` x.astype(int)```
+* 为了控制random,使用```random.seed(NUM)```注意每次执行这个,只能够对一次random操作生效,下一次就不生效
+* ```np.argwhere(arr == x)```来获得ind
+  * 或者用这种方式: ``````

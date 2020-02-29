@@ -22,6 +22,26 @@ tags:                               #标签
 * ```\multirow{2}{*}{$n_i$}``` 当表格同一行的东西占的列数目不一样的时候
 * [常见错误](https://www.weibo.com/ttarticle/p/show?id=2309403955741387052924)
 * [Table相关](https://zhuanlan.zhihu.com/p/19749566)
+* Fig. （大写，加点）
+* 两张图
+
+``` 
+
+\begin{figure*}[th]
+  % include first image
+  \subfigure[]{
+    \includegraphics[width=0.45\linewidth]{eccv2020kit/figs/layer_nasbench101.pdf} 
+    \label{fig:layers_nb101}
+  }
+  \subfigure[]{
+    \includegraphics[width=0.45\linewidth]{eccv2020kit/figs/layer_nasbench201.pdf} 
+    \label{fig:layers_nb201}
+  }
+\caption{The effect of the number of GCN or GATES layers. (a) Experiments on NAS-Bench-101. The proportion of training samples is 0.1\% (381 training architectures, 42362 testing architectures). (b) Experiments on NAS-Bench-201. The proportion of training samples is 10\% (781 training architectures, 7812 testing architectures).}
+\label{fig:gates_layers}
+\end{figure*}
+
+```
 
 # Digest
 
@@ -47,6 +67,7 @@ tags:                               #标签
 
 * To sum up, we make the following contributions:
 * The rest of this paper is organized as follows. The related studies are introduced in Sec.~\ref{sec:related}. In Sec.~\ref{sec:methods}, we introduced our fixed-point training. Then in Sec.~\ref{sec:exp}, the effectiveness of our method is illustrated by experiments. We further discuss XXX in Sec.~\ref{sec:discuss}.Finally, we conclude our work in Sec.~\ref{sec:conclusion}.
+* ad-hoc - (for this purpose only)
 
 # 心得 (他人经验)
 
