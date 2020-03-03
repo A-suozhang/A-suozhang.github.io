@@ -23,7 +23,8 @@ tags:                               #标签
 * [常见错误](https://www.weibo.com/ttarticle/p/show?id=2309403955741387052924)
 * [Table相关](https://zhuanlan.zhihu.com/p/19749566)
 * Fig. （大写，加点）
-* 两张图
+* 特有名词，比如GPU，以及方法AMC需要大写
+* 两张图并列
 
 ``` 
 
@@ -85,6 +86,8 @@ tags:                               #标签
   * 大小写！
 * 图要放在最上面
 * 截稿前注意备份overleaf（活用overleaf的history功能）
+* 在最后统一check一些表达
+* "x"用```$\times$``` dollar号不能忘不然会格式崩坏
 
 # Resources
 
