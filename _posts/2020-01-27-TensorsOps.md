@@ -70,3 +70,7 @@ tags:                               #标签
 * 为了控制random,使用```random.seed(NUM)```注意每次执行这个,只能够对一次random操作生效,下一次就不生效
 * ```np.argwhere(arr == x)```来获得ind
   * 或者用这种方式: ``````
+* 可以用```[:,None]```来代替转置
+  * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20200303212426.png)
+* ```np.tile```创建多个副本
+  * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20200303212922.png)
