@@ -54,6 +54,11 @@ tags:                               #标签
 * excel 超过
 * extensive 广泛的
 * subpar 次佳
+* paradigm 范例
+* scheme 方式
+* generic 一般
+* derive 获得
+* venue
 
 ### 常用短语
 
