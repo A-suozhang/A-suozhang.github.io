@@ -10,6 +10,13 @@ tags:                               #标签
      - 心得
 ---
 
+# 石墨文档List
+
+* [GATES Related](https://shimo.im/sheets/T3Cp36PRHPj38TKp/MODOC)
+* [NAS Reading List](https://shimo.im/sheets/T3Cp36PRHPj38TKp/MODOC)
+
+
+
 # Paper Stack 文章堆栈
 
 ### GNN
@@ -52,12 +59,32 @@ of action marginal distributions
     * MetAdapt的flow
       * arch as DAG , feature map as node / op as edge
       * Task-Adaptive Block
-        * 
+* 这个图的配色不错
+* ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20200313202441.png)
+
+* [Channel Gating Neural Networks](https://papers.nips.cc/paper/8464-channel-gating-neural-networks.pdf)
+* 思想来源于Feature Map中有很多绝对值小的地方，这些东西其实是可以不需要的
+* 核心观点在于，认为partial sum和global sum是有相关性的(成立的前提假设-做了实验一半的channel有0.86的相关性)，所以partial sum发现不effective的部分没有必要继续做计算(以一定condition)
+  * 这个threshold是硬的
+  * 可以fine-grain也可以channel-wise
+  * 把所有的W_l分一部分W_p和另外的W_r,它们的结果应该在这一层是要加起来的，把W_p* X_p的输出(Partial Sum)输入一个Channel Gating模块，以一个threshold来确定是否需要对剩下的W_r Apply Mask，给出一个Out_C维度的Mask，选择的依据是Feature Map的Activation绝对值
+  * 相当于是一个新的layer type
+* ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20200313154531.png)
+* 有一个channel grouping确保all channels are treated equally
+  * 相当于防止每次都把前几个channel做为W_r，所以加了一个channel shuffling
+  * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20200313162432.png) 
+
+
+* Review[Netowrk Pruning via Transformable NAS]
 
 
 
 
-## 石墨文档List
-* [GATES Related](https://shimo.im/sheets/T3Cp36PRHPj38TKp/MODOC)
-* [NAS Reading List](https://shimo.im/sheets/T3Cp36PRHPj38TKp/MODOC)
+
+### 2020-03-17 MCMC
+
+* ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20200317151113.jpg)
+* 撒豆子算面积的实验
+
+
 
