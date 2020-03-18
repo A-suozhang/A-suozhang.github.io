@@ -75,10 +75,30 @@ of action marginal distributions
   * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20200313162432.png) 
 
 
-* Review[Netowrk Pruning via Transformable NAS]
+* [Review Netowrk Pruning via Transformable NAS]()
+  * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20200317204835.png)
+  * 用NAS来处理Channel Pruning的问题
+  * 每个layer的channels，首先需要设计一个distribution，用类softmax的方式来，决定选择每个channel的概率
+    * 选取channel的过程本身不differntiable，用gumble-softmax来
+    * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20200317203915.png)
+    * CWI (Channel-Wise Interpolation) -  Adaptive Average Pooling
 
+---
 
-
+* [MAML - Model Agnostic Meta-Learning for Fast Adaptation]()
+  * Learn2Learn
+  * 对标的是最经典的从pretrain model的transfer learning (严格来说Fintune也是一种Meta-Learning)
+  * MAML还关注着多任务(与MultiTaskLearning有许多的关联)
+    * 比如人脸关键点和定位是同样的一个问题，但是对NN来说是作为两个问题来处理的
+    * MAML是以一个Task为基本单位的
+  * 最终目的是**学一个好的初始化参数**
+  * 新的Loss Function
+    * 一部分loss是经典的loss，另外一个部分其他任务的损失参数
+    * 有一个思想是不找单个任务的全局最优(Global Minima)，因为这样可能很难收敛到别的task的好结果，而是找到多个task之间的一个平衡(也不用最好)
+    * 而传统的finetune首先是从任务A的最佳解出发，所以不一定对第二个任务效果好
+  * 操作
+    * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20200317213623.png)
+    * 我们先有了随机初始化的网络theta_0,在第一个task上按照正常的sgd训练获得参数theta_m,然后与此为基础获得valid loss，并且用这个梯度，不去优化theta_m而是去优化theta_0,去得到theta_1.下面再以theta_1作为上一步的theta_0，去apply到下一个任务（*这样去经历A String Of Tasks-有点像一系列课程*）
 
 
 ### 2020-03-17 MCMC

@@ -51,7 +51,15 @@ tags:                               #标签
 * [Searching for MobileNetV3](https://link.zhihu.com/?target=https%3A//arxiv.org/pdf/1905.02244.pdf)
 * NAS，告辞...
 
-## Refs
+## [GhostNet](https://arxiv.org/abs/1911.11907)
+
+* Huawei Noah Ark
+* 其Motivation在于Conv中有很多类似的Feature Map(其实与FPGM类似,但是FPGM选择如何去LetOut掉重复的,而本文通过一个简单的Ghost Transform去生成类似的Feature Map而不是从Conv来获得)
+* 按照MobileNet-V3的结构,用带Ghost的Bottleneck去替代原先的Bottleneck Block
+
+
+
+## Refssasaas
 * [为什么mobilenet，shufflenet在理论上速度很快，工程上并没有特别大的提升？](https://www.zhihu.com/question/343343895/answer/816049923)
     * 更底层的思考
     * 计算强度

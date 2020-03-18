@@ -581,3 +581,32 @@ Host *.eva*
   * nc表示这个是中间跳板(~~不要停下来啊~~)
 * [Multi](https://www.cyberciti.biz/faq/linux-unix-ssh-proxycommand-passing-through-one-host-gateway-server/)
 * ```scp FILE ztc.eva0:~/```
+
+### Docker
+* 3个基本概念： 
+  * Image - 可以看作是一个特殊的Filesystem，提供了容器运行的程序，资源以及特殊参数(环境变量)，但是*不包含任何动态数据* - 看成是一个空的房子
+  * Container - 一个轻量级的Sandbox，可以看作是一个极简的Linux环境，容器是image创建的instance，各个容器之间隔离
+  * Repository - 类比于代码仓库，是image的仓库
+* K8S(Kubernets) -  基于容器的集群管理集团: Master/Node
+
+
+##### [Installation](https://github.com/yeasy/docker_practice/blob/master/install/ubuntu.md)
+1.  
+
+```
+    sudo apt-get -y install \
+    apt-transport-https \
+    ca-certificates \
+    curl \
+    gnupg-agent \
+    software-properties-common 
+
+```
+
+2. ```curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -```
+   * Check ```sudo apt-key fingerprint 0EBFCD88``` 
+3. ```sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"```
+4. ```sudo apt-get update && sudo apt-get install docker-ce docker-ce-cli containerd.io```
+   * List Available Version in Repo ```apt-cache madison docker-ce``` 
+5. 测试安装成功 ``````
+   * [on WSL may be buggy](https://github.com/Microso ftDocs/WSL/issues/457) 
