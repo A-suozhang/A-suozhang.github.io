@@ -82,6 +82,13 @@ of action marginal distributions
     * 选取channel的过程本身不differntiable，用gumble-softmax来
     * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20200317203915.png)
     * CWI (Channel-Wise Interpolation) -  Adaptive Average Pooling
+  
+
+* [HAQ: Hardware-Aware Automated Quantization with Mixed Precision](http://openaccess.thecvf.com/content_CVPR_2019/papers/Wang_HAQ_Hardware-Aware_Automated_Quantization_With_Mixed_Precision_CVPR_2019_paper.pdf)
+
+
+* [NAO]
+* [Semi-Supervised NAS]
 
 ---
 
@@ -105,6 +112,10 @@ of action marginal distributions
 
 * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20200317151113.jpg)
 * 撒豆子算面积的实验
+
+
+### 2020-03-20 DeConv
+* ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20200320185002.png)
 
 
 
