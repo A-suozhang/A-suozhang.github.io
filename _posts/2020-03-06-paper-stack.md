@@ -88,7 +88,26 @@ of action marginal distributions
 
 
 * [NAO]
-* [Semi-Supervised NAS]
+    * Discrete -> Continuos 
+      * 包含了一个encoder，将arch映射到一个连续空间，同时还搭配一个decoder
+      * 还有predictor 
+    * 与此类似的是DARTS，说DARTS认为最好的arch是当前weight下的argmax，而NAO直接用一个decoder映射回模型
+      * 还有一支是Bayesian Optimization，作者认为GP的性能于Covariance Function的设计强相关
+    * Search Space设计
+      * 两步，首先决定1）which 2 previous nodes as inputs 2)确定要用什么op
+    * symmetric的design:为了保证symmetric的模型（实际上是一个模型）的embedding一致，predictor给出差不多的结果
+      * 用了Augmentation（flip）来训练encoder
+    * Encoder和Decoder都是LSTM，predictor是一个mean-pooling加mlp
+    * 三者Jointly Train
+      * 认为predictor could work as regularization去避免encoder只对应decoder的结果，而没有正常表征
+        * 这一步和传统VAE中的加noise一致
+    * 认为weight-sharing和NAO是complementary的
+
+* [SemiNAS](https://arxiv.org/pdf/2002.10389.pdf)
+  * 用Controller(其实是里面的predictor)去在大量无标注的arch上做标注(不经过Evaluation)，将新的Data-Pair加入训练
+  * 卖点是能够更快的找到比较好的架构，比EA之类的效率更高
+    * 但是高的也不是很明显，怀疑是否是NAO带来的而不是Semi带来的(毕竟用自己推断出来的数据来训练自己(但是flow与Self-Supervised又不太一样))
+  * 用NAO as example（因为它既可以用在conventional train from scratch也可以做Weight sharing）
 
 ---
 
@@ -106,6 +125,43 @@ of action marginal distributions
   * 操作
     * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20200317213623.png)
     * 我们先有了随机初始化的网络theta_0,在第一个task上按照正常的sgd训练获得参数theta_m,然后与此为基础获得valid loss，并且用这个梯度，不去优化theta_m而是去优化theta_0,去得到theta_1.下面再以theta_1作为上一步的theta_0，去apply到下一个任务（*这样去经历A String Of Tasks-有点像一系列课程*）
+
+---
+
+* [MixMatch]()
+  * 用Autoencoder来重建输入图像，来获得好的Representation(或者是用GAN)
+  * Semi较为有效的几个方案
+    1. Consistency Regularization
+    2. Entropy minimize： 来源于共识，决策边界不应该穿过边沿分布的高密度区域(Push Back Decision Boundary)吸引对未标记数给出低熵的预测
+       * 对当前的结果肯定，所以有人用带Temperature的CrossEntropy 
+    3. 最基础的L2正则化(在SGD下等价于Weight Decay)
+       * 有说法说Adam和L2正则一起作用会出现区别
+    4. 一种新方法是MixUp，任意抽取两个样本，构造混合样本和标签
+       * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20200321202307.png) 
+    5. MixMatch
+
+* [En-AET]()
+  * 用一个VAE去找到最好的transform组合
+    * encoder找到一个好的embedding，decoder re-parameterize出transform
+
+* ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20200321203810.png)
+
+* 对于在NAS中利用Semi的几个问题
+  * 首先是两个维度，是在predictor找arch的时候用semi，还是直接找一个更适合semi的网络
+  * 第一个维度看上去问题比较适合，实际不然
+    * 但是在NAS Predictor中怎么利用unlabel的arch数据，感觉值得研究
+  * 后者的motivation我还不是很确定，而且看上去有点困难
+    * 架构对semi训练的影响？ fewshot别人其实还是说明了这个问题的
+    * evaluation过于noisy，不能很好的衡量，很大程度上取决于训练的Trick
+  * 1） 算法上是否对架构有影响
+  * 2） 有一个新的任务，在线处理这些标注数据； 要说明别的任务上的架构不能work
+ 
+* 
+
+---
+
+
+
 
 
 ### 2020-03-17 MCMC
