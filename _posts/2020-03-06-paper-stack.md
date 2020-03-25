@@ -2,12 +2,15 @@
 layout:     post                    # 使用的布局（不需要改）
 title:      Paper Stack 文章堆栈           # 标题 
 subtitle:   待读的文章和无处安放的文章解读   #副标题
-date:       2020-03-06            # 时间
+date:       2020-03-26            # 时间
 author:     tianchen                      # 作者
 header-img:  img/1_28/nantong-7.jpg  #这篇文章标题背景图片  
 catalog: true                       # 是否归档
 tags:                               #标签
      - 心得
+     - 常用
+     - 论文阅读
+     - 综述
 ---
 
 # 石墨文档List
@@ -172,6 +175,19 @@ of action marginal distributions
 
 ### 2020-03-20 DeConv
 * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20200320185002.png)
+
+### 2020-03-24 Gumble Softmax
+* ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20200324113027.png)
+* 从VAE(连续分布采样的求导)，加入一个Gumble噪声(包含了参数的信息)，首先从Gaussian中采样，带入值
+* 对于离散分布，加一个Argmax->Softmax 
+
+
+### 2020-03-26 Self-Supervised Learning
+
+* ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20200325231129.jpg)
+* [MoCo](https://link.zhihu.com/?target=https%3A//arxiv.org/pdf/1911.05722.pdf) by Kaiming
+
+
 
 
 

@@ -7,7 +7,7 @@ author:     tianchen                      # 作者
 header-img:  img/1_28/dawn.jpg  #这篇文章标题背景图片  
 catalog: true                       # 是否归档
 tags:                               #标签
-     - 心得
+     - 综述
 ---
 
 # Active Learning
@@ -24,3 +24,7 @@ tags:                               #标签
   * 注意对于一些复杂的任务，需要衡量模型本身能够解决，不然再大量的标注数据也不能达到预期结果
   * 衡量Hard Sample和Easy Sample的指标需要定义   (会不会与NAS的rank相有一些矛盾)
 * 核心问题在于**Selected Strategy**
+
+
+
+* 经过思考之后发现和NAS本身有些难以结合，暂且放下这个

@@ -8,6 +8,7 @@ header-img:  img/1_28/nantong-7.jpg  #这篇文章标题背景图片
 catalog: true                       # 是否归档
 tags:                               #标签
      - 心得
+     - DL
 ---
 
 # Training Techniques

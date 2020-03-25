@@ -7,6 +7,7 @@ author:     tianchen                      # 作者
 header-img:  img/1_28/nantong-0.jpg  #这篇文章标题背景图片  
 catalog: true                       # 是否归档
 tags:                               #标签
+     - DL
      - 常用
 ---
 
