@@ -159,12 +159,63 @@ of action marginal distributions
   * 1） 算法上是否对架构有影响
   * 2） 有一个新的任务，在线处理这些标注数据； 要说明别的任务上的架构不能work
  
-* 
+
+
+
+* [Data Efficient Image Recognitio with Contrastive Predictive Coding](https://arxiv.org/pdf/1905.09272v2.pdf) by DeepMind
+  * 将Unsupervised领域的Contrastive Predictive Coding的方法改进(revisit)并且加入到Semi当中
+  * 目前Semi的ImagenetSOTA / Also work on Det (PASCAL_VOC 2007)
+  * CPC - Contrastive Predictive Coding
+    * Learn Representation
+  * Workflow
+    * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20200326142002.png)
+    * 1. Unsupervised Spatial Prediction
+      * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20200326153411.png)
+      * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20200326153436.png)
+      * 首先将图片分为多个有Overlapping的Patch，构成一个Grid
+      * 经过一个前景Feature ectractor,最后接一个Mean-Pooling，保证每个Patch对应一个Feature vector
+      * 之后再经一个Context Network，目的是Recognize出输入的Embedding(Feature Vector)是来自哪个Grid Cell
+        * ContextVector输入的是一系列Zij(其感受野是所有在它之前(↖)的Zij，输出是一个context Vector cij
+        * 这里训练中用到了InfoNCE Loss，改进自NCE(NoiseContrastiveEstimation)最大化cell以及其来自位置的mutual info，就是从Z_l中采样出一些z，只有zij match了才是正样本
+        * Encoder和Context Network一起训练  
+        * **这一步的核心思想是利用之前的信息去预测之后的信息，ContextVector-Cij中包含了ZiJ+的信息，但是其不是输入**
+          * 以此去获得更加Consistent的Feature，就是Time(这里是Location-Invariant的Feature )
+    * 2. ClassificationTask
+      * 后面的ContextNetwork不要，直接利用已有的Label按照Supervised的方式接一个分类网络(甚至可以是一个简单的Logistic Regression)
+
+* 上文的前身[Contrastive Predictive Coding](https://arxiv.org/abs/1807.03748)
+  * [Post](https://mf1024.github.io/2019/05/27/contrastive-predictive-coding/)
+  * Unsupervised Training Feature Extractor for Representation
+  * 思想是利用Prediction作为目标(objective)
+    * 常见的思想是Training the model to predict Future / Some Missing Information(对于上文来说就是Patch对应的Localization的Info)
+      * 这个思想是否与VAE或者是GAN的思想类似？
+    * 利用这个Prediction问题所提取的Encoder
+  * 在采出的一个正样本和一系列负样本中，让预测结果去贴合正样本，最小化的是互信息量/或者是KL散度(类似这样的方式)
+  * *这篇文章本身不止说Vision(还有NLP和RL)，上面那篇是只针对Visual*
+
+* 相关的最近的paper还有[A Simple Framework for Contrastive Learning of Visual Representations](https://arxiv.org/pdf/2002.05709v1.pdf)
+  * Hinton做的东西
+* [S4L-Self-Supervised Semi-Supervised Learning](https://paperswithcode.com/paper/190503670)
+  * ICCV2019 - Google
+
+
+
+
+* [BigBiGAN - Large Scale Adversarial Representation Learning](https://arxiv.org/pdf/1907.02544v2.pdf)
+  * DeepMind
+  * 指出了近年来Self-Supervised的方法逐渐打败了基于Adversarial的，本文着手于用Adversarial learning来改进Representation
+  * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20200326155430.png)
+  * 之前的工作BigGAN和ALI(Adversarial Learnt Inference)其flow一般为:
+    * 我有Data X服从分布P_x，还对latent Variable Z有一个分布P_z(作为prior一般是gaussian)，Generator建模P(X|Z)-也就是从分布P_z中采样出Latent Variable Z，然后还原回X；对于传统的GAN，有一个Discriminator(Encoder)建模相反的概率分布P(Z|X),给定数据，predict这个embedding(\epsilon)
+    * BiGAN(bidirectional)加入了一个Joint Discriminator,输入的是一个(X,Z)的Pair，需要分辨的是它们是来自Sample&Encoding还是LatentSample&Generator
+      * 这样看来Generator的目的是“Fool”Disciminator by 让两个联合分布更加接近P_x\epsilon & P_zG（两者之间的距离用了一个Jenson-Shannon Divergence）
+    * 一个有趣的训练结果是，当G/D都是确定的函数的时候(两个分布是狄拉克分布的时候)它们两个在Global Optimal点上是互为相反值
+  * 本文发现修改了Discriminator能够在不compromiseGenerator的情况下提升性能
+    * Disciminator有三个组件FHJ，F的输入只为X，J的输入只为Z
+  * 实际做分类的时候是先Unlabel的训练一个BigBiGAN，然后Freeze Representation，训练一个Linear Classifier在有label的数据上展开
+
 
 ---
-
-
-
 
 
 ### 2020-03-17 MCMC
@@ -186,8 +237,34 @@ of action marginal distributions
 
 * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20200325231129.jpg)
 * [MoCo](https://link.zhihu.com/?target=https%3A//arxiv.org/pdf/1911.05722.pdf) by Kaiming
+  * 将Contrastive Learning的问题抽象为了一个Dictionary Learning的问题
+    * 维持一个Dict其中有一些Encoding，当进入一个新的Sample的时候，经过这个Encoder，我需要它能从这个Dict中Query出一个与其最类似的Key，这样就有两个问题： 1. dict要足够大 2. Dict要具有一致性
+    * Similarity是用InfoNCE(a kind of contrastive Loss Function)
+    * Dict中的Keys是On-the-fly被定义出来的(Momentum Encoder 给出的结果)
+  * 如何判定是不是同类别？InstanceDiscrimination:
+    * 该Sample与其他的所有图片都是异类，对其本身Aug出的结果认为是同类
+  * Inference的时候后面直接跟一个1层的fc，加一个softmax
+* CPC - CPC通过对多个时间点共享的信息进行编码来学习特征表达，同时丢弃局部信息。这些特征被称为“慢特征”
 
+---
 
+### 2020-03-27 
+
+* 生成模型的几种流派
+  1. AutoRegressive 
+  2. VAE
+  3. GAN
+  4. FLOW（NICE）
+* 都是通过随机噪声来生成数据，在建模分布的时候，都是通过度量噪声与训练数据的分布差异
+* 不同点
+  * VAE的z到x的Dependency是一个随机的过程，而GAN是一个确定的，因而VAE的Inference是Well-Defined，而GAN的就相对病态了
+  * GAN是为了生成新图片，VAE除了这个之外还需要建模数据的分布以及HiddenState
+  * 流模型直接从原始问题出发，直接建模训练数据和生成数据的概率关系，用可逆推的NN来训练，z与x的关系是一一对应的
+  * 最直观的反应是Loss不同
+    * VAE是ELBO(最大似然估计-等价于最小化KL散度-注意KL三度不是在数据和噪声之间的，而是模型的p(x)与数据的p(x)之间的)
+      * ELBO是Likelyhood的Lower Bound
+    * GAN是最小化Jenson-Shannon Divergence，这个也是Model给出的P(x)和数据给出的P(x)之间的(**说人话就是两个Embedding之间的**)
+    * FLOW用的也是最大似然估计，由于用的是可逆的NN
 
 
 
