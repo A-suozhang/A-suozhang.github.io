@@ -1,7 +1,7 @@
 ---
 layout:     post                    # 使用的布局（不需要改）
-title:      Self-Supervised Learning 主动学习           # 标题 
-subtitle:   Tell When to Label   #副标题
+title:      Self-Supervised Learning 自监督           # 标题 
+subtitle:   LeCun　Says it's the future    #副标题
 date:       2020-03-20           # 时间
 author:     tianchen                      # 作者
 header-img:  img/1_28/dawn.jpg  #这篇文章标题背景图片  
