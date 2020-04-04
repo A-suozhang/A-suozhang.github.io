@@ -4,7 +4,7 @@ title:      Paper Stack 文章堆栈           # 标题
 subtitle:   待读的文章和无处安放的文章解读   #副标题
 date:       2020-03-26            # 时间
 author:     tianchen                      # 作者
-header-img:  img/1_28/nantong-7.jpg  #这篇文章标题背景图片  
+header-img:  img/4_1/city2.jpg  #这篇文章标题背景图片  
 catalog: true                       # 是否归档
 tags:                               #标签
      - 心得

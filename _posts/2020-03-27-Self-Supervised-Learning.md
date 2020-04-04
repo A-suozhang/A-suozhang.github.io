@@ -4,7 +4,7 @@ title:      Self-Supervised Learning 自监督           # 标题
 subtitle:   LeCun　Says it's the future    #副标题
 date:       2020-03-20           # 时间
 author:     tianchen                      # 作者
-header-img:  img/1_28/dawn.jpg  #这篇文章标题背景图片  
+header-img:  img/4_1/cat.jpg  #这篇文章标题背景图片  
 catalog: true                       # 是否归档
 tags:                               #标签
      - 综述
