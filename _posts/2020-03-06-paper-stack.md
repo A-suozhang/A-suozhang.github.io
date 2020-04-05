@@ -4,7 +4,7 @@ title:      Paper Stack 文章堆栈           # 标题
 subtitle:   待读的文章和无处安放的文章解读   #副标题
 date:       2020-03-26            # 时间
 author:     tianchen                      # 作者
-header-img:  img/4_1/city2.jpg  #这篇文章标题背景图片  
+header-img:  img/4_1/city_2.jpg  #这篇文章标题背景图片  
 catalog: true                       # 是否归档
 tags:                               #标签
      - 心得
@@ -265,6 +265,12 @@ of action marginal distributions
       * ELBO是Likelyhood的Lower Bound
     * GAN是最小化Jenson-Shannon Divergence，这个也是Model给出的P(x)和数据给出的P(x)之间的(**说人话就是两个Embedding之间的**)
     * FLOW用的也是最大似然估计，由于用的是可逆的NN
+
+---
+
+### 2020-04-05
+
+* ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20200405093121.jpg)
 
 
 

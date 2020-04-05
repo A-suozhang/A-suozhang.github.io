@@ -14,6 +14,8 @@ tags:                               #标签
 
 # LaTex
 
+> Linux下安装```sudo apt-get install texlive-full cjk-latex latex-cjk-chinese```
+
 * 对一个section用```\label{sec:method-grouping}```来指定，在别的地方用```~\ref{sec:method-grouping}```
 * 在cite前面加一个```~```表示小于一个空格的空间
 * 排图片一般默认[ht]，h表示是当前位置，t表示在最上面（指的是下一页的最上面）
@@ -25,7 +27,7 @@ tags:                               #标签
 * [Table相关](https://zhuanlan.zhihu.com/p/19749566)
 * Fig. （大写，加点）
 * 特有名词，比如GPU，以及方法AMC需要大写
-* 两张图并列
+* 两张图并列(注意这种方式两张图标号是a/b，但是如果用```\begin{subfigure}```的话标注就是新的fig)
 
 ``` 
 
