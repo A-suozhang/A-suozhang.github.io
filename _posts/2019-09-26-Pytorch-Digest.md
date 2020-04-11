@@ -2,7 +2,7 @@
 layout:     post                    # 使用的布局（不需要改）
 title:      Understanding&Debugging PyTorch           # 标题 
 subtitle:   火炬心法！        #副标题
-date:       2020-02-12             # 时间
+date:       2020-04-10            # 时间
 author:     tianchen                      # 作者
 header-img:  img/11_30/bg-road1.jpg  #这篇文章标题背景图片  
 catalog: true                       # 是否归档
@@ -196,6 +196,48 @@ tags:                               #标签
       * 实现了getitem和len方法
       * 所以可以被```torch.utils.data.DataLoader```
         * 使用了```torch.multiprocessing```来多线程读取
+  
+  * 实现从多个Dataset同时Load数据
+    1. 构造一个新的DataSet类型
+     
+    ``` py
+    class ConcatDataset(torch.utils.data.Dataset):
+       def __init__(self, *datasets):
+           self.datasets = datasets
+
+       def __getitem__(self, i):
+           return tuple(d[i] for d in self.datasets)
+
+       def __len__(self):
+           return min(len(d) for d in self.datasets)
+
+    train_loader = torch.utils.data.DataLoader(
+                ConcatDataset(
+                    datasets.ImageFolder(traindir_A),
+                    datasets.ImageFolder(traindir_B)
+                ),
+                batch_size=args.batch_size, shuffle=True,
+                num_workers=args.workers, pin_memory=True)
+
+    for i, (input, target) in enumerate(train_loader):
+    ``` 
+
+    2. 比较朴素的做法
+
+    ``` py
+    train_dl1 = torch.utils.data.DataLoader(train_ds1, batch_size=16, 
+                                          shuffle=True, num_workers=8)
+    train_dl2 = torch.utils.data.DataLoader(train_ds2, batch_size=16, 
+                                          shuffle=True, num_workers=8)
+    inputs1, targets1 = next(iter(train_dl1))
+    inputs2, targets2 = next(iter(train_dl2))
+
+    targets1
+    tensor([ 1,  1,  0,  1,  0,  0,  1,  1])
+
+    targets2
+    tensor([ 0,  0,  0,  0,  0,  0,  0,  1])
+    ``` 
 
 ### Layers
 
