@@ -491,9 +491,17 @@ let g:netrw_banner = 0
     * (这个错误貌似和pip版本升级有关)
     * 把pip文件中的 ```from pip import main``` 修改为 ```from pip._internal import main``` 即可
 
+### Ipython对应Python版本的配置
+
+* 首先```which ipython```找到现在ipython的命令对应的是哪个文件
+  * 一般是```/usr/bin/ipython```
+  * 但是其实可能不是...我就改错文件了
+* sudo vim到这个文件,把开头的```#!/usr/local/bin/python3```改成你希望的python路径
+  * 需要的python路径一样可以通过```which python```来获得
+
 
 ## Tmux
-* Tmux-Config
+* Tmux-Config 
 * 解决tmux下的vim配色错误）
   * 用```echo $TERM```如果是screen那就不对，需要改为xterm
   * ```set -g default-terminal "screen-256color"```
