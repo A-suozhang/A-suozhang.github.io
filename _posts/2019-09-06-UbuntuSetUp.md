@@ -238,6 +238,7 @@ sudo apt-get install silversearcher-ag ctags
 ```
 
 3. 源码编译安装Global
+  * 这里可能会因为没有GCC报错，```sudo apt-get install gcc g++ cmake```即可
 
 ```
 sudo apt-get install libncurses5-dev # 插件需要的软件包

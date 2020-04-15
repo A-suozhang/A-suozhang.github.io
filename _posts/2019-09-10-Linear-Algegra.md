@@ -2,7 +2,7 @@
 layout:     post                    # 使用的布局（不需要改）
 title:      重学线性代数 Linear-Algebra             # 标题 
 subtitle:   一个感慨自己本科三年白学了的系列        #副标题
-date:       2019-09-12              # 时间
+date:       2020-04-15              # 时间
 author:     tianchen                      # 作者
 header-img:  img/bg-nmb.jpg  #这篇文章标题背景图片
 catalog: true                       # 是否归档
@@ -10,6 +10,7 @@ tags:                               #标签
     - 重新学习
 ---
 # 起因
+
 * 保研面试需要复习一些科目，对我来说，复习基本就属于重学了，也算从一个不一样的角度入门学
 
 > 给自己几条纲领：：轻证明，重串联 轻定义，重理解 （希望自己能把这个方式Carry Out了）
@@ -100,6 +101,16 @@ $$
 
 ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20190910194807.png)
 
+
+---
+
+* **特殊的矩阵类型**
+  1. 三角阵(Traingular Matrix) - Lower Traingular(All Non-zero element below digonal)
+  2. 对称阵(Symmetric Matrix) - A=A^T (Must be Square to be symmetric) 
+  3. 正交阵(Orthogonal Matrix) - UU^T = I (The Inverse of U being its transpose)
+     * Orthogonal exists between each row (Dot Product of each row is 0) 
+
+
 ## Determinant 行列式
 * 行列式的意义是该空间的基，所构成的平行四边形(平行六面体)的面积(体积)
     * 矩阵或者说线性变换的行列式表示了**空间被挤压，伸缩的情况**
@@ -183,8 +194,13 @@ $$ \begin{bmatrix}{x_1}\\{y_1}\end{bmatrix} \cdot  \begin{bmatrix}{x_2}\\{y_2}\e
 * 特征基 此时Matrix为Diagonal Matrix(只有对角元)
     * 可以自己转 - 这个过程就是**特征值分解 **
 
+* **Eigen Decomposition**
+  * A (nxn Mat with N independent Eigen-Vectors),The EigenVectors compose of P, A=(PDP^-1),D being a Diagnoal values are Eigen-Values
+  * 一个比较重要的推论是 A^N = P(D^N)P
+
         
 
 
 # Refs
 1. [3Blue1Brown's Video](http://www.bilibili.com/video/av6731067?p=1&share_medium=android&share_source=qq&bbid=XY8437382A43059E8474C51AA1E313CA89074&ts=1568085084206)
+2. [CS224W - LinProof]()

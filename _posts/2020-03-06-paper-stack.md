@@ -215,6 +215,50 @@ of action marginal distributions
   * 实际做分类的时候是先Unlabel的训练一个BigBiGAN，然后Freeze Representation，训练一个Linear Classifier在有label的数据上展开
 
 
+* [Convolutional Networks withAdaptive Inference Graphs](https://arxiv.org/pdf/1711.11503.pdf)
+  * 挺有意思的一篇文章，思想是CNN不需要一直FeedForward下去、
+  * 以一个Adaptive Inference Graph的思想
+  * Robustness角度也能更好
+
+* [Learning multiple visual domains with residual adapters](https://arxiv.org/abs/1705.08045)
+* 🔑 Key:    
+  * 通过一个Residue的Adapter，学习多个Task的Share Representation
+* 🎓 Source:  
+  * VGG-Oxford   NIPS2017 
+* 🌱 Motivation: 
+  * 传统的方法对不同的Problem/Data,学习不同的Representation，本文目的是学习一个Representation去处理多个任务
+  * Tunable Network Structure，通过一个Adapter Residue Block，可以对不同dataset on-the-fly的调整  
+* 💊 Methodology:
+  * 对Data-dependent Learning问题，可以抽象为用一个Auxiliary网络来从Input Data，Predict Domain，domain specific的param就可以用一个网络来predict出(相当于去Parameterize这些domain-specific的param)
+  * 本文认为线性的对filter param做parameterization等价于加入一个新的中间层，这样就可以显式的区分开Domain-specific和domain-invariant的feature了
+  * 所以引入了一个Adaptive Residue Block
+    * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20200415131036.png)
+    * 其中\alpha被限定为1x1Conv
+    * 在Adapter1x1Conv之前有一个BN，其scale与bias也是domain-specific的
+    * 对比了一下domain-(in)variant的data比例
+      * 2(h^2C^2+hC)个无关的/2(C^2+5C)个有关的(h是kernel size，一般是3)
+  * 传统的Multi-Domain Learning用finetune的方式会陷入Catastrophic Forgetting
+    * 本文首先在一个大的domain(比如Imagenet)上训练domain-invariant的，然后再只tune domain-specific的
+* 📐 Exps:
+  * Different Visual Tasks
+    * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20200415115730.png)   
+    * FGVC-Aircraft： 100Imagex100Class    
+    * DPes: 50,000 Greyscale Pedestrain [18*36]
+    * DTD: Texture,5640image,47class
+    * GTSR: Traffic sign 43 class
+    * Flower102: 102 Class of Flowers (40-258 image per class)
+    * ILSVRC12: 1k Class, 1.2M
+    * Omniglot: 50 class, 1623 Handwritten character
+    * SVHN: 10 class, 70,000 real world sign
+    * UCF101: action-recog 101 class 113,320 videos（对本文来说，对视频做了Dynamic Image Coding，将整个video encode成了一张图）
+  * Metric是decathlon discipline
+    * (需要在所有task上效果好)
+    * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20200415133227.png)
+* 💡 Ideas:  
+  * Different Domain Share Low/Mid level patterns     
+
+
+
 ---
 
 
