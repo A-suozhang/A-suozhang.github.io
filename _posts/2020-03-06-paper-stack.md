@@ -159,9 +159,6 @@ of action marginal distributions
   * 1） 算法上是否对架构有影响
   * 2） 有一个新的任务，在线处理这些标注数据； 要说明别的任务上的架构不能work
  
-
-
-
 * [Data Efficient Image Recognitio with Contrastive Predictive Coding](https://arxiv.org/pdf/1905.09272v2.pdf) by DeepMind
   * 将Unsupervised领域的Contrastive Predictive Coding的方法改进(revisit)并且加入到Semi当中
   * 目前Semi的ImagenetSOTA / Also work on Det (PASCAL_VOC 2007)
@@ -257,6 +254,211 @@ of action marginal distributions
 * 💡 Ideas:  
   * Different Domain Share Low/Mid level patterns     
 
+---
+
+```
+* 🔑 Key:   
+* 🎓 Source:  
+* 🌱 Motivation: 
+* 💊 Methodology:
+* 📐 Exps:
+* 💡 Ideas: 
+```
+
+
+---
+
+* [Towards Unified INT8 Training for Convolutional Neural Network](http://arxiv.org/abs/1912.12607)
+
+* 🔑 Key:   
+  * Mainly Dealing with the Gradient Quantization
+  * Empirical 4 Rules of Gradient
+  * Theoretical Convergence Bound & 2 Principles
+  * 2 Technique: Directional-Sensitive Gradient Clipping + Deviation Counteractive LR Scaling
+* 🎓 Source:  
+  * CVPR 2020 SenseTime + BUAA
+* 🌱 Motivation: 
+  * ![](https://github.com/A-suozhang/MyPicBed/raw/master//img/20200417205828.png)
+* 💊 Methodology:
+  * Symmetric Uniform Quantization with Stochastic Rounding
+  * Challenged for Quantizing Gradients
+    * Small perturbation would affect **direction**
+    * *Sharp and Wide Distribution（Unlike Weight/Activation）*
+    * Evolutionary: *As time goes on, even more sharp*
+    * *Layer Depth: Closely related to network depth(shallower the layer is, distribution sharper)*
+    * *Special Block: DW Layer, always sharp*
+  * Theoretical Bound afftected by 3 Terms(mainly with Quantization Error & LR & L2-Norm)
+    * Useful Tricks: 1. Min Q Error   2. Scale Down the LR
+  * Directional Sensitive Gradient Clipping
+    * Actually its just plain grad clipping
+    * Find the Clipping Value: Cosine Distance instead of MSE(Avoid the magnitude of grad's effect)
+  * Deviation Counteractive LR Scaling
+    * balance the exponentially accumulated grad error(deviation) by **exponentially decreasing LR accordingly**
+    * ```f(deviation) = max(e^(-\alpha*deviation), \beta)```
+      * \beta controls the lower bound of lr
+      * \alpha controls the decay degree
+  * Stochastic Rounding
+    * curandGenerator
+    * Linear Congruential Generator, yield a sequence of pseudo randomized number
+* 📐 Exps:
+  * ![](https://github.com/A-suozhang/MyPicBed/raw/master//img/20200417212040.png)
+  * ![](https://github.com/A-suozhang/MyPicBed/raw/master//img/20200417212102.png)
+  * ![](https://github.com/A-suozhang/MyPicBed/raw/master//img/20200417212118.png)
+* 💡 Ideas: 
+  * (Found with smaller LR, MobV2 training didn't crash,although perf. decay)
+  * Deviation of grad *exponentially* accumulated since its propagated through layer
+
+
+
+
+* [Improving Neural Network Quantization without Retraining using Outlier Channel Splitting](http://arxiv.org/abs/1901.09504)
+* 🔑 Key:   
+  * Outlier Channel Splitting
+* 🎓 Source:  
+  * Zhiru
+* 🌱 Motivation: 
+  * Post-training quantization follows bell-shaped distribution while hardware could better handle linear
+    * so the outlier becomes a problem
+* 💊 Methodology:
+  * Duplicate Outliers channels, then halves its value \
+  * Similar to 《Net2Net》 Net2WiderNet
+* 📐 Exps:
+* 💡 Ideas: 
+  * ![](https://github.com/A-suozhang/MyPicBed/raw/master//img/20200417213824.png)
+  * Post-Quantization's mainstream，First Clipping，then Sym-Linear-Quan
+    * Activation Clipping - Use Subset of input sample
+    * Earlier work: min L2 Norm of Quantization Error
+    * ACIQ: fits a Gaussian and Laplacian,use the fitting curve analytical compute optimal threshold
+    * SAWB: Linear extrapolate 6 dists
+    * TensorRt: Profile the dist, min the KL Divergence between original and quantized dist
+
+* [DetNAS: Backbone Search for Object Detection](http://arxiv.org/abs/1903.10979)
+* 🔑 Key:   
+  * nas 4 Det backbone
+  * Supernet
+* 🎓 Source:  
+  * Megvii
+* 🌱 Motivation: 
+  * Det often needs imagenet pretraining & NAS requires accuracy as supervised signal
+    * Imagenet-pretraining + Det finetune
+  * Pre-training and finetuning are costly
+    * Following One-shot, decouple the weight training and the architecture
+  * Det task perf. as guide, to search for the Backbone Feature Extractor
+* 💊 Methodology:
+    * Steps: 
+      1. SuperNet Pretrain on ImageNet and finetune on Det Task
+      2. NAS on Supernet with EA
+        * Path-wise(at one time, only updating samples path)
+    * Finetuning BN
+      * Freezing BN(Traditional) wont work for supernet(normalize couldnt acquired at different paths)
+      * SyncBN replace regular BN
+        * Compute BN Statistics across multiple GPUs (save memory consumption)
+      * Also when EA searches arch, each BN param should be independent
+        * need to re-accumulate the BN for every new arch
+    * SS Design
+      * Small/Big (40/20 Blocks)
+        * Small used in Ablation Study
+      * based on ShuffleNetV2 Block(involves channel split and shuffle operation)
+        * 4 Choices:
+        * x3: kernel-size [3,5,7]
+        * x1: replacing right branch with Xception block(3 repeated DW 3x3 Conv)
+        * 4^(40) choices for big ss
+    * EA
+      * Mutation + CrossOver
+      * arch dont meet constraint will be removed when updating
+* 📐 Exps: 
+* 💡 Ideas:
+  * Det's Direction
+    * Architecture: FPN - Top-Down arch with lateral connection, integrating features at all scales
+    * Loss: RetinaNet's Focal Loss, dealing with the class imbalance(Instability in earlier training?)
+    * MetaAnchor: dynamic anchor mechanism
+  * AmeobaNet - plain EA without Controller could also achieve
+  * Det often uses the image classification backbone which could be sub-optimal(DetNet59 > ResNet101)
+  * NAS-FPN only searches for the Feature Pyramid Network
+  * EA could better handle Constraints than RL & Gradient-based 
+  * [SyncBN](https://tramac.github.io/2019/04/08/SyncBN/)
+    * Plain BN with DataParallel - Input distiributed to subsets and build different models on different GPU
+    * (Since independent for each GPU, so batch size actually smallen)
+    * Key2SyncBN: Get the global mean & var
+      * Sync 1st then calc the mean & var
+      * (Simplest implemention is first sync together calc mean, then send it back to calc var) - Sync twice
+      * ![](https://github.com/A-suozhang/MyPicBed/raw/master//img/20200418111031.png)
+        * modify computation flow and only sync once
+    * [Code](https://github.com/tamakoji/pytorch-syncbn)
+  * ------------------------------------------
+  * Rather Small SS
+  * Simple Shared-Weights with interesting handle of BN
+
+
+* [NAS-FPN: Learning Scalable Feature Pyramid Architecture for Object Detection](http://arxiv.org/abs/1904.07392)
+* 🔑 Key:   
+  * Search a FPN(Feature Pyramid Network) in a ss covering all cross-scale connections
+* 🎓 Source:
+  * Quoc V Le Google  
+* 🌱 Motivation: 
+  * Huge design space(increase exponentially)
+* 💊 Methodology:
+  * Following Cell-based SS(author called it as scalable architecture), main contribution is designing **search space**
+    * the SS is **modular**  (Repeat the FPN N times then concat into a large net)
+  * RNN RL Controller
+  * ![](https://github.com/A-suozhang/MyPicBed/raw/master//img/20200418171859.png)
+  * Feature Pyramid Network
+    * (following RetinaNet, use last layer in each group of feature map as *the input of the FPN*)
+    * 5 Scales(C_{3,4,5,6,7}) stride of 8/16/32/64/126 pixel（6,7 purely max-pooling of 5） for Merging Cell
+    * Composed of multiple merging cells  
+    * Input/Output same size - can be stacked (num to stack would control the acc/flops trade-off)
+    * Each merging cell gives output are appended into the candidate layers, also feeds into next merging cell
+      * Finally the 5 merging cells are output 
+  * Merging Cell
+    * basic element of FPN
+    * Merging 2 input feature map of different size
+    * Each Cell has its own resolution(the output)
+    * 4 Step: 
+      1. choose input-layer-1 
+      2. choose input-layer-2 
+      3. choose output feature resolution
+      4. select binary op(add or maxpool) - (scales are handles b4 the binary op)
+  * ![](https://github.com/A-suozhang/MyPicBed/raw/master//img/20200418173400.png)
+  * Meshgrid Representation
+    * ![](https://github.com/A-suozhang/MyPicBed/raw/master//img/20200418173458.png)
+* 📐 Exps:
+  * Scalable: Stacking NAS-FPN blocks could improve acc while stacking simple block couldnt
+* 💡 Ideas:
+  * FPN - fuse features across different scales (cross-scale connection in ConvNets)
+    * Deeper layer feature semantically strong but less resolution, are upsampled and added with lower-representation for feature with both good semantic and resolution  
+    * sequentially combining 2 adjacent layer feature (with top-down/lateral connection)
+    * RW
+      1. [Path aggregationnetwork for instance segmentation. In CVPR, 2018.]() - add an additional bottom-up pathway
+      2. [M2det: A single-shot object detector based on multi-level feature pyramid network. AAAI, 2019.]() - Multiple U-shaped Modules
+      3. [Deep feature pyramid reconfiguration for object detection. In ECCV, 2018]() - Combine features at all scale + Global attention
+    * Problem: manually designed and shallow(compared to backbone)
+  * Any-time detection: dont necessarily need to forward all pyramid networks
+    * Desired when computation effort is concern
+  * ----------------------------------------------------------------------------------
+  * Google's Work, really strange Hyper-param（lr-0.08/8 epochs training） (Maybe Grid-Search Again?)
+
+
+* [EfficientDet: Scalable and Efficient Object Detection](http://arxiv.org/abs/1911.09070)
+* 🔑 Key:   
+	* Systematically NAS for Det Task
+  * Combining EfficientNet Backbone + Bi-FPN + Compound Scaling
+* 🎓 Source:  
+	* Quo V Le Google Brain
+* 🌱 Motivation: 
+	* Weighted Bi-directional FPN - for multi-scale feature fusion (Better Feature Aggregation)
+	* Compound Scaling method - uniformly scale the resolution/depth/width (Scalable)
+* 💊 Methodology:
+  * ![](https://github.com/A-suozhang/MyPicBed/raw/master//img/20200418223126.png)
+  * the "BiFPN", analogy of FPN & PANet
+    * from traditional "Top-down" structure(1-way information flow)
+    * Adding an extra edge when I/O is at the same level
+    * remove node with only one input edge 
+    * Adding Weighted Feature Fusion - like Attention
+    * exponential scale up BiFPN width
+    * ![](https://github.com/A-suozhang/MyPicBed/raw/master//img/20200418220047.png){:height="100" width="100"}
+* 📐 Exps:
+* 💡 Ideas:
+  * One-Stage Det: (Anchor-Free) whether have a region proposal step
 
 
 ---

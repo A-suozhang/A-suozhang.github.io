@@ -64,6 +64,9 @@ tags:                               #标签
 * compelling 引人瞩目的
 * consolidate 巩固
 * coincide 一致
+* deviation 误差
+* counteractive 抵消
+* need-demand-requirement-desire 需求
 
 ### 常用短语
 
@@ -75,6 +78,8 @@ tags:                               #标签
 * be prone to 有倾向
 * put forward
 * deem to 认为
+* sth. degree (Lr decay degree)
+* engage/involve with 涉及
 
 
 ### 常用语句

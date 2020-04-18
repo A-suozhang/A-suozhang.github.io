@@ -33,3 +33,21 @@ tags:                               #标签
 * Adaptive BN
     * 通过将均值方差修改为实际Domain的均值和方差，就可以完成Domain Adaptation
 
+
+## [SyncBN](https://tramac.github.io/2019/04/08/SyncBN/)
+
+> 解决了高显存占用模型(输入分辨率高)无法拥有大Batchsize的问题
+
+* Plain BN with DataParallel - Input distiributed to subsets and build different models on different GPU    
+    * 默认的形式是先将数据分组，然后在各个卡上独立完成前向与后向
+    * ![](https://github.com/A-suozhang/MyPicBed/raw/master//img/20200418113212.png)
+* (Since independent for each GPU, so batch size actually smallen)
+* Key2SyncBN: Get the global mean & var
+    * Sync 1st then calc the mean & var
+    * (Simplest implemention is first sync together calc mean, then send it back to calc var) - Sync twice
+    * ![](https://github.com/A-suozhang/MyPicBed/raw/master//img/20200418111031.png)
+    * modify computation flow and only sync once        
+    * 每张卡先做好Sum(x/x^2)传到其他卡，收集到所有的卡的信息之后做一个加和再进行运算
+        * 直观想通信压力会大很多，吞吐量和同步都会存在
+* [Code](https://github.com/tamakoji/pytorch-syncbn)
+* [Explanation of Back-prop](https://kevinzakka.github.io/2016/09/14/batch_normalization/)
