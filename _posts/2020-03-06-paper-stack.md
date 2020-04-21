@@ -2,7 +2,7 @@
 layout:     post                    # 使用的布局（不需要改）
 title:      Paper Stack 文章堆栈           # 标题 
 subtitle:   待读的文章和无处安放的文章解读   #副标题
-date:       2020-03-26            # 时间
+date:       2020-04-21            # 时间
 author:     tianchen                      # 作者
 header-img:  img/4_1/city_2.jpg  #这篇文章标题背景图片  
 catalog: true                       # 是否归档
@@ -460,7 +460,93 @@ of action marginal distributions
 * 💡 Ideas:
   * One-Stage Det: (Anchor-Free) whether have a region proposal step
 
+---
 
+* [Learning to Remember: A Synaptic Plasticity Driven Framework for Continual Learning](http://arxiv.org/abs/1904.03137)
+* CVPR2019
+* Arch:
+  * Conditional GAN with learnable neural masking
+    * During SGD Add Mask on Layer/weight
+    * ![](https://github.com/A-suozhang/MyPicBed/raw/master//img/20200420174733.png)
+
+* [Lifelong Learning with Dynamically Expandable Networks](http://arxiv.org/abs/1708.01547)
+* ICLR2018
+* Arch:
+  * Add Neurons by heuristic rule(Add and re-intialize new neurons)
+
+* [An Adaptive Random Path Selection Approach for Incremental Learning](http://arxiv.org/abs/1906.01120)
+* NIPS2019
+  * Dynamic adaptive path selection
+  * Attention-based on Peak Path Response
+    * Paths Re-weighted with new task 
+  * ![](https://github.com/A-suozhang/MyPicBed/raw/master//img/20200420185856.png)
+
+* [Memory Aware Synapses: Learning what (not) to forget](http://arxiv.org/abs/1711.09601)
+* ECCV 2018
+  * Memory-Aware Synapses: Marking the parameter of a NN online and unsupervised
+
+* [IL2M: Class Incremental Learning With Dual Memory](https://ieeexplore.ieee.org/document/9009019/)
+* ECCV 2019
+* Dual Memory 1. for examplers 2. initial class statistics(class predictions) - used for rectify the classification(deal with imbalance)
+
+* [Piggyback: Adapting a Single Network to Multiple Tasks by Learning to Mask Weights](http://arxiv.org/abs/1801.06519)
+* ECCV 2018
+  * Learn Multi-task Masks  
+  * Task-specific loss train the soft threshold
+    * one mask per task
+  * ![](https://github.com/A-suozhang/MyPicBed/raw/master//img/20200420192129.png)
+
+* [Learn to Grow: A Continual Structure Learning Framework for Overcoming Catastrophic Forgetting](http://arxiv.org/abs/1904.00310)
+* ICML 2019
+  * decouple the arch learning and param learning
+  * Growing the network-NAS-like DARTs
+    * Search for block (new/reuse/adaption)
+  * ![](https://github.com/A-suozhang/MyPicBed/raw/master//img/20200420202125.png) 
+
+* [Efficient Lifelong Learning with A-GEM](http://arxiv.org/abs/1812.00420)
+* ICLR2019
+  * Evaluating Efficecny of lifelong learning methods (metric for measuring how quickly learning)
+  * Improve the original GEM(Gradient Episodic Memory)
+    * Distribute an episode memory
+  * mainly discussed why other methods fail to fitting the "Lifelong Learning" because not dealing with a single pass of the stream of data
+
+
+* [Learning without Memorizing](http://arxiv.org/abs/1811.08051)
+* CVPR2019 2019
+  * no stroing data sample for old task
+  * change in classifier attention map for old tasks
+  * ![](https://github.com/A-suozhang/MyPicBed/raw/master//img/20200420204205.png)
+
+* [Lifelong Learning with Searchable Extension Units](http://arxiv.org/abs/2003.08559)
+
+* 🔑 Key:  
+  * * Lifelong Learning predefine arch, this method search for extension model
+* 🎓 Source:
+  * arxiv 2003 & ZJU 
+* 🌱 Motivation: 
+  * Summarize the lifelong learning
+    1. Fix methods: retaining data information of previous task
+      * Often encounter capacity bottleneck
+    2. Expansion Methods: 
+      * Newly added params are added, though the old are frozen or regularized
+      * Then re-train whole/subnet for new task
+      * May Increase rapidly(redundant)
+      * Also added elements are constrained to be the same with the previous
+* 💊 Methodology:
+  * Contains: 1. Unit Searcher   2. Task model creator
+    * Super Model(Contain Multihead model)
+    * Task Model(Part of the super model,all has the same layer)
+    * Each task has task-specific output layer, other layer are shared (composed of many EUs)
+  * Proceudre （seems pretty plain for NAS...）
+    1. Search EU - in current task
+    2. Expand the SuperModel: adding EU in each intermediate layer
+    3. Create Task Model: Select the best EUs(part)
+    4. Train the task model, train the net
+  * ![](https://github.com/A-suozhang/MyPicBed/raw/master//img/20200420213758.png)
+  * ![](https://github.com/A-suozhang/MyPicBed/raw/master//img/20200420215011.png)
+* 📐 Exps:
+* 💡 Ideas: 
+  * new metric named mixed score: measuring both param size and accuracy of the life learning problem
 ---
 
 

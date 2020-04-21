@@ -2,7 +2,7 @@
 layout:     post                    # 使用的布局（不需要改）
 title:      Understanding&Debugging PyTorch           # 标题 
 subtitle:   火炬心法！        #副标题
-date:       2020-04-10            # 时间
+date:       2020-04-21            # 时间
 author:     tianchen                      # 作者
 header-img:  img/11_30/bg-road1.jpg  #这篇文章标题背景图片  
 catalog: true                       # 是否归档
@@ -563,8 +563,6 @@ target = torch.Tensor([1,1])
     * 这个里面的内容是自己打包的,可以选择
   * 读取pth出来的net是一个OrderedDict
 
-
-
 ### Tensorboard
 * [一个教程](https://www.pytorchtutorial.com/pytorch-builtin-tensorboard/)
 * ~~```from torch.utils.tensorboard import SummaryWriter```~~
@@ -581,6 +579,99 @@ target = torch.Tensor([1,1])
 * 在代码中将数据丢到多卡的第一张(controler)上
 * 实际运行的时候每个batch被**平分**到多张卡上
   * 最后的Loss和G都x4了(当然在求的时候也平均了,所以相当于就是用了一个大Batch)
+
+### Hook
+
+> 用来监控或者获得中间结果，像插入了一个probe 
+> 参考了[Understanding Hooks](https://blog.paperspace.com/pytorch-hooks-gradient-clipping-debugging/)
+
+* 注意需要经过整个backward pass才能获得中间的梯度
+
+* Forward hook for Visualizing Activation
+
+``` py
+net = myNet()
+visualisation = {}
+
+def hook_fn(m, i, o):
+  visualisation[m] = o 
+
+def get_all_layers(net):
+  for name, layer in net._modules.items():
+    #If it is a sequential, don't register a hook on it
+    # but recursively register hook on all it's module children
+    if isinstance(layer, nn.Sequential):
+      get_all_layers(layer)
+    else:
+      # it's a non sequential. Register a hook
+      layer.register_forward_hook(hook_fn)
+
+get_all_layers(net)
+
+  
+out = net(torch.randn(1,3,8,8))
+
+```
+
+* Backward Hook for NN module
+  * Backward Hook 在loss.backward()的过程中被调用
+
+``` py
+
+net = myNet()
+
+def hook_fn(m, i, o):
+  print(m)
+  print("------------Input Grad------------")
+
+  for grad in i:
+    try:
+      print(grad.shape)
+    except AttributeError: 
+      print ("None found for Gradient")
+
+  print("------------Output Grad------------")
+  for grad in o:  
+    try:
+      print(grad.shape)
+    except AttributeError: 
+      print ("None found for Gradient")
+  print("\n")
+net.conv.register_backward_hook(hook_fn)
+net.fc1.register_backward_hook(hook_fn)
+inp = torch.randn(1,3,8,8)
+out = net(inp)
+
+(1 - out.mean()).backward()
+
+```
+
+* Hook for Params/Middle Tensor
+  * 对Tensor(Variable)进行Register Hook，返回的是单个参数(就是它的grad，因为不是叶子节点的梯度会被释放掉 )
+  * 对于Module可以register_input/output_hook 输入是(m,i,o) 
+    * 其中如果module有多个param的话backward的i/o可能是list
+    * 对module的forward hook则是单输入，单输出(在我们的实验里输入是一个单元素tuple，但是输出是一个)
+
+``` py
+
+def forward(self, x):
+  x = self.relu(self.conv(x))
+  x.register_hook(lambda grad : torch.clamp(grad, min = 0))     #No gradient shall be backpropagated 
+                                                                #conv outside less than 0
+  # print whether there is any negative grad
+  x.register_hook(lambda grad: print("Gradients less than zero:", bool((grad < 0).any())))  
+  return self.fc1(self.flatten(x))
+
+---
+
+for name, param in net.named_parameters():
+  # if the param is from a linear and is a bias
+  if "fc" in name and "bias" in name:
+    param.register_hook(lambda grad: torch.zeros(grad.shape))
+
+
+```
+
 
 # Some Resoueces
 
