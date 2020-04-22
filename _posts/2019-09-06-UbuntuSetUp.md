@@ -590,6 +590,10 @@ Host *.eva*
   * nc表示这个是中间跳板(~~不要停下来啊~~)
 * [Multi](https://www.cyberciti.biz/faq/linux-unix-ssh-proxycommand-passing-through-one-host-gateway-server/)
 * ```scp FILE ztc.eva0:~/```
+* 在服务器上进行Jupyter的端口映射
+  * 在登陆时候指定比如 ```ssh -L 8888(Local Port):localhost:6006(Remote Port) ztc.eva0``` 将远程服务器端口映射到本机8888
+  * 在服务器上用6006端口启动Jupyter
+  * 如果Jupyter的版本错了，可以先```which jupyter```然后将对应的位置建立软连接到我们想要的```ln -s SOURCE_FILE TARGET_FILE```
 
 ### Docker
 * 3个基本概念： 
