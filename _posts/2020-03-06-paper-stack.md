@@ -549,6 +549,17 @@ of action marginal distributions
   * new metric named mixed score: measuring both param size and accuracy of the life learning problem
 ---
 
+* [ResNeSt: Split-Attention Networks](https://hangzhang.org/files/resnest.pdf)
+
+* 🔑 Key:   
+* 🎓 Source:  
+* 🌱 Motivation: 
+* 💊 Methodology:
+* 📐 Exps:
+* 💡 Ideas: 
+
+---
+
 
 ### 2020-03-17 MCMC
 

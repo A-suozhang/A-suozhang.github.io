@@ -513,6 +513,9 @@ target = torch.Tensor([1,1])
   * 参考了[这个讨论](https://discuss.pytorch.org/t/creating-tensors-on-gpu-directly/2714),这时候更好的办法是**直接在GPU上生成这些小Tensor**
   * 对zeros/ones直接用```torch.cuda.FloatTensor(x.shape).fill_(1.)```
   * 对于random来说 ```torch.rand/randn([3,3]) == torch.cuda.FloatTensor(x.shape).uniform_/normal_()```
+* 对Tensor的多个分组执行类似操作的时候，用for循环拆分，操作，再组合**没有利用到并行度，很慢**(List Comprehension也一样慢)
+  * 应该活用Broadcast！
+  * 比如我需要对一个[3,3]的矩阵除以一个[1,3]的tensor，那么按照维度将[1.3]其展开为[3,3]再做element-wise操作
 
 #### 尺度变化
 
@@ -529,6 +532,7 @@ target = torch.Tensor([1,1])
       * **这种做法必须向后对齐,很神奇**
 * 当我想制作一个fake data的时候 ```[Batch, Channel, W, H]```
   * 拓展数据,使用```tensor.expand([1,1,3,3])``` 
+    * 或者是```torch.unsqueeze($SOME_DIM)```
   * 或者是使用```torch.stack([x,x,x], dim = 0)```
     * stack会直接新建一个维度,而cat则不会
     * 比如```[1,2,2]```做一个```torch.stack([x,x], dim = 2)``` 
