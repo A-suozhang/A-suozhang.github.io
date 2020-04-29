@@ -552,11 +552,52 @@ of action marginal distributions
 * [ResNeSt: Split-Attention Networks](https://hangzhang.org/files/resnest.pdf)
 
 * 🔑 Key:   
+  * New backbone for det & semantic-seg
+  * Split Attention across feature map groups (within a block)
+    * A new ResNet Cell 
 * 🎓 Source:  
 * 🌱 Motivation: 
+  * A new resnet cell, plug and play with ResNet
+    * help the downstream tasks(like Det or Seg)
+    * ![](https://github.com/A-suozhang/MyPicBed/raw/master//img/20200428085217.png)
+  * ResNet are meant for Image Classification - focus on depthwise & group-wise conv, howerer for downstream task, cross channel information are ctitical
+    * Small reception field, no cross-channel interaction
+  * create a versatile backbone with universally improved feature representation
 * 💊 Methodology:
+  * ![](https://github.com/A-suozhang/MyPicBed/raw/master//img/20200428090121.png)
+  * Feature maps into groups(num of group is cardinality)
+    * Radix as the split within a group
+  * Split Attention
+    * element-wise sum across multiple splits
+    * H，W average pooling for gathering global contextual information
+    * Channel-wise weighted soft fusion
+    * ![](https://github.com/A-suozhang/MyPicBed/raw/master//img/20200428091033.png)
+    * finally for groups, concat them
+    * split block output with a shortcut
+      * if stided, add another transformation with the output
+  * Related with other attention methods
+    * SE(Squueze and activation) use global context to predict channel-wise attention factor
+      * when r=1（radix）ResNest is SENet, only difference is 
+      * SE employed on the whole block regardless of groups, ResNest applied on each group
+    * SKNet feature fusion between network branches
+      * (author says that is could be low efficient and hard to caling to larger groups)
 * 📐 Exps:
+  * 3x3 Max pooling instead of strided conv
+  * All the training tricks(a little-bit concerned, we could employ these though)
 * 💡 Ideas: 
+  * SENet
+    * Channel-wise aggregation for the global context, then learn a set of weights
+      * The excitation is actually an fc
+    * ![](https://github.com/A-suozhang/MyPicBed/raw/master//img/20200428092523.png)
+    * ![](https://github.com/A-suozhang/MyPicBed/raw/master//img/20200428092638.png)
+  * SKNet
+    * Split - Fuse - Select
+      * two group conv branches with different kernel size
+      * Fuse is a squeeze and excitation block
+      * 2 softmax to get the channel weights, multiplying them, then added   
+    * ![](https://github.com/A-suozhang/MyPicBed/raw/master//img/20200428093221.png)
+    * Sacrifice a little flops for better perf.
+      * Combine Attention with larger kernel
 
 ---
 
