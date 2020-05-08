@@ -1,8 +1,8 @@
 ---
 layout:     post                    # 使用的布局（不需要改）
-title:      Object Detection简述              # 标题 
+title:      LPCV20比赛准备 / Object Detection简述              # 标题 
 subtitle:   看看这一年目标检测领域又背着我发展了多少(雾)        #副标题
-date:       2019-10-13              # 时间
+date:       2020-05-07             # 时间
 author:     tianchen                      # 作者
 header-img:  img/bg-neon.jpg  #这篇文章标题背景图片
 catalog: true                       # 是否归档
@@ -10,7 +10,127 @@ tags:                               #标签
     - DL
     - 综述
 ---
-# Object Detection
+
+# 比赛TODO
+
+> 需要做的东西还真不少
+
+* 目前主要需要做的是去完成、Pytorch - TF - Tflite一套工具链
+    1. 编译安装tf与bazel
+    2. tflite的使用
+    3. 模型转换工具
+* 还有定点上不知道有没有什么空间
+
+* TODO：
+    1. 编译tf  (Finished)
+    2. 安装android studio
+        * 编译apk
+    3. 跑起来EfficientDet
+        * COCO Dataset  
+    4. 正常走完android开发的块速流程
+
+
+
+# Tflite工具链的安装流程
+
+> 充满血与泪的一周多，tf这东西真不是人用的，主要内容填写在[Git issue](https://github.com/A-suozhang/my-debug-record/issues/11)当中
+
+* 主线是[OVIC Benchmarker for LPCV 2020](https://github.com/tensorflow/tensorflow/tree/master/tensorflow/lite/java/ovic)
+
+
+0. PIP安装TF
+    1.1 [tf-2.1版本在import的时候出现问题](https://github.com/tensorflow/tensorflow/issues/35968)
+    1.2 Downgrade 2 tensorflow 2.0 via ```pip install tensorflow-gpu==2.0.0```
+
+* 其中的prequisite部分指引向
+
+1. 从头开始编译TF
+    * 由于TFlite需要build from source
+    * 主要参考了[tf官方的版本](https://www.tensorflow.org/install/source)
+    * 主要遇到的阻力是网络问题
+        * 由于遇到了需要下墙外的资源的问题，由于bazel需要通过建立localhost，所以直接用proxychains搭配ss不能正常安装
+        * 首先给git配置代理 ```git config --global http.proxy socks5://127.0.0.1:10808```
+            * 然而到了之后这个还是不起作用，反而需要改动
+            * (另外一种改变git config的方法是在```~/.gitconfig```)
+        * 我们实际需要的是http代理，而socks并不能提供该种代理，所以使用了privoxy
+            * [Privoxy的配置教程](https://docs.lvrui.io/2016/12/12/Linux%E4%B8%AD%E4%BD%BF%E7%94%A8ShadowSocks-Privoxy%E4%BB%A3%E7%90%86/)
+            * 首先```sudo apt-get install privoxy```
+            * 编辑 ```sudo vim /etc/privoxy/config```
+                * 搜索```listen-address```保证```listen-address 127.0.0.1:8118```存在，将来的http代理将在8118端口
+                * 将``` #forward-socks5t / 127.0.0.1:1080 .```接触注释(注意结尾的“.”)
+            * 重启Privoxy
+                * ```systemctl restart privoxy```
+                * ```systemctl enable privoxy```
+            * 在```~/.bashrc```中添加
+                * ```export http_proxy=http://127.0.0.1:8118```
+                * ```export https_proxy=https://127.0.0.1:8118```
+        * 用```curl www.google.com``` 来测试是否成功
+        * 注意改完之后git的config也要改过来，```git config --global https.proxy https://127.0.0.1:8118```
+    1.1 开始安装一些初步的 
+        * ```sudo apt install python-dev python-pip```
+        * ```pip install -U --user pip six numpy wheel setuptools mock 'future>=0.17.1'```
+        * ```pip install -U --user keras_applications --no-deps```
+        * ```pip install -U --user keras_preprocessing --no-deps```
+    1.2 安装bazel
+        * 查看需要的bazel版本，查看tf源码目录下的```configure.py```
+        * 在[Release界面直接下载.sh](https://docs.bazel.build/versions/master/install-ubuntu.html)
+        * 运行```xxx.sh --user```
+        * 在bashrc中添加```export PATH="$PATH:$HOME/bin"```
+    1.3 编译Source Code
+        * ```git clone https://github.com/tensorflow/tensorflow.git``` 
+        * ```git checkout r1.15```
+        * ```./configure```
+            * 请完成sec2.1再调用此行
+            * 这里实际上需要葱figure好android再执行
+        * ```bazel build --config=v1 --config=opt //tensorflow/tools/pip_package:build_pip_package```
+        * (希望确实是能够work的)
+    * ```./bazel-bin/tensorflow/tools/pip_package/build_pip_package /tmp/tensorflow_pkg```
+    * ```pip install /tmp/tensorflow_pkg/tensorflow-version-tags.whl```
+
+
+* 我不知道是否需要手动安装，但是我现在的jdk版本是```11.0.7```，应该可以直接apt安装获得
+
+2. [配置android](https://www.tensorflow.org/lite/guide/android)
+    * [下载ndk](https://developer.android.com/ndk/downloads/older_releases.html#ndk-17c-downloads)
+    * [通过android studio安装sdk]()
+    * 在1.3的```./configure```中指定SDK/NDK Path
+    * 讲道理下面的指令就可以编译了
+        * ```bazel build -c opt --fat_apk_cpu=x86,x86_64,arm64-v8a,armeabi-v7a \ --host_crosstool_top=@bazel_tools//tools/cpp:toolchain \  //tensorflow/lite/java:tensorflow-lite```
+    * 将在```bazel-bin/tensorflow/lite/java/```生成了aar文件，将其复制到android项目中并修改```build.gradle```
+    * (其实这一步我真的不清楚到底如何起效果，而且看上去好像是删除了两行android依赖才完成的最后的编译，所以成功性存疑)
+
+3. Follow [Ovic Guide](https://github.com/tensorflow/tensorflow/tree/master/tensorflow/lite/java/ovic) 然后测试一系列东西
+    * 从一开始的validate，到生成最后的apk
+        * ```curl -L https://storage.googleapis.com/download.tensorflow.org/data/ovic_2019_04_30.zip -o /tmp/ovic.zip```
+            * 用来测试的```.lite```文件可以在这个文件夹中获取
+        * 如果要利用自己的模型，需要从tf的ckpt开始
+            1. 利用4步骤中完成的export_ssd_graph来从ckpt文件中获取frozen_graph.pb文件
+            2. 利用tf编译产生的bazel-bin中的tflite-convert从上一步的pb文件中生成.lite文件用作提交与测试
+    
+
+* TFLite
+    * [Example Kerasflow+Lite](https://github.com/tensorflow/tensorflow/blob/master/tensorflow/lite/micro/examples/hello_world/create_sine_model.ipynb)
+    * 分为
+        * interpreter - specially optimized for certain device platform
+            * device-optimzied kernel
+            * pre-fused activation/bias
+        * converter - convert the tf model for interpreter
+    * [Get Started](https://www.tensorflow.org/lite/guide/get_started)
+    * [Converter只支持以下op](https://www.tensorflow.org/lite/guide/ops_compatibility)
+    * 4 Type
+        * Post-Training Dynamic Range quantize
+            * Float Scale
+        * Post-Training Integer Quatize
+        * Post-Training float 16 
+* [OVIC-guide](https://github.com/tensorflow/tensorflow/tree/master/tensorflow/lite/java/ovic)
+* [Install and build tflite](https://www.tensorflow.org/lite/guide/android)
+
+
+
+
+
+# Object Detection 综述
+
 * 从去年这个时候做SSD-FPGA之后，就没怎么关注过这一块了，在DL中一年不关注一个领域的发展可见一斑（特别还是Detection这么火的一个领域），来补课了
 * 文章来自于[Arxiv](https://arxiv.org/abs/1905.05055)又看的[zhihu](https://zhuanlan.zhihu.com/p/72838705)的翻译版，我自己再夹杂一些私货，算是二次咀嚼了，~~反刍（不是)~~
 

@@ -87,9 +87,15 @@ tags:                               #标签
 ``` bash
 sslocal -c PATH_TO_YOUR_SHADOWSOCKS_JSON (~/shadowsocks.json)
 ```
+
 * 可能会出现问题 ```AttributeError: /usr/local/ssl/lib/libcrypto.so.1.1: undefined symbol: EVP_CIPHER_CTX_cleanup```
+  * 如果用pip3安装ss就会出现这个问题
   * 参考[这个博客的解决方案](https://kionf.com/2016/12/15/errornote-ss/)
   * 我们实际的路径可能是 ```./.local/lib/python3.6/site-packages/shadowsocks/crypto```
+
+
+
+
 
 1. Chrome配置
 * 在[Chrome应用商店](https://chrome.google.com/webstore/)中安装Switchy Omega
@@ -217,7 +223,8 @@ sslocal -c PATH_TO_YOUR_SHADOWSOCKS_JSON (~/shadowsocks.json)
 ## Trouble Shooting
 * 硬盘识别不出来```Mount error: “unknown filesystem type 'exfat'”```
   * ```sudo apt-get install exfat-fuse exfat-utils```
-
+* Ubuntu与Win双系统时候时间崩坏
+  * ```sudo vim /etc/default/rcS```将UTC yes改成no
 
 ## Vim Set Up
 

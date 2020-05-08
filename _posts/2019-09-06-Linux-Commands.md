@@ -208,6 +208,22 @@ tags:
   * 查看连接的指向
 * 查看目录的磁盘占用 ```du -sh```
 	* s的作用是不让子目录也输出
+* privoxy
+    * [Privoxy的配置教程](https://docs.lvrui.io/2016/12/12/Linux%E4%B8%AD%E4%BD%BF%E7%94%A8ShadowSocks-Privoxy%E4%BB%A3%E7%90%86/)
+    * 首先```sudo apt-get install privoxy```
+    * 编辑 ```sudo vim /etc/privoxy/config```
+        * 搜索```listen-address```保证```listen-address 127.0.0.1:8118```存在，将来的http代理将在8118端口
+        * 将``` #forward-socks5t / 127.0.0.1:1080 .```接触注释(注意结尾的“.”)
+    * 重启Privoxy
+        * ```systemctl restart privoxy```
+        * ```systemctl enable privoxy```
+    * 在```~/.bashrc```中添加
+        * ```export http_proxy=http://127.0.0.1:8118```
+        * ```export https_proxy=https://127.0.0.1:8118```
+    * 用```curl www.google.com``` 来测试是否成功
+* git config
+    * ```git config --global http.proxy socks5://127.0.0.1:10808```
+    * 在```~/.gitconfig```
 
 
 ---
