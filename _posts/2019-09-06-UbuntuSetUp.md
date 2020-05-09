@@ -92,6 +92,9 @@ sslocal -c PATH_TO_YOUR_SHADOWSOCKS_JSON (~/shadowsocks.json)
   * 如果用pip3安装ss就会出现这个问题
   * 参考[这个博客的解决方案](https://kionf.com/2016/12/15/errornote-ss/)
   * 我们实际的路径可能是 ```./.local/lib/python3.6/site-packages/shadowsocks/crypto```
+* 默认安装的ss版本比较低，不能支持```gcm```的加密方式
+  * 用```sudo pip install https://github.com/shadowsocks/shadowsocks/archive/master.zip -U```更新到3.0
+  * ```sslocal --version```检查
 
 
 
@@ -166,6 +169,23 @@ sslocal -c PATH_TO_YOUR_SHADOWSOCKS_JSON (~/shadowsocks.json)
     * Proxy模式开启V2Ray就能够正常运行了
 6. proxychains的配置也要做对应修改，修改本地端口
 
+### privoxy
+* (在eva服务器上挂代理会影响tunet的登录，先把http(s)_proxy设置为空再tunet)
+* [Privoxy的配置教程](https://docs.lvrui.io/2016/12/12/Linux%E4%B8%AD%E4%BD%BF%E7%94%A8ShadowSocks-Privoxy%E4%BB%A3%E7%90%86/)
+* 首先```sudo apt-get install privoxy```
+* 编辑 ```sudo vim /etc/privoxy/config```
+    * 搜索```listen-address```保证```listen-address 127.0.0.1:8118```存在，将来的http代理将在8118端口
+    * 将``` #forward-socks5t / 127.0.0.1:1080 .```接触注释(注意结尾的“.”)
+* 重启Privoxy
+    * ```systemctl restart privoxy```
+    * ```systemctl enable privoxy```
+* 在```~/.bashrc```中添加
+    * ```export http_proxy=http://127.0.0.1:8118```
+    * ```export https_proxy=https://127.0.0.1:8118```
+* 用```curl www.google.com``` 来测试是否成功
+* git config
+    * ```git config --global http.proxy socks5://127.0.0.1:10808```
+    * 在```~/.gitconfig```
 
 
 

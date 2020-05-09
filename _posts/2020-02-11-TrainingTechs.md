@@ -4,7 +4,7 @@ title:      Training Techniques           # 标题
 subtitle:   炼丹工人的基本修养   #副标题
 date:       2020-02-06            # 时间
 author:     tianchen                      # 作者
-header-img:  img/4_1/city.jpg  #这篇文章标题背景图片  
+header-img:  img/5_1/wf-3.jpg  #这篇文章标题背景图片  
 catalog: true                       # 是否归档
 tags:                               #标签
      - 心得

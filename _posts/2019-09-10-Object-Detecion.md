@@ -4,7 +4,7 @@ title:      LPCV20比赛准备 / Object Detection简述              # 标题
 subtitle:   看看这一年目标检测领域又背着我发展了多少(雾)        #副标题
 date:       2020-05-07             # 时间
 author:     tianchen                      # 作者
-header-img:  img/bg-neon.jpg  #这篇文章标题背景图片
+header-img:  img/5_1/laptop.jpg  #这篇文章标题背景图片
 catalog: true                       # 是否归档
 tags:                               #标签
     - DL
@@ -106,7 +106,16 @@ tags:                               #标签
         * 如果要利用自己的模型，需要从tf的ckpt开始
             1. 利用4步骤中完成的export_ssd_graph来从ckpt文件中获取frozen_graph.pb文件
             2. 利用tf编译产生的bazel-bin中的tflite-convert从上一步的pb文件中生成.lite文件用作提交与测试
-    
+
+4. 安装tensorflow-models
+    * Clone the repo
+    * [Follow the Det API installation guide](https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/installation.md)
+        * noted that please use tf1.X for the det model
+
+---
+
+* check tensorflow version ```tf.__version__()```
+* check tensorflow is_cuda ```tf.test.is_built_with_cuda() ```
 
 * TFLite
     * [Example Kerasflow+Lite](https://github.com/tensorflow/tensorflow/blob/master/tensorflow/lite/micro/examples/hello_world/create_sine_model.ipynb)

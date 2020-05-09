@@ -209,6 +209,7 @@ tags:
 * 查看目录的磁盘占用 ```du -sh```
 	* s的作用是不让子目录也输出
 * privoxy
+    * (在eva服务器上挂代理会影响tunet的登录，先把http(s)_proxy设置为空再tunet)
     * [Privoxy的配置教程](https://docs.lvrui.io/2016/12/12/Linux%E4%B8%AD%E4%BD%BF%E7%94%A8ShadowSocks-Privoxy%E4%BB%A3%E7%90%86/)
     * 首先```sudo apt-get install privoxy```
     * 编辑 ```sudo vim /etc/privoxy/config```
