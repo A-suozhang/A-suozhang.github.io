@@ -262,6 +262,7 @@ tags:
 
 * 批量修改命令sed
   * ```sed -i "s/Re0/Re1/g" a.txt``` 按照正则的方式替换
+  * 对多文件批量替换  ```sed -i "s/old_string/new_string/g" \` grep old_string -rf ./ \` ``
 * 批量重命名 rename 与上同理
 * diff两个file就是``diff FILE_A FILE_B```
 

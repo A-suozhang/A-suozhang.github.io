@@ -112,11 +112,129 @@ tags:                               #标签
     * [Follow the Det API installation guide](https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/installation.md)
         * noted that please use tf1.X for the det model
 
+5. 导出以及撰写pipeline.cfg
+    * Refer to the object_detection/export_tflite_ssd_lib.py
+    * [Official Guide]()
+
 ---
+
+# Tensorflow
+
+> 需要梳理一些TF的basic，不然有点寸步难行
+
+### Cheet-Sheet
 
 * check tensorflow version ```tf.__version__()```
 * check tensorflow is_cuda ```tf.test.is_built_with_cuda() ```
 
+
+### Graph
+
+* Tf会自动将计算转化为图上的节点，系统会维持一个默认的计算图 
+    * ```x.graph```可以获取当前tensor所在的计算图
+    * ```tf.get_default_graph()```获取默认计算图
+    * ```tf.Graph()```手动生成新图，在不同图中的同一变量，操作和值也是不一致的
+* 在某个计算图中，**collection**用来整合不同类别的资源
+    * ```g.get_all_collections()```
+    * ```tf.add_to_collection()```
+* 一般图的输入用一个placeholder来定义 ```x=tf.placeholder(tf.float32, shape=(1,300,300,3),name="xxx")```
+    * 然后在session运行的时候调用 ```sess.run(y, feed_dict = {x: [[[...]]]})```
+
+### Tensor
+
+* Tf的Tensor中没有真实的值，只是保存了如何获得这些数据的过程，主要是张量的结构
+* 默认dtype是tf.float32
+* 张量的维度是不能改变的，如果需要强制替换到某个维度变换的向量,必须指定validateshape=False
+    * 调用```tf.assignn(x1,x2,validate_shape=False)```
+
+#### Variable
+
+> 可以保存和更新的变量
+
+* ```tf.Variable()```变量的声明，本身是一个运算(OP),该op的结果是一个Tensor(张量)
+    * variable可看成某一种特殊的张量
+* 变量会自动加入图，可以用```tf.global_variables()```获得所有的参数
+* 可以用trainable属性来标识是否会被训练，用```tf.trainable_variables```来获取 
+
+#### Constants
+
+> 一旦写入，就不能再改变    
+
+### Session
+
+> TF的运行模型
+
+* 常在一个sess scope中进行执行
+    * ```with tf.Session() as sess:```
+* ```sess=tf.Session(); with sess.as_default():```
+    * 通过将session register为default，调用eval等函数的时候就可以不用在参数指定```x.eval(session=sess)```
+* ```sess = tf.InteractiveSession()``` - 通过交互式环境下直接构建成默认会话，省去了注册默认会话的过程
+* 在session内部，```tf.Tensor.Eval()```函数可以用来获得某个tensor的取值 
+* 一般的NN训练流程
+    * 主干图graph，输入placeholder，输出logit
+    * 输出logit套一个损失函数得到loss
+    * 定义trainer_step - ```train_step = tf.train.AdamOptimizer(learning_rate).minimize(cross_entropy)```
+    * 在主干循环(iter)中调用```sess.run(train_step)```
+    * 在一开始可能需要有一个init
+        * ```init_step = tf.global_variables_initializer(); sess.run(init_step)```
+    * 其中需要打印出来的变量，```sess.run(loss, feed_dict={})```并且打印出来
+
+
+### Ckpt-模型存储
+
+* tf的模型类型:
+    * 一个[接地气教程](https://www.jianshu.com/p/c9fd5c01715e)
+    * 一个[StackOverflow](https://stackoverflow.com/questions/35508866/tensorflow-different-ways-to-export-and-run-graph-in-c/43639305#43639305)
+    * 自己参考写并测试了一个load脚本好像是能用的load.py
+    * ckpt
+        * ```.ckpt```是老版本的ckpt的输出(B4 1.12)，现在的输出由meta/index/data/checkpoint文件组成
+            * meta-保留了完整的图结构，由```saver = tf.train.import_meta_graph()```
+            * data/index-保留了所有的参数 ```saver.restore(sess, tf.train.latest_checkpoint("./"))```
+                * data中包含了所有变量
+                * index中描述了variable中的key与value的对应关系
+        * Save - ![](https://github.com/A-suozhang/MyPicBed/raw/master//img/20200509183310.png)
+            * saver产生一个文件夹中的4个文件
+        * Load - ![](https://github.com/A-suozhang/MyPicBed/raw/master//img/20200509183630.png)
+            * 这之后可以用```tf.get_default_graph().get_tensor_by_name()```
+            * 或者打印变量名 ```sess.run('w1:0')```
+            * 如果希望读出所有的内容
+                * ```from tensorflow.python import pywrap_tensorflow```
+                * ```reader = pywrap_tensorflow.NewCheckpointReader(checkpoint_path)```
+                    * 注意这里的ckpt_path，如果模型的名字是model.meta，那么这里就是model
+                * ```var_to_shape_map = reader.get_variable_to_shape_map()```
+                * ```for key in var_to_shape_map:```
+                    * key是各个变量的名字
+                    * value是各个变量的shape
+                    * 提取值的话用 ```reader.get_tensor(key)```
+                        * 取出的东西是一个np-array
+        * 由```tf.train.Saver()```调用save()生成的，不包含图的结构
+        * 用```saver.restore(session, ckpt_path)```来重构计算图
+    * pb文件(GraphDef)(经过了protobuf)，包括了图以及内部的参数
+        * 是二进制文件不可读，pb也支持文本形式(.pbtxt)但是包含文本文件大
+        * 从中构建计算图
+            * ```graph=tf.Graph()```
+            * ```graphdef = tf.GraphDef()```
+            * ```with open("*.pb","rb") as f:  graph_def.ParseFromString(f.read())```
+        * 作为与训练模型的pb文件是从ckpt中freeze而来，包含了所有参数
+    * saved_model (目前还没有遇到过)
+        * 包含了graphdef和ckpt
+    * 对于PB对象，于其用tf-board进行graph可视化，可以直接使用[Netron](https://github.com/lutzroeder/netron)来进行快捷可视化图
+
+* 目前模型的输出： (也就是detect所给出的结果)
+    * raw_image (1,300,300,3)
+    * feature_maps
+    * Anchors - concat:0 (1917,4)
+    * Final-anchors - tile:0 (1,1917,4)
+    * Box-encoding - squeeze:0 (1,1917,4)
+    * Class-predictions - concat:0 (1,1917,91)
+        * 90 classes + 1 background
+        * 后续交给 score_conversion_fn操作
+    * box-encoding以及class-prediction抽出来做一个identity加上raw-output的scope
+
+
+### TF-lite
+
+* 会有一些customop是tflite所不支持的
 * TFLite
     * [Example Kerasflow+Lite](https://github.com/tensorflow/tensorflow/blob/master/tensorflow/lite/micro/examples/hello_world/create_sine_model.ipynb)
     * 分为
@@ -134,8 +252,13 @@ tags:                               #标签
 * [OVIC-guide](https://github.com/tensorflow/tensorflow/tree/master/tensorflow/lite/java/ovic)
 * [Install and build tflite](https://www.tensorflow.org/lite/guide/android)
 
+### 杂项 Mixed
 
-
+* 直接```import XXX```会在项目的根目录下寻找，所以找不到
+    * 如果改成模块化的import ```from . import utils```相对导入，在当前.py文件的目录下
+        * 带```.```的就是相对导入，是从**当前py文件的路径下**
+    * py3默认绝对导入
+        * **是从执行文件夹下**
 
 
 # Object Detection 综述
