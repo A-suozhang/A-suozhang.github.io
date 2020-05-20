@@ -507,6 +507,10 @@ let g:netrw_banner = 0
 * 安装jupyterthemes，直接用pip安装即可
   * 然后导入配置 ```jt -t onedork -f roboto -fs 14 -nfs 14 -tfs 14 -ofs 11```
   * (如果用apt安装jupyter可能会出现无法往.jupyter目录写的问题，手动修改权限即可)
+* 有的时候jupyter对应的python版本不一定正确
+  * 直接修改```which jupyter```所出现的jupyter文件中第一行的python路径，不起效果(ipython和pip这样能够达成，但是jupyter不行)
+  * 原因是需要修改kernel的cfg，在比如```~/.local/share/jupyter/kernels/python3/kernel.json```将里面的python修改为需要指定的python绝对路径
+    * ![](https://github.com/A-suozhang/MyPicBed/raw/master//img/20200520075549.png)
 
 ##　pip3
 * 首先需要给它换源,在~目录下建立```.pip/pip.conf```
