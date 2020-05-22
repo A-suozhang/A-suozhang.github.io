@@ -654,3 +654,17 @@ Host *.eva*
    * List Available Version in Repo ```apt-cache madison docker-ce``` 
 5. 测试安装成功 ``````
    * [on WSL may be buggy](https://github.com/Microso ftDocs/WSL/issues/457) 
+
+
+### aria2c
+
+> 主要是参考了这个教程[Ubuntu18.04安装配置及使用aria2](https://www.jianshu.com/p/2f7e087f452b)
+
+* 内部需要先建立aria的session
+* 然后```/etc/aria2/aria2.conf```
+  * 内部指定dir
+* 启动aria的命令```sudo aria2c --conf-path=/etc/aria2/aria2.conf -D```  
+  * 可以直接将它放到bashrc里面
+* 常用参数
+  * ```-c```可继传
+  * ```-s```分段 
