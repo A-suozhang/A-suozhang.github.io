@@ -481,6 +481,8 @@ let g:netrw_banner = 0
 	* 打开之后进入edit-dictionary-sources-Wikipedia-取消注释/Websites添加有道
 		* 连接为 ```http://dict.youdao.com/search?q=%GDWORD%&ue=utf8```
 	* 然后挂在后面就可以用CTRL+C+C翻译鼠标选中的单词了!
+* FFMpeg - 一个简单的视频处理工具
+  * ```ffmpeg -i video.mp4 -b:a 192K -vn music.mp3```
 
 
 # Win当中的Ubuntu - WSL(Windows SubSystem Linux)

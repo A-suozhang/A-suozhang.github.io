@@ -225,6 +225,7 @@ tags:
 * git config
     * ```git config --global http.proxy socks5://127.0.0.1:10808```
     * 在```~/.gitconfig```
+* Crontab 定时运行
 
 
 ---
@@ -260,23 +261,29 @@ tags:
     * ```？``` - 匹配单个字符
     * ```[]``` - 匹配括号内字符（类似re）
 
+### Sed
+
 * 批量修改命令sed
   * ```sed -i "s/Re0/Re1/g" a.txt``` 按照正则的方式替换
   * 对多文件批量替换  ```sed -i "s/old_string/new_string/g" \` grep old_string -rf ./ \` ``
 * 批量重命名 rename 与上同理
 * diff两个file就是``diff FILE_A FILE_B```
 
+### awk
+
+> 对应着Shell工具，awk对应逐行的处理，sed用作编辑，grep用作查找
+
 
 ---
 
 
-### Bash
+# Bash
 
 > 参考了[简书-Bash](https://www.jianshu.com/p/e1c8e5bfa45e)
 
 > 以及[This Tutorial](https://linuxhint.com/bash_scripting_tutorial_beginners/#b4)
 
-#### Basics
+### Basics
 
 * Shell本身就是在OS和用户之间的一个命令解释器
 * 起手 ```#！/bin/bash```选择bash作为解释器
@@ -291,18 +298,8 @@ tags:
 * 引用变量用 ```${my_var}```大括号也可以不加
 * 单引号内部的内容会被全部输出（不会带转义）但是双引号之间的可以
   * echo出一个变量要么不用引号要么双引号
-* 注意赋值的时候要加括号与引用，不然会被解析为字符串
-  * 类似```x = $[i**2]``` 
-  * (貌似这个里面引用别的变量不需要引号)
-* 传入args直接用 ```$1```
-* 如果要多个脚本同时进行操作直接在代码之后加```&```
-  * 然后用wait表示等上面的所有全部做完
-  * 但是目前实测过多的任务同时的时候会出现log写不进去的情况
+* ```${var:-DEFAULT}``` 如果var没有被声明, 或者其值为空, 那么就以$DEFAULT作为其值 *  
   
-
-* 数字运算要加括号
-	* ```b=$[b**2]```
-
 * 条件语句
 
 ``` bash
@@ -359,3 +356,26 @@ done
 * 循环，range
 
 ```for i in (sed 0 ${END); do echo ${i}; done ```
+
+``` bash
+for ((int i; i<10; i++)) do
+    echo $i
+done
+```
+
+* 遍历某文件夹下的文件
+
+``` bash
+for filename in ./*.mp3; do
+    echo $filename
+done
+```
+
+### 字符串
+
+* ${#string}                                      $string的长度 
+* ${string:position}                              在$string中, 从位置$position开始提取子串至屁股
+* ${string:position:length}                       在$string中, 从位置$position开始提取长度为$length的子串     
+* ${string/substring/replacement}                 使用$replacement, 来代替第一个匹配的$substring
+* ${string//substring/replacement}                 使用$replacement, 来代替最后一个匹配的$substring
+* ```expr match $string "\(re\)" ```
