@@ -482,7 +482,10 @@ let g:netrw_banner = 0
 		* 连接为 ```http://dict.youdao.com/search?q=%GDWORD%&ue=utf8```
 	* 然后挂在后面就可以用CTRL+C+C翻译鼠标选中的单词了!
 * FFMpeg - 一个简单的视频处理工具
+  * [参考](https://www.jianshu.com/p/0127902761b9)
   * ```ffmpeg -i video.mp4 -b:a 192K -vn music.mp3```
+  * ```ffmpeg -i record-271628-20190220-013432-296.flv -c:v libx264 -crf 19 -strict experimental 20190220.mp4```
+  * ```ffmpeg -i "concat:123.mp3|124.mp3" -acodec copy output.mp3```
 
 
 # Win当中的Ubuntu - WSL(Windows SubSystem Linux)

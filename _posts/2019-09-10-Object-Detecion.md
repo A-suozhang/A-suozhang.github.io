@@ -130,15 +130,48 @@ tags:                               #标签
 
 ### Graph
 
+* Example
+
+``` py
+
+a = tf.placeholders(tf.float32, [])
+b = tf.constant(1.0)
+c = tf.add(a,b)
+with tf.Session() as session:
+  print(session.run(c, feed_dict={a:1.0}))  
+
+```
+
 * Tf会自动将计算转化为图上的节点，系统会维持一个默认的计算图 
     * ```x.graph```可以获取当前tensor所在的计算图
     * ```tf.get_default_graph()```获取默认计算图
     * ```tf.Graph()```手动生成新图，在不同图中的同一变量，操作和值也是不一致的
-* 在某个计算图中，**collection**用来整合不同类别的资源
-    * ```g.get_all_collections()```
+* 在某个计算图中，**collection** 用来整合不同类别的资源
+    * ```g.get_all_collection_keys()```
     * ```tf.add_to_collection()```
 * 一般图的输入用一个placeholder来定义 ```x=tf.placeholder(tf.float32, shape=(1,300,300,3),name="xxx")```
     * 然后在session运行的时候调用 ```sess.run(y, feed_dict = {x: [[[...]]]})```
+* ```graph.get_operations()``` 获得各种节点
+    * ![](https://github.com/A-suozhang/MyPicBed/raw/master//img/20200613093809.png)
+* ![](https://github.com/A-suozhang/MyPicBed/raw/master//img/20200613093827.png)
+
+#### GraphDef
+
+* ```tf.get_default_grapg.as_graph_def()```
+* 打印出来是一个string的样子
+    * ![](https://github.com/A-suozhang/MyPicBed/raw/master//img/20200613100051.png)
+* 转化为二进制图并存储pb
+    * ```gd.SerializeToString()``` 然后用wb的模式写入pb文件
+* ```gd.node[0]``` 可以看作一个list来用
+    * 再往里有属性 name / op / attr
+    * 其中attr是一个dict
+        * value（就是一个tensor） / dtype
+* 获取所有key 
+
+``` py
+for n in gd.node:
+    print(n.name)
+```
 
 ### Tensor
 
@@ -158,7 +191,19 @@ tags:                               #标签
 
 #### Constants
 
-> 一旦写入，就不能再改变    
+> 一旦写入，就不能再改变   
+
+* ```tf.constant(1.0, name="a")```
+
+#### PlaceHolder
+
+* ```tf.placeholder(dtype(tf.float32), shape, name)```
+* run的时候用```sess.run(output, feed_dict={b:1.0}```
+    * feed_dict当中填入的是对应的变量名字，而不是name
+    * 同理sess run的也是
+
+
+---
 
 ### Session
 
@@ -178,6 +223,33 @@ tags:                               #标签
     * 在一开始可能需要有一个init
         * ```init_step = tf.global_variables_initializer(); sess.run(init_step)```
     * 其中需要打印出来的变量，```sess.run(loss, feed_dict={})```并且打印出来
+
+---
+
+### Model
+
+* 定义网络结构的几种方式
+
+``` py
+from tensorflow.keras import Model
+
+class MyNet(Model):
+    def __init__(self):
+        super(MyNet,self).__init__()
+        self.conv1 = Conv2D(32,1,activation="relu")
+        self.flatten = Flatten()
+        self.d1 = Dense(128,activation="relu")
+        self.d2 = Dense(10)
+    def call(self, x):
+        x = self.conv1(x)
+        x = self.flatten(x)
+        x = self.d1(x)
+        x = self.d2(x)
+        return x
+
+net=MyNet()
+net.summary()
+```
 
 
 ### Ckpt-模型存储
