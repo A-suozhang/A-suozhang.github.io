@@ -673,3 +673,17 @@ Host *.eva*
 * 常用参数
   * ```-c```可继传
   * ```-s```分段 
+
+
+# Termux - 安卓手机的终端配置
+
+> 参考了[这个教程](http://einverne.github.io/post/2019/06/termux-app.html#%E4%BB%8E%E7%94%B5%E8%84%91-ssh-%E8%BF%9E%E6%8E%A5-termux)
+
+* [Termux的牛逼教程](https://www.sqlsec.com/2018/05/termux.html)
+
+* [Win上的相关配置](https://blog.csdn.net/zsjangel/article/details/81087837)
+* 查看ssh是否启动以及启动
+  * ```service sshd start / status```
+* 手机上安装termux的api
+  * 首先安装软件termux-api
+  * ```pkg install termux-api```

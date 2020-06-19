@@ -2,7 +2,7 @@
 layout:     post                    # 使用的布局（不需要改）
 title:      Paper Stack 文章堆栈           # 标题 
 subtitle:   待读的文章和无处安放的文章解读   #副标题
-date:       2020-04-21            # 时间
+date:       2024-01-01            # 时间
 author:     tianchen                      # 作者
 header-img:  img/5_1/wf-0.jpg  #这篇文章标题背景图片  
 catalog: true                       # 是否归档
@@ -601,7 +601,6 @@ of action marginal distributions
 
 ---
 
-
 ### 2020-03-17 MCMC
 
 * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20200317151113.jpg)
@@ -656,5 +655,42 @@ of action marginal distributions
 
 * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20200405093121.jpg)
 
+---
 
+### 2020-06-17
+
+* [Multi-Precision Quantized Neural Networks via Encoding Decomposition of -1 and +1](https://arxiv.org/abs/1905.13389)
+* 🔑 Key:   
+  * Decomposite Multi-Precision NN into multi BinaryNN, more efficient Deployment
+* 🎓 Source:  
+* 🌱 Motivation: 
+* 💊 Methodology:
+* 📐 Exps:
+* 💡 Ideas:
+
+
+# [Searching for Accurate Binary Neural Architectures]()
+* Huawei Noah
+* only search for width(channels), acquire higher acc with less flops
+* the arch remain the same with the original fp32 model
+
+
+# [Learning Architectures for Binary Networks]()
+* GIST(South Korea)
+* seems like eccv ...
+* cell-based, proposed a new cell template composed of binary operations
+* novel-searching objective - Diversity Regularization  
+* 这些new ss基本都是一个套路，对dw separable，dilated conv binary化
+  * 这篇文章里多了一个zerorise layer(没搞懂)，说是作为placeholder
+
+# [Binarized Neural Architecture Search]()
+* Beihang Univ
+* Darts foundation
+* channel sampling / operation space reduction
+  * abbadon less potential operation
+
+# [BATS: Binary ArchitecTure Search]()
+* Cambridge
+* binarized ss
+* search strategy
 

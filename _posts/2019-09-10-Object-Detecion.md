@@ -149,6 +149,7 @@ with tf.Session() as session:
 * 在某个计算图中，**collection** 用来整合不同类别的资源
     * ```g.get_all_collection_keys()```
     * ```tf.add_to_collection()```
+    * ![](https://github.com/A-suozhang/MyPicBed/raw/master//img/20200617144505.png)
 * 一般图的输入用一个placeholder来定义 ```x=tf.placeholder(tf.float32, shape=(1,300,300,3),name="xxx")```
     * 然后在session运行的时候调用 ```sess.run(y, feed_dict = {x: [[[...]]]})```
 * ```graph.get_operations()``` 获得各种节点
@@ -157,7 +158,7 @@ with tf.Session() as session:
 
 #### GraphDef
 
-* ```tf.get_default_grapg.as_graph_def()```
+* ```gd = tf.get_default_graph().as_graph_def()```
 * 打印出来是一个string的样子
     * ![](https://github.com/A-suozhang/MyPicBed/raw/master//img/20200613100051.png)
 * 转化为二进制图并存储pb
