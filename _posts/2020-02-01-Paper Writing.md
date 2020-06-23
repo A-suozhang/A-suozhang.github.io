@@ -147,6 +147,102 @@ tags:                               #标签
   * rebuttal时不要漏点，要逐点回应做到有问必答。若因篇幅有限，可将类似的意见合成一点，万不可因篇幅有限擅自删除一些要点或遗漏要点，以免造成含糊不清、浑水摸鱼之嫌
 * **要有问必答**
 
+### 2020-06-20
+
+* Review Trans Paper
+* 有什么不懂的就加Question
+  * 给Major Revision / Minor Revision 
+* Template
+
+```
+Decision: Major revision
+
+Comments:
+The authors argue that imposing uniform regularizations on filters during structured pruning is problematic. And they propose to modify the existing regularization-based structured pruning methods, by weighting the regularization of different filters based on the saliency scores. The saliency score is calculated as ||grad x scale||^2 / FLOPs reduction.
+
+Strength:
+The accuracy results on CIFAR-10 and ImageNet are impressive. 
+
+Weakness:
+You should analysis the computational efficiency of the overall pruning process. In you abstract, you state that the overhead of calculating the saliency is minimum, however, there is an inner iteration to calculate the saliency scores every epoch during SASL, which might be time-consuming. Also, the post-processing pruning and fine-tuning may be time-consuming. I'm aware that you utilize a hard-mining technique to accelerate the pruning process, and in Ablation 4), you said “hard sample mining strategy can not only reduce the complexity overhead for the saliency estimation“. I would like to see a quantitive study on the computational efficiency of your proposed framework.
+
+The description of the method and experiment settings is not very clear, here are some queries about the method and experimental settings:
+- How do you “classify” the filters into different “ hierarchy”? Define thresholds, or just uniform distribute them according to the ranking?
+- How many iterations are there in the iterative pruning and fine-tuning process? In each iteration, how many filters are discarded?
+- In the ablation study 2), how do you change the base regularization value according to the number of classes? Did you experiment with class number larger than 5?
+- In SASL* (a.k.a, the aggressive scheme), what hyper-parameters are tuned? The base regularization value in SASL, or only the post-processing iterative pruning process?
+- How do you handle skip connections?
+
+
+Other comments:
+- Page 5 line 24, Page 8 line 30 (right column): wrong quotation marks
+- I don’t think hierarchy is a very proper terminology for describing different saliency levels.
+
+
+From my perspective, i suppose using the product of the gradient magnitude and the weight/activation magnitude as the saliency signal is common in early studies, e.g., [1][2]. Thus, the main contribution of this paper is to propose to use the quotient of the commonly used saliency score and the FLOPs reduction as the new saliency score, and then, the saliency scores are used to determine the weighting value for the regularizer.
+
+[1] P. Molchanov, S. Tyree, T. Karras, T. Aila, and J. Kautz, Pruning convolutional neural networks for resource efficient inference, ICLR 2017.
+[2] Michael Figurnov , Aijan Ibraimova, Dmitry Vetrov, and Pushmeet Kohli, PerforatedCNNs: Acceleration through Elimination of Redundant Convolutions, NIPS 2016.
+```
+
+
+```
+This paper proposes several techniques to improve dense video caption performance, including an event-level feature fusion, a scene-level topic predictor, an NMS procedure that takes both temporal and linguistic similarity into consideration. By combining these techniques, this paper achieves very good results. Also, this paper conducts comprehensive ablation studies on the proposed techniques.
+
+Basically, I think this is a good paper. Although the event-level feature fusion method is simple, the ablation studies have demonstrated its effectiveness. And, I like the idea of using topic model to discover latent topics, and then using the topic distribution of each video as the scene-level training signal. And it’s good to see that the ablation study demonstrates its effectiveness on the evaluation metrics. Is this idea original? 
+
+I have some queries:
+- In equation (2), why do you use asymmetric linear embedding layers, W_Q, and W_K, this doesn’t seem like a reasonable distance metric.
+- Page3 line39 column right, you say that “the low-dim vector P may not be easily separable”. I think separable is not a proper word here, since we are not solving a classification problem.
+```
+
+```
+TCSVT review: multi-feature adaptive late fusion image retrieval based on cross-entropy normalization
+
+
+Review confidence level: 4
+Technical content:
+novelty: 1
+Tutorial: 1
+Technical correctness: 1
+Technical depth: 1
+Application: 1
+
+Presentation:
+clarity: 1
+organization: 1
+conciseness: 1
+english: 1
+references: 2
+
+Decision: Reject
+
+Comments:
+This paper proposes to select reference curves for each query image by minimizing the “cross-entropy”, and then use the calibrated similarity curves to fuse multiple features.
+
+Basically, I think there is a lot to be improved on this paper. 
+
+(1) Writing and Clarity
+This paper is poorly written. There are many grammar mistakes, many sentences cannot convey the points, and many terminologies are not used correctly. The authors should check the grammar, and polish the presentation.
+
+(2) Organization and conciseness
+      Related work: The summary of the related work is not well organized, the logic chain between subsections is weak.
+      Method: The organization of the method section is not good, it’s hard to follow your method description and capture the crucial points, and I must read for the second time to capture what you mean. For an example, the title of III.C “Effect Analysis of Cross-Entropy Normalization” does not fit with the content.
+
+(3) Technical correctness and depth
+     I have some doubts about the method. The description in the paper seems to indicates that the S curve for each feature is normalized, and this paper aims to find a reference curve that can calibrate each feature’s curve by fitting its tail. However, It seems from Eq.4 that S_i(u:v) is normalized across different features, maybe the notation is wrong that the summation is not across the index “i”?  If so, the summation of S_i(u, v) across the u-v segment should be less than 1 instead of equal 1.
+     
+     This method is purely heuristic and empirical, I don’t think the derivation about the positiveness of the “relative entropy” is suitable in a paper, since it’s a fact that is well known in textbooks. Thus, I would recommend that you remove the two theorems in your paper.
+
+      Why do you use “area under curve” to calculate the fusion weights. The only place that mentions this intuition is the II.D section where you discuss that [17] utilized this intuition. Can you provide more theoretical or intuitive background , or at least, can you experiment with other alternatives to demonstrate the rationality of this weighting scheme. 
+
+     The word “complementarity” is repeatedly used in the paper, you emphasize that your method of selecting the reference curve can “optimize” the complementarity. However,  I fail to capture the logic behind this statement. According to your description in III.D, it seems like you think minimizing the “complementarity” of the reference curve and the current feature’s similarity curve is a way to “optimize” the complementarity? I suppose that utilizing feature complementarity means that you should choose features that maximally complement each other, and this is not related to the proposed method.
+
+(4) Experiments, Application of the method
+     This method might not be so useful in application. The proposed method is an incremental one, and brings extra memory footprints and query latency overhead. 
+
+     In IV.G, you said that “we’re not going to make a direct comparison on the query time”. I don’t think the differences in the computer’s performance or the feature number is the reason for not doing the quantitive latency comparison, since all these variables can be controlled. So, you should compare the query time with more baselines.
+```
 
 
 

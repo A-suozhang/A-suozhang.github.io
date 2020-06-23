@@ -942,6 +942,8 @@ tensor = torch.from_numpy(np.asarray(PIL.Image.open(path))
 tensor = torchvision.transforms.functional.to_tensor(PIL.Image.open(path)) 
 ```
 
+* Tensor默认的打印小数点位数是4位，如果我们需要更高的精度``torch.set_printoptions(precision=8)```
+
 ---
 
 * [一些常用操作](https://zhuanlan.zhihu.com/p/59205847)

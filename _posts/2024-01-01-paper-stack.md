@@ -668,6 +668,20 @@ of action marginal distributions
 * 📐 Exps:
 * 💡 Ideas:
 
+* 创新点
+  * Decomposite NN into Multi BNNs
+  * M-bit Encoding Function
+  * Support Mixed Precisions
+
+  * Advan
+    * Many tasks, generality
+  * Question
+    * Typo in Table3 "Encoded Activation and Weights"
+    * Periodical
+    * the speed-up rate, whether concerning the encoding/decode and scale multiplication(although it may not cost much)
+    * Decomposition method hardware cost
+
+
 
 # [Searching for Accurate Binary Neural Architectures]()
 * Huawei Noah
