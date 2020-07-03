@@ -54,6 +54,8 @@ tags:                               #标签
 ### 常用词语及Synonym整理
 
 * ample 足够的，多的
+* alleviate 缓和
+* asymptotic 渐进的
 * excel 超过
 * extensive 广泛的
 * subpar 次佳
@@ -68,6 +70,7 @@ tags:                               #标签
 * counteractive 抵消
 * need-demand-requirement-desire 需求
 * derivation 推导
+* facilicate 促进，帮助
 
 ### 常用短语
 

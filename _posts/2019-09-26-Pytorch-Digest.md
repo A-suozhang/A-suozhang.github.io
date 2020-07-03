@@ -943,6 +943,8 @@ tensor = torchvision.transforms.functional.to_tensor(PIL.Image.open(path))
 ```
 
 * Tensor默认的打印小数点位数是4位，如果我们需要更高的精度``torch.set_printoptions(precision=8)```
+* 有时候代码中出现了```cuda(async=True)```会报syntax error
+	* 是由于Py3.7之后的async变成了python本身的reserved的关键词，应该将async改为```non_blocking```
 
 ---
 
