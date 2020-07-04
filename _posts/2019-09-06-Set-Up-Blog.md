@@ -2,7 +2,7 @@
 layout:     post                    # 使用的布局（不需要改）
 title:      建立博客的过程               # 标题 
 subtitle:   Where did This Blog Form #副标题
-date:       2019-09-09              # 时间
+date:       2020-07-04              # 时间
 author:     tianchen                      # 作者
 header-img:  img/bg-term.png   #这篇文章标题背景图片
 catalog: true                       # 是否归档
@@ -126,6 +126,14 @@ gem install kramdown
 $$ F(x) = P\{ X <= x \} = \int_{-\infty}^x f(x)\,dx $$
 * 这个是网页上支持的另起一行的公式书写(但是本地markdown不支持)
 \\[ f(x,y,z) = 3y^2 z \left( 3 + \frac{7x+5}{1 + y^2} \right). \\]]
+
+
+## 公式的解决方案
+
+> 采用Mathjax进行渲染会导致本地与云端格式的不同，采用了第三方平台渲染成SVG的方式来实现
+
+* ```![equation](https://latex.codecogs.com/svg.latex?\frac{1}{3}{sin(5)})```
+* ![equation](https://latex.codecogs.com/svg.latex?\frac{1}{3}{sin(5)})
 
 
 ## Comment Support
