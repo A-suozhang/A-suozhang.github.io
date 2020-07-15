@@ -299,6 +299,13 @@ tags:
 * 单引号内部的内容会被全部输出（不会带转义）但是双引号之间的可以
   * echo出一个变量要么不用引号要么双引号
 * ```${var:-DEFAULT}``` 如果var没有被声明, 或者其值为空, 那么就以$DEFAULT作为其值 *  
+
+* 数字运算
+	1. expr ```r=`expr 4 + 5` ```
+		* 注意expr后面要加空格
+	2. $(()) ```echo $((2+3))```
+	3. $[]  ```echo $[2+3]```
+	4. let n=2*3
   
 * 条件语句
 
@@ -355,7 +362,7 @@ done
 
 * 循环，range
 
-```for i in (sed 0 ${END); do echo ${i}; done ```
+```for i in $(seq 0 ${END); do echo ${i}; done ```
 
 ``` bash
 for ((int i; i<10; i++)) do
