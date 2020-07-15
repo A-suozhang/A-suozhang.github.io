@@ -16,6 +16,27 @@ tags:                               #标签
 
 > Linux下安装```sudo apt-get install texlive-full cjk-latex latex-cjk-chinese```
 
+### 使用姿势
+
+
+* 一般flow是xelatex-bibtex-xelatex
+	* 用xelatex来创建(pdflatex几乎同等)
+	* 用bibtex xx.aux来建立ref
+* 文件意义
+	* .tex是主要的代码文件
+	* .bib内部包含了从google scholar等地方获取的引用
+	* .aux首次编译的时候产生
+		* .blg也是生成的中间文件
+	* .bbl bibtex所输出的bib
+	* 一些模板会包含比如说
+		* ruler.sty
+		* splncs04.bst
+		* llncs.cls
+
+* 有的时候会因为pdf文件被占用而导致失败，导致了bib炸了
+
+### Tips
+
 * 对一个section用```\label{sec:method-grouping}```来指定，在别的地方用```~\ref{sec:method-grouping}```
 * 在cite前面加一个```~```表示小于一个空格的空间
 * 排图片一般默认[ht]，h表示是当前位置，t表示在最上面（指的是下一页的最上面）
@@ -28,6 +49,11 @@ tags:                               #标签
 * Fig. （大写，加点）
 * 特有名词，比如GPU，以及方法AMC需要大写
 * 两张图并列(注意这种方式两张图标号是a/b，但是如果用```\begin{subfigure}```的话标注就是新的fig)
+* 调整图片格式实在是太痛苦了！很容易一张图就会被卡到最后去，整个格式都会崩溃
+	* 目前发现可以用```[H]```大写的H来强制将其锁在Here！
+* \footnote{} 脚注
+* 表示星号要用```$^*$```
+
 
 ``` 
 
@@ -133,6 +159,13 @@ tags:                               #标签
     * 配色，这个倒是可以展开讲，目前我的体会是，饱和度拉低，色系倒是可以稍微跨越一些
     * 字体大小放大！
     * 实际放到文中的图里的字大小，和ppt里字大小不完全相关联，有时候需要把图压扁或者拉长才是真正关键的，因为论文格式里页宽就这么多
+
+
+### 2020-05-01 挂arxiv
+
+* 注意arxiv需要的是latex source code
+* 在文件的一开始需要指定```\pdfoutput=1```
+	* 即使是在tex编译的时候显示error也是按照这个规则来做
 
 ### 2020-04-20 Rebuttal
 
@@ -248,6 +281,18 @@ This paper is poorly written. There are many grammar mistakes, many sentences ca
 ```
 
 
+### ECCV Camera Ready
+
+> 开始准备eccv2020的camera ready了
+
+* 需要提交的内容有
+	* source code(latex) + camera ready的pdf
+	* copyright pdf - 需要签名
+	* supplmentary material
+
+
+* gates
+	* baseline文字的图片和文字改一下
 
 # Resources
 

@@ -386,3 +386,9 @@ done
 * ${string/substring/replacement}                 使用$replacement, 来代替第一个匹配的$substring
 * ${string//substring/replacement}                 使用$replacement, 来代替最后一个匹配的$substring
 * ```expr match $string "\(re\)" ```
+
+* 替换名字
+	* 比如我需要将ms.tex转化为ms.aux
+	* ```${FILE/.tex/.aux}``` - (等价于s.replace())
+* Example - mp4 convert mp3
+* ![](https://github.com/A-suozhang/MyPicBed/raw/master//img/20200715090430.png)
