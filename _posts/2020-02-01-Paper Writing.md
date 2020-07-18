@@ -166,6 +166,8 @@ tags:                               #标签
 * 注意arxiv需要的是latex source code
 * 在文件的一开始需要指定```\pdfoutput=1```
 	* 即使是在tex编译的时候显示error也是按照这个规则来做
+* 打包成一个压缩包包含所有source code，需要不含subfolder，里面直接是内容
+	* 主tex文件是要是```ms.tex```
 
 ### 2020-04-20 Rebuttal
 
