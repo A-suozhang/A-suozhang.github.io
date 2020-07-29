@@ -463,6 +463,8 @@ let g:netrw_banner = 0
     * 在Settings->Keyboard->添加一个```shutter -s```，配合你想要的快捷键
 * PicGo
     * 参考[建立博客的博客](http://a-suozhang.xyz/2019/09/09/Set-Up-Blog/)
+	* 注意有的时候会出现picgo的无法上传的问题，一下直接就断，显示“服务器端错误”
+		* 原来是v2ray的http代理在10809端口，改正之后好了
 * Filezilla 
   * [this link](https://www.atechtown.com/install-filezilla-on-ubuntu/)
   * 就是正常的apt配置

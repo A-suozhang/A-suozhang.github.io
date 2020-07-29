@@ -111,6 +111,24 @@ tags:                               #标签
 * sth. degree (Lr decay degree)
 * engage/involve with 涉及
 
+### 常用缩写
+
+* ```et al.``` - 拉丁语中的et alia，表示作者时候的省略
+	* et后面不加.因为et本身不是缩写
+	* 如果是在句子最后，不需要两个.
+	* 如果后面的不是句号，那后面的.还是需要的 
+* ```etc.``` - 表示等等
+	* et cetera - 一般放在举例的最后，表示前面的例子还没有举完
+	* 与上面的区别是人用et al，没有生命的用etc
+	* 前面需要有逗号！和上面那个不一样
+* ```e.g.``` - for example
+	* exampli gratia
+	* 代替for instance, such as
+	* 前面有逗号，最后有句号以及逗号   
+* ```i.e.``` - 也就是
+	* id est
+	* 等同that is, in other words
+	* 也是最后有点和逗号
 
 ### 常用语句
 
@@ -168,6 +186,8 @@ tags:                               #标签
 	* 即使是在tex编译的时候显示error也是按照这个规则来做
 * 打包成一个压缩包包含所有source code，需要不含subfolder，里面直接是内容
 	* 主tex文件是要是```ms.tex```
+* 注意arxiv并不会给你跑bibtex
+	* 所以提交的时候一定要将bbl文件给包含了，否则会没有引用信息！
 
 ### 2020-04-20 Rebuttal
 
