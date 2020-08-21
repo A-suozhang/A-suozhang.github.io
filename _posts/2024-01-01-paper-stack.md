@@ -2,7 +2,7 @@
 layout:     post                    # 使用的布局（不需要改）
 title:      Paper Stack 文章堆栈           # 标题 
 subtitle:   待读的文章和无处安放的文章解读   #副标题
-date:       2024-01-01            # 时间
+date:       2020-08-06            # 时间
 author:     tianchen                      # 作者
 header-img:  img/7_1/3-build.jpg  #这篇文章标题背景图片  
 catalog: true                       # 是否归档
@@ -28,42 +28,6 @@ tags:                               #标签
 
 ### NAS
 
-* [Transfer Learning with Neural AutoML](https://arxiv.org/pdf/1803.02780.pdf)
-  * Parallel Training on Multi-tasks, Transfer the search strategy
-  * 当有了一个pretrained的controller的时候，只有task embedding需要更新
-  * Generic SS (Learned task representation & Task-specific advantage normalization)  
-  * In standard single-task training of NAS, only the embedding
-of the previous action is fed into the RNN. In multitask training, the task embedding is concatenated
-to the action embedding. We also add a skip connection across the RNN cell to ease the learning
-of action marginal distributions
-
-* [MetAdapt: Meta-Learned Task-Adaptive Architecture for Few-Shot Classification](https://arxiv.org/pdf/1912.00412.pdf)
-  * 用MetaLearning+NAS来搜索出更适合Few-shot的架构
-  * Differentiable-NAS
-  * 发现FewShotLearning的backbone model是先越大越好，然后会差
-    * 认为D-NAS可以mitigate overfitting
-    * Follow DARTS - Arch as DAG
-  * 与一半NAS不同，不是找到一个架构用
-    * 找到能更快adapt到别的task的
-    * 有一系列small networks,MetAdapt Controller，同时更新weights，修改connection
-  * FewShotLearning
-    * Metric Learning based
-      * Learn a non-linear embedding into a metric space, use L2 distance for classification
-        * (Some change L2 disatnce with a implicit learned function/GNN)
-      * Could improve when adding semantic information
-    * Generative Based
-      * 或者说是augmentation-based
-      * 设计到一些transfer相关的一些东西
-    * Meta Learning - learn a learning stragegy easily adapted to other few-shot tasks
-      * trained on a set of few-shot tasks (episodes)
-      * 另外一支是gradient-based
-        * MAML
-        * MetaSGD
-    * MetAdapt的flow
-      * arch as DAG , feature map as node / op as edge
-      * Task-Adaptive Block
-* 这个图的配色不错
-* ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20200313202441.png)
 
 * [Channel Gating Neural Networks](https://papers.nips.cc/paper/8464-channel-gating-neural-networks.pdf)
 * 思想来源于Feature Map中有很多绝对值小的地方，这些东西其实是可以不需要的
@@ -131,86 +95,6 @@ of action marginal distributions
 
 ---
 
-* [MixMatch]()
-  * 用Autoencoder来重建输入图像，来获得好的Representation(或者是用GAN)
-  * Semi较为有效的几个方案
-    1. Consistency Regularization
-    2. Entropy minimize： 来源于共识，决策边界不应该穿过边沿分布的高密度区域(Push Back Decision Boundary)吸引对未标记数给出低熵的预测
-       * 对当前的结果肯定，所以有人用带Temperature的CrossEntropy 
-    3. 最基础的L2正则化(在SGD下等价于Weight Decay)
-       * 有说法说Adam和L2正则一起作用会出现区别
-    4. 一种新方法是MixUp，任意抽取两个样本，构造混合样本和标签
-       * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20200321202307.png) 
-    5. MixMatch
-
-* [En-AET]()
-  * 用一个VAE去找到最好的transform组合
-    * encoder找到一个好的embedding，decoder re-parameterize出transform
-
-* ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20200321203810.png)
-
-* 对于在NAS中利用Semi的几个问题
-  * 首先是两个维度，是在predictor找arch的时候用semi，还是直接找一个更适合semi的网络
-  * 第一个维度看上去问题比较适合，实际不然
-    * 但是在NAS Predictor中怎么利用unlabel的arch数据，感觉值得研究
-  * 后者的motivation我还不是很确定，而且看上去有点困难
-    * 架构对semi训练的影响？ fewshot别人其实还是说明了这个问题的
-    * evaluation过于noisy，不能很好的衡量，很大程度上取决于训练的Trick
-  * 1） 算法上是否对架构有影响
-  * 2） 有一个新的任务，在线处理这些标注数据； 要说明别的任务上的架构不能work
- 
-* [Data Efficient Image Recognitio with Contrastive Predictive Coding](https://arxiv.org/pdf/1905.09272v2.pdf) by DeepMind
-  * 将Unsupervised领域的Contrastive Predictive Coding的方法改进(revisit)并且加入到Semi当中
-  * 目前Semi的ImagenetSOTA / Also work on Det (PASCAL_VOC 2007)
-  * CPC - Contrastive Predictive Coding
-    * Learn Representation
-  * Workflow
-    * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20200326142002.png)
-    * 1. Unsupervised Spatial Prediction
-      * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20200326153411.png)
-      * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20200326153436.png)
-      * 首先将图片分为多个有Overlapping的Patch，构成一个Grid
-      * 经过一个前景Feature ectractor,最后接一个Mean-Pooling，保证每个Patch对应一个Feature vector
-      * 之后再经一个Context Network，目的是Recognize出输入的Embedding(Feature Vector)是来自哪个Grid Cell
-        * ContextVector输入的是一系列Zij(其感受野是所有在它之前(↖)的Zij，输出是一个context Vector cij
-        * 这里训练中用到了InfoNCE Loss，改进自NCE(NoiseContrastiveEstimation)最大化cell以及其来自位置的mutual info，就是从Z_l中采样出一些z，只有zij match了才是正样本
-        * Encoder和Context Network一起训练  
-        * **这一步的核心思想是利用之前的信息去预测之后的信息，ContextVector-Cij中包含了ZiJ+的信息，但是其不是输入**
-          * 以此去获得更加Consistent的Feature，就是Time(这里是Location-Invariant的Feature )
-    * 2. ClassificationTask
-      * 后面的ContextNetwork不要，直接利用已有的Label按照Supervised的方式接一个分类网络(甚至可以是一个简单的Logistic Regression)
-
-* 上文的前身[Contrastive Predictive Coding](https://arxiv.org/abs/1807.03748)
-  * [Post](https://mf1024.github.io/2019/05/27/contrastive-predictive-coding/)
-  * Unsupervised Training Feature Extractor for Representation
-  * 思想是利用Prediction作为目标(objective)
-    * 常见的思想是Training the model to predict Future / Some Missing Information(对于上文来说就是Patch对应的Localization的Info)
-      * 这个思想是否与VAE或者是GAN的思想类似？
-    * 利用这个Prediction问题所提取的Encoder
-  * 在采出的一个正样本和一系列负样本中，让预测结果去贴合正样本，最小化的是互信息量/或者是KL散度(类似这样的方式)
-  * *这篇文章本身不止说Vision(还有NLP和RL)，上面那篇是只针对Visual*
-
-* 相关的最近的paper还有[A Simple Framework for Contrastive Learning of Visual Representations](https://arxiv.org/pdf/2002.05709v1.pdf)
-  * Hinton做的东西
-* [S4L-Self-Supervised Semi-Supervised Learning](https://paperswithcode.com/paper/190503670)
-  * ICCV2019 - Google
-
-
-
-
-* [BigBiGAN - Large Scale Adversarial Representation Learning](https://arxiv.org/pdf/1907.02544v2.pdf)
-  * DeepMind
-  * 指出了近年来Self-Supervised的方法逐渐打败了基于Adversarial的，本文着手于用Adversarial learning来改进Representation
-  * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20200326155430.png)
-  * 之前的工作BigGAN和ALI(Adversarial Learnt Inference)其flow一般为:
-    * 我有Data X服从分布P_x，还对latent Variable Z有一个分布P_z(作为prior一般是gaussian)，Generator建模P(X|Z)-也就是从分布P_z中采样出Latent Variable Z，然后还原回X；对于传统的GAN，有一个Discriminator(Encoder)建模相反的概率分布P(Z|X),给定数据，predict这个embedding(\epsilon)
-    * BiGAN(bidirectional)加入了一个Joint Discriminator,输入的是一个(X,Z)的Pair，需要分辨的是它们是来自Sample&Encoding还是LatentSample&Generator
-      * 这样看来Generator的目的是“Fool”Disciminator by 让两个联合分布更加接近P_x\epsilon & P_zG（两者之间的距离用了一个Jenson-Shannon Divergence）
-    * 一个有趣的训练结果是，当G/D都是确定的函数的时候(两个分布是狄拉克分布的时候)它们两个在Global Optimal点上是互为相反值
-  * 本文发现修改了Discriminator能够在不compromiseGenerator的情况下提升性能
-    * Disciminator有三个组件FHJ，F的输入只为X，J的输入只为Z
-  * 实际做分类的时候是先Unlabel的训练一个BigBiGAN，然后Freeze Representation，训练一个Linear Classifier在有label的数据上展开
-
 
 * [Convolutional Networks withAdaptive Inference Graphs](https://arxiv.org/pdf/1711.11503.pdf)
   * 挺有意思的一篇文章，思想是CNN不需要一直FeedForward下去、
@@ -268,69 +152,6 @@ of action marginal distributions
 
 ---
 
-* [Towards Unified INT8 Training for Convolutional Neural Network](http://arxiv.org/abs/1912.12607)
-
-* 🔑 Key:   
-  * Mainly Dealing with the Gradient Quantization
-  * Empirical 4 Rules of Gradient
-  * Theoretical Convergence Bound & 2 Principles
-  * 2 Technique: Directional-Sensitive Gradient Clipping + Deviation Counteractive LR Scaling
-* 🎓 Source:  
-  * CVPR 2020 SenseTime + BUAA
-* 🌱 Motivation: 
-  * ![](https://github.com/A-suozhang/MyPicBed/raw/master//img/20200417205828.png)
-* 💊 Methodology:
-  * Symmetric Uniform Quantization with Stochastic Rounding
-  * Challenged for Quantizing Gradients
-    * Small perturbation would affect **direction**
-    * *Sharp and Wide Distribution（Unlike Weight/Activation）*
-    * Evolutionary: *As time goes on, even more sharp*
-    * *Layer Depth: Closely related to network depth(shallower the layer is, distribution sharper)*
-    * *Special Block: DW Layer, always sharp*
-  * Theoretical Bound afftected by 3 Terms(mainly with Quantization Error & LR & L2-Norm)
-    * Useful Tricks: 1. Min Q Error   2. Scale Down the LR
-  * Directional Sensitive Gradient Clipping
-    * Actually its just plain grad clipping
-    * Find the Clipping Value: Cosine Distance instead of MSE(Avoid the magnitude of grad's effect)
-  * Deviation Counteractive LR Scaling
-    * balance the exponentially accumulated grad error(deviation) by **exponentially decreasing LR accordingly**
-    * ```f(deviation) = max(e^(-\alpha*deviation), \beta)```
-      * \beta controls the lower bound of lr
-      * \alpha controls the decay degree
-  * Stochastic Rounding
-    * curandGenerator
-    * Linear Congruential Generator, yield a sequence of pseudo randomized number
-* 📐 Exps:
-  * ![](https://github.com/A-suozhang/MyPicBed/raw/master//img/20200417212040.png)
-  * ![](https://github.com/A-suozhang/MyPicBed/raw/master//img/20200417212102.png)
-  * ![](https://github.com/A-suozhang/MyPicBed/raw/master//img/20200417212118.png)
-* 💡 Ideas: 
-  * (Found with smaller LR, MobV2 training didn't crash,although perf. decay)
-  * Deviation of grad *exponentially* accumulated since its propagated through layer
-
-
-
-
-* [Improving Neural Network Quantization without Retraining using Outlier Channel Splitting](http://arxiv.org/abs/1901.09504)
-* 🔑 Key:   
-  * Outlier Channel Splitting
-* 🎓 Source:  
-  * Zhiru
-* 🌱 Motivation: 
-  * Post-training quantization follows bell-shaped distribution while hardware could better handle linear
-    * so the outlier becomes a problem
-* 💊 Methodology:
-  * Duplicate Outliers channels, then halves its value \
-  * Similar to 《Net2Net》 Net2WiderNet
-* 📐 Exps:
-* 💡 Ideas: 
-  * ![](https://github.com/A-suozhang/MyPicBed/raw/master//img/20200417213824.png)
-  * Post-Quantization's mainstream，First Clipping，then Sym-Linear-Quan
-    * Activation Clipping - Use Subset of input sample
-    * Earlier work: min L2 Norm of Quantization Error
-    * ACIQ: fits a Gaussian and Laplacian,use the fitting curve analytical compute optimal threshold
-    * SAWB: Linear extrapolate 6 dists
-    * TensorRt: Profile the dist, min the KL Divergence between original and quantized dist
 
 * [DetNAS: Backbone Search for Object Detection](http://arxiv.org/abs/1903.10979)
 * 🔑 Key:   
@@ -549,56 +370,6 @@ of action marginal distributions
   * new metric named mixed score: measuring both param size and accuracy of the life learning problem
 ---
 
-* [ResNeSt: Split-Attention Networks](https://hangzhang.org/files/resnest.pdf)
-
-* 🔑 Key:   
-  * New backbone for det & semantic-seg
-  * Split Attention across feature map groups (within a block)
-    * A new ResNet Cell 
-* 🎓 Source:  
-* 🌱 Motivation: 
-  * A new resnet cell, plug and play with ResNet
-    * help the downstream tasks(like Det or Seg)
-    * ![](https://github.com/A-suozhang/MyPicBed/raw/master//img/20200428085217.png)
-  * ResNet are meant for Image Classification - focus on depthwise & group-wise conv, howerer for downstream task, cross channel information are ctitical
-    * Small reception field, no cross-channel interaction
-  * create a versatile backbone with universally improved feature representation
-* 💊 Methodology:
-  * ![](https://github.com/A-suozhang/MyPicBed/raw/master//img/20200428090121.png)
-  * Feature maps into groups(num of group is cardinality)
-    * Radix as the split within a group
-  * Split Attention
-    * element-wise sum across multiple splits
-    * H，W average pooling for gathering global contextual information
-    * Channel-wise weighted soft fusion
-    * ![](https://github.com/A-suozhang/MyPicBed/raw/master//img/20200428091033.png)
-    * finally for groups, concat them
-    * split block output with a shortcut
-      * if stided, add another transformation with the output
-  * Related with other attention methods
-    * SE(Squueze and activation) use global context to predict channel-wise attention factor
-      * when r=1（radix）ResNest is SENet, only difference is 
-      * SE employed on the whole block regardless of groups, ResNest applied on each group
-    * SKNet feature fusion between network branches
-      * (author says that is could be low efficient and hard to caling to larger groups)
-* 📐 Exps:
-  * 3x3 Max pooling instead of strided conv
-  * All the training tricks(a little-bit concerned, we could employ these though)
-* 💡 Ideas: 
-  * SENet
-    * Channel-wise aggregation for the global context, then learn a set of weights
-      * The excitation is actually an fc
-    * ![](https://github.com/A-suozhang/MyPicBed/raw/master//img/20200428092523.png)
-    * ![](https://github.com/A-suozhang/MyPicBed/raw/master//img/20200428092638.png)
-  * SKNet
-    * Split - Fuse - Select
-      * two group conv branches with different kernel size
-      * Fuse is a squeeze and excitation block
-      * 2 softmax to get the channel weights, multiplying them, then added   
-    * ![](https://github.com/A-suozhang/MyPicBed/raw/master//img/20200428093221.png)
-    * Sacrifice a little flops for better perf.
-      * Combine Attention with larger kernel
-
 ---
 
 ### 2020-03-17 MCMC
@@ -659,37 +430,14 @@ of action marginal distributions
 
 ### 2020-06-17
 
-* [Multi-Precision Quantized Neural Networks via Encoding Decomposition of -1 and +1](https://arxiv.org/abs/1905.13389)
-* 🔑 Key:   
-  * Decomposite Multi-Precision NN into multi BinaryNN, more efficient Deployment
-* 🎓 Source:  
-* 🌱 Motivation: 
-* 💊 Methodology:
-* 📐 Exps:
-* 💡 Ideas:
 
-* 创新点
-  * Decomposite NN into Multi BNNs
-  * M-bit Encoding Function
-  * Support Mixed Precisions
-
-  * Advan
-    * Many tasks, generality
-  * Question
-    * Typo in Table3 "Encoded Activation and Weights"
-    * Periodical
-    * the speed-up rate, whether concerning the encoding/decode and scale multiplication(although it may not cost much)
-    * Decomposition method hardware cost
-
-
-
-# [Searching for Accurate Binary Neural Architectures]()
+- [Searching for Accurate Binary Neural Architectures]()
 * Huawei Noah
 * only search for width(channels), acquire higher acc with less flops
 * the arch remain the same with the original fp32 model
 
 
-# [Learning Architectures for Binary Networks]()
+- [Learning Architectures for Binary Networks]()
 * GIST(South Korea)
 * seems like eccv ...
 * cell-based, proposed a new cell template composed of binary operations
@@ -697,13 +445,13 @@ of action marginal distributions
 * 这些new ss基本都是一个套路，对dw separable，dilated conv binary化
   * 这篇文章里多了一个zerorise layer(没搞懂)，说是作为placeholder
 
-# [Binarized Neural Architecture Search]()
+- [Binarized Neural Architecture Search]()
 * Beihang Univ
 * Darts foundation
 * channel sampling / operation space reduction
   * abbadon less potential operation
 
-# [BATS: Binary ArchitecTure Search]()
+- [BATS: Binary ArchitecTure Search]()
 * Cambridge
 * binarized ss
 * search strategy

@@ -88,9 +88,42 @@ tags:                               #标签
        * 在0/90/180/270中选择
        * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20200327154203.png) 
     2. S4L-Examplar
-       * 学习对Aug无关的Representation(和聪哥的工作很接近) 
+       * 学习对Aug无关的Representation(和聪哥的工作很接近)
+
+
+* [BigBiGAN - Large Scale Adversarial Representation Learning](https://arxiv.org/pdf/1907.02544v2.pdf)
+  * DeepMind
+  * 指出了近年来Self-Supervised的方法逐渐打败了基于Adversarial的，本文着手于用Adversarial learning来改进Representation
+  * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20200326155430.png)
+  * 之前的工作BigGAN和ALI(Adversarial Learnt Inference)其flow一般为:
+    * 我有Data X服从分布P_x，还对latent Variable Z有一个分布P_z(作为prior一般是gaussian)，Generator建模P(X|Z)-也就是从分布P_z中采样出Latent Variable Z，然后还原回X；对于传统的GAN，有一个Discriminator(Encoder)建模相反的概率分布P(Z|X),给定数据，predict这个embedding(\epsilon)
+    * BiGAN(bidirectional)加入了一个Joint Discriminator,输入的是一个(X,Z)的Pair，需要分辨的是它们是来自Sample&Encoding还是LatentSample&Generator
+      * 这样看来Generator的目的是“Fool”Disciminator by 让两个联合分布更加接近P_x\epsilon & P_zG（两者之间的距离用了一个Jenson-Shannon Divergence）
+    * 一个有趣的训练结果是，当G/D都是确定的函数的时候(两个分布是狄拉克分布的时候)它们两个在Global Optimal点上是互为相反值
+  * 本文发现修改了Discriminator能够在不compromiseGenerator的情况下提升性能
+    * Disciminator有三个组件FHJ，F的输入只为X，J的输入只为Z
+  * 实际做分类的时候是先Unlabel的训练一个BigBiGAN，然后Freeze Representation，训练一个Linear Classifier在有label的数据上展开 
 
 
 ### Semi-Supervised
 
 * [FixMatch](https://arxiv.org/pdf/2001.07685v1.pdf)
+
+
+* [MixMatch]()
+  * 用Autoencoder来重建输入图像，来获得好的Representation(或者是用GAN)
+  * Semi较为有效的几个方案
+    1. Consistency Regularization
+    2. Entropy minimize： 来源于共识，决策边界不应该穿过边沿分布的高密度区域(Push Back Decision Boundary)吸引对未标记数给出低熵的预测
+       * 对当前的结果肯定，所以有人用带Temperature的CrossEntropy 
+    3. 最基础的L2正则化(在SGD下等价于Weight Decay)
+       * 有说法说Adam和L2正则一起作用会出现区别
+    4. 一种新方法是MixUp，任意抽取两个样本，构造混合样本和标签
+       * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20200321202307.png) 
+    5. MixMatch
+
+* [En-AET]()
+  * 用一个VAE去找到最好的transform组合
+    * encoder找到一个好的embedding，decoder re-parameterize出transform
+
+* ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20200321203810.png)
