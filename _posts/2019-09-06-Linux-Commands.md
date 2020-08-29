@@ -300,6 +300,12 @@ tags:
   * echo出一个变量要么不用引号要么双引号
 * ```${var:-DEFAULT}``` 如果var没有被声明, 或者其值为空, 那么就以$DEFAULT作为其值 *  
 
+``` bash
+N=$1
+
+use xxx ${N:-1}
+```
+
 * 数字运算
 	1. expr ```r=`expr 4 + 5` ```
 		* 注意expr后面要加空格
