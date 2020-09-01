@@ -97,6 +97,7 @@ tags:                               #标签
 * need-demand-requirement-desire 需求
 * derivation 推导
 * facilicate 促进，帮助
+* neutralize 抵消
 
 ### 常用短语
 
