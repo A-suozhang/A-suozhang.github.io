@@ -35,6 +35,45 @@ tags:                               #标签
 
 * 有的时候会因为pdf文件被占用而导致失败，导致了bib炸了
 
+
+### Table 
+
+* basic template
+
+
+> [overleaf-guide](https://no.overleaf.com/learn/latex/Tables)
+
+```
+\begin{table*}[hb]   % hb means here-bottom
+\centering
+\caption{head of the table}
+\label{tab: some_table}    % for reference \cite{tab:xx}
+\begin{tabular}{c|c|c|c}   % denote the vlines
+	something & something & something & something \\
+	...
+\end{tabular}
+\end{table}
+```
+
+* use \hline \vline \cline{1-2} if lines are needed
+* 默认情况的vline只有在对应位置的地方有东西的时候才会出现
+	* 所以有的时候要写空的 ```& & & & \\```
+* for multi-row - use ```\userpackage{multirow}```
+
+···
+\multirow{2}{*}{some word} A1 & B1 & C1 \\
+						   A2 & B2 & C2 \\
+\hline
+···
+
+
+### checkmark
+
+```
+usepackage{tikz}
+\def\checkmark{\tikz\fill[scale=0.4](0,.35) -- (.25,0) -- (1,.7) -- (.25,.15) -- cycle;} 
+```
+
 ### Tips
 
 * 对一个section用```\label{sec:method-grouping}```来指定，在别的地方用```~\ref{sec:method-grouping}```
@@ -53,6 +92,7 @@ tags:                               #标签
 	* 目前发现可以用```[H]```大写的H来强制将其锁在Here！
 * \footnote{} 脚注
 * 表示星号要用```$^*$```
+* 引用链接  ```\href{http://www.sharelatex.com}{Something Linky}```
 
 
 ``` 
