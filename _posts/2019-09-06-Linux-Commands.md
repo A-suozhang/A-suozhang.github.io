@@ -226,6 +226,9 @@ tags:
     * ```git config --global http.proxy socks5://127.0.0.1:10808```
     * 在```~/.gitconfig```
 * Crontab 定时运行
+* 由于distributed训练有的时候会出现进程杀不干净的情况，所以需要手动清一下
+	* ```ps aux | grep -i awnas``` - 这样找到Id号然后kill掉
+
 
 
 ---
