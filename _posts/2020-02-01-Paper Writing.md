@@ -60,11 +60,19 @@ tags:                               #标签
 	* 所以有的时候要写空的 ```& & & & \\```
 * for multi-row - use ```\userpackage{multirow}```
 
-···
+```
 \multirow{2}{*}{some word} A1 & B1 & C1 \\
 						   A2 & B2 & C2 \\
 \hline
-···
+```
+
+
+### Formula
+
+* 用\begin{equation} \end{equation} - 讲道理它会自己标上序号
+* 在公式前后加上\begin{split} \end{split} 用作分割
+* 对于两条公式的对齐，手动在内部加上 & - 公式里的&的位置会自动对齐
+* 对于s.t.这样的东西需要给它加上\mbox{}， 并且保持一个空格
 
 
 ### checkmark
@@ -93,9 +101,8 @@ usepackage{tikz}
 * \footnote{} 脚注
 * 表示星号要用```$^*$```
 * 引用链接  ```\href{http://www.sharelatex.com}{Something Linky}```
-
-
-``` 
+* alias的方式 ```\newcommand{\method}{BARS\xspace}```
+	* xspace是表示在需要的时候加空格
 
 \begin{figure*}[th]
   % include first image
@@ -150,7 +157,7 @@ usepackage{tikz}
 * put forward
 * deem to 认为
 * sth. degree (Lr decay degree)
-* engage/involve with 涉及
+* engage/involve with 涉及 （engage with -> involve）
 
 ### 常用缩写
 
@@ -357,12 +364,24 @@ This paper is poorly written. There are many grammar mistakes, many sentences ca
 * gates
 	* baseline文字的图片和文字改一下
 
+
+### CVPR2021 -  2020-11-28
+
+* 第二次完整的写文章，流水账一下
+* 首先是在CMT上注册获得paper-id,占坑
+	- 自己写的时候语法错误好多，还需要锻炼，包括文章的表达方式，以后读文章的时候还需要多积累
+	- 开着grammarly写把
+* 关于看ddl可以加个群或者用[AI Deadlines](https://aideadlin.es/) - 可以不用搞复杂的时区换算了
+
+
 # Resources
 
 ## Docs
 
 * 石墨
 * 腾讯
+* Google Docs
+* Notion
 
 ## Writing
 
@@ -386,3 +405,4 @@ This paper is poorly written. There are many grammar mistakes, many sentences ca
   * [Marker](https://matplotlib.org/3.1.1/api/markers_api.html#module-matplotlib.markers)
 * [Matplotlib Tutorial(Not Official)](https://riptutorial.com/matplotlib/)
 * [Mathematcia Doc](https://reference.wolfram.com/language/)
+* [这篇文章图不错](https://arxiv.org/pdf/2006.05467.pdf)
