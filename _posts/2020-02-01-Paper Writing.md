@@ -121,6 +121,10 @@ usepackage{tikz}
 ```
 
 * 当内容实在长需要压空间的时候，在fig或者table中加```\vspace{-10pt}```来压缩空间
+* 在标题中换行 \title{something \protect\\ something}
+* 有的时候编译莫名错误 ```File ended while scanning use of ```
+	* 首先删除本次编译产生的aux，brf，bbl文件
+	* 然后记得要关闭pdf解决文件占用问题
 
 # Digest
 
