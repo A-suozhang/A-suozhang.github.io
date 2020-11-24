@@ -35,7 +35,7 @@ $$ \alpha_{ij}^{k}$$
 $$ \vec{xy} (vec)$$
 $$ \hat{xy} (hat)$$
 $$ \tilde{xy} (tilde)$$
-
+$$ \overline{xy} (overline)$$
 
 2.3 括号
 
