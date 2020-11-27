@@ -149,6 +149,8 @@ usepackage{tikz}
 * derivation 推导
 * facilicate 促进，帮助
 * neutralize 抵消
+* implication 含义
+* anticipate 预计
 
 ### 常用短语
 
@@ -162,6 +164,8 @@ usepackage{tikz}
 * deem to 认为
 * sth. degree (Lr decay degree)
 * engage/involve with 涉及 （engage with -> involve）
+* in-depth comparison
+* ouptut response - 输出的激活值
 
 ### 常用缩写
 
