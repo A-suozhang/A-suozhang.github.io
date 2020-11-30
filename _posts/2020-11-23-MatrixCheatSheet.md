@@ -31,11 +31,15 @@ $$\begin{bmatrix}
 
 * 仅对角线上有元素
 
-#### 可对角化
+#### 可对角化 - related to 相似
 
 * <span style="color:red;">针对方阵
 * $$ \sum = P^{-1}AP $$
 * 存在条件: 对(n,n)方阵，特征值有N个根
+
+* 相似 - 对应的是 B = P^{-1} A P
+
+
 
 ### 正交矩阵 (Orthogonal Matrix)
 
@@ -70,7 +74,7 @@ $$\begin{bmatrix}
 
 * $$ A = UDU* $$
 
-### 非奇异
+### 非奇异(Non-Singular)
 
 * $$ |A| != 0 $$
 * 非奇异 == 可逆

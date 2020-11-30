@@ -151,6 +151,7 @@ usepackage{tikz}
 * neutralize 抵消
 * implication 含义
 * anticipate 预计
+* contemporary 当代
 
 ### 常用短语
 
