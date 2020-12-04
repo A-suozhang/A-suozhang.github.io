@@ -551,19 +551,24 @@ let g:netrw_banner = 0
 	2. Load it into tmux conf
 	3. maybe install plugins with ```set -g @plugin '...'```
 	4. go into tmux and use ```PREFIX+SHITF+I```
+
 ```
-# List of plugins
+
+List of plugins
+
 set -g @plugin 'tmux-plugins/tpm'
 set -g @plugin 'tmux-plugins/tmux-sensible'
 
-# Other examples:
-# set -g @plugin 'github_username/plugin_name'
-# set -g @plugin 'git@github.com:user/plugin'
-# set -g @plugin 'git@bitbucket.com:user/plugin'
+Other examples:
+set -g @plugin 'github_username/plugin_name'
+set -g @plugin 'git@github.com:user/plugin'
+set -g @plugin 'git@bitbucket.com:user/plugin'
 
-# Initialize TMUX plugin manager (keep this line at the very bottom of tmux.conf)
+Initialize TMUX plugin manager (keep this line at the very bottom of tmux.conf)
 run '~/.tmux/plugins/tpm/tpm'
+
 ```
+
 * 存储tmux状态 [tmux resucrrect](https://github.com/tmux-plugins/tmux-resurrect)
 	* 在tmux conf中加入 ```set -g @plugin 'tmux-plugins/tmux-resurrect'```
 

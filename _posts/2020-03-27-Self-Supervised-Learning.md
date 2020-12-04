@@ -10,13 +10,33 @@ tags:                               #标签
      - 综述
 ---
 
+
+### Self-Supervised
+
+* Pretext Tasks(Core)
+	* with transformations: spatial patch prediction, colorization, rotation(aims at generating different views of the image and find feature invariant to these transforms)
+		* use the traditional data aug
+
+> [理解Contrastive Predictive Coding和NCE Loss - 得未曾有的文章 - 知乎](https://zhuanlan.zhihu.com/p/129076690)
+
+* Contrastive Leaning Framework
+	* maximuize the distance between similarity and dissimilarity
+	* could be formualted as a `dictionary-lookup` problem
+		* a reference of image is augmented into 2 views - query & Key
+		* the query token q+ should match its key k+ over a set of {k-}
+	* composed of a encoding network / data aug module
+	* contrastive loss objective: InfoNCE(Noise-Contrastive-Estimation)  $$L_q = -log\frac{exp(qk^+/\tau)}{exp(qk^+/\tau)+\sum__{k^-}{qk^{-}/\tau}}$$
+		* \tau is temperature hyper-param scaling the distribution of idstances
+		* 类似一个二分类(positive/negative sample)
+
+
+#### Papers
+
 * NCE
   * 核心思想: 将真实样本和一系列“噪声样本”进行对比，从中发现真实样本的规律
     * 从一个其他分布中采样出Sample(来自N(x)分布的就是负样本)而来自原本分布P(x)的认为是正样本
     * 对于ML的Classification任务，就是只认为当前的样本以及其Aug为一个P(X)，其他的Dataaset中的东西都是来自N(x)
   * 说人话就是NCE是将其转化为一个二分类问题，真实样本为1，另外一个分布的采样样本为0
-
-
 
 * [Data Efficient Image Recognitio with Contrastive Predictive Coding](https://arxiv.org/pdf/1905.09272v2.pdf) by DeepMind
   * 将Unsupervised领域的Contrastive Predictive Coding的方法改进(revisit)并且加入到Semi当中
@@ -51,8 +71,6 @@ tags:                               #标签
 
 
 * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20200325231129.jpg)
-
-
 
 * [MoCo](https://link.zhihu.com/?target=https%3A//arxiv.org/pdf/1911.05722.pdf) by Kaiming
   * Contrastive Learning本身是LeCun在2006CVPR上提出的，思想就是拉近类内的，拉远类间的；训练的方式是NCE
@@ -106,6 +124,9 @@ tags:                               #标签
 
 
 ### Semi-Supervised
+
+
+#### Papers
 
 * [FixMatch](https://arxiv.org/pdf/2001.07685v1.pdf)
 
