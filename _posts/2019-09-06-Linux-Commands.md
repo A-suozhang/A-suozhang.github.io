@@ -228,6 +228,7 @@ tags:
 * Crontab 定时运行
 * 由于distributed训练有的时候会出现进程杀不干净的情况，所以需要手动清一下
 	* ```ps aux | grep -i awnas``` - 这样找到Id号然后kill掉
+* 添加sudo用户的时候，用```sudo visudo```命令这样会更加安全一点,会做检查
 
 
 
