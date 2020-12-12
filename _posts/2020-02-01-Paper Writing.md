@@ -74,6 +74,15 @@ tags:                               #标签
 * 对于两条公式的对齐，手动在内部加上 & - 公式里的&的位置会自动对齐
 * 对于s.t.这样的东西需要给它加上\mbox{}， 并且保持一个空格
 
+---
+
+> 打公式常用的一些符号的cheat sheet,[更完整](https://www.rpi.edu/dept/arc/training/latex/LaTeX_symbols.pdf)
+
+* `\int` - 积分
+* `\l(g)eq` - 大于等于号
+* `\cdot` - 点乘
+* `\times` - 叉乘
+* `\infty` - 无限符号
 
 ### checkmark
 
