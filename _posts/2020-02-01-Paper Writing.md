@@ -161,6 +161,7 @@ usepackage{tikz}
 * implication 含义
 * anticipate 预计
 * contemporary 当代
+* prohibitive 禁止的(很困难的)
 
 ### 常用短语
 

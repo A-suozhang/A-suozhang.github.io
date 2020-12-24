@@ -277,6 +277,20 @@ tags:
 
 > 对应着Shell工具，awk对应逐行的处理，sed用作编辑，grep用作查找
 
+awk接收一个模式串以及一个代码块
+
+- 使用方式
+
+awk命令原始的使用方式可以是`awk $pattern $filename`，但是一般使用管道，相当于用前面命令的输出作为文件流给awk命令
+
+主要的pattern是引号内，大括号内表示操作,`~`表示服从某个规则
+最常用的指代： `$0` 表示整行，`$N`表示第N个代码块的部分，默认是用空格作为分隔
+测试：`ll | awk '{print $3};'`
+
+使用`$1 ~ /something/`来匹配某个pattern
+
+
+
 
 ---
 
@@ -408,3 +422,14 @@ done
 	* ```${FILE/.tex/.aux}``` - (等价于s.replace())
 * Example - mp4 convert mp3
 * ![](https://github.com/A-suozhang/MyPicBed/raw/master//img/20200715090430.png)
+
+### 管道
+
+- 最简单的使用例子 ```ll | grep -i something```
+- 输出到文件  `curl www.baidu.com > baidu.log`
+- 当文件内容很多的时候，可以用less命令来建立管道，这样可以翻页浏览，而不是打印出很多 `grep train_acc train.log | less`
+- 在管道中使用sed替换  `curl www.baidu.com | sed 's/baidu/google/g' | grep google`
+- `wc -l` 列出行数sum
+
+作用是下载下baidu.com的source code并将其中所有的baidu替换为google，然后在索引到其中所有的google
+管道从左向右运行
