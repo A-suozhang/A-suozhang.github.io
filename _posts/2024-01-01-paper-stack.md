@@ -34,3 +34,65 @@ tags:                               #标签
 * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20200405093121.jpg)
 
 
+### 2021-01-03 NES
+
+* Keys
+
+a family of black-box optimization algorithms use natural grad to update the parameterized distribution in the direction of higher expected **fitness**
+
+* Source - Jurgen 
+
+* Motivation
+
+* Methodoly
+
+Iteratively update the searched distribution by using estimated grad on its distribution param(e.g. \miu & \sigma of gaussian), iter stops while the criterion is met.
+
+1. Search Gradient method
+
+> what is search space? what is fitness?
+
+however, to locate a quadratic optimum, should be at least quatratic, since 1-order methods will be unstable
+the update is not scale-invariant
+this does not occur in general grad-based case, since here the grad controls both the position and the variance of distribution over the same search space dimension
+this problem is solved with the `natural gradient`
+
+2. Natural gradient
+
+> how to make it a constraint optimization
+
+natural gradient is proposed in the ml field to help mitigate the slow convergence in plataeu landscape / ridges(山岭，山脊)
+the plain grad \delta{J} represent the steepest ascent(in the space of the actual param \theta)
+when the learning-step \epsilon is small, the problem could be reformed as finding a new distribution with param chosen from the 
+hypersphere of radius \epsilon and center \theta that maximize the plain grad \delta{J}. so the Enculidean distance is used for 
+measuring the distance between the distribution, so the update is dependent of the parameterization of the distribution. 
+the key of natural is to remove this dependence, finding a natural distance*(e.g. KL distance), reduce it to the constraint optimizaiton
+***use the natural grad instead of the steepest grad for optimization*
+
+3. Fitness shaping - make the distribution invariante to (arbitary but order-preserving transformation)
+
+> what is order? simply make the ranking of the fiteness function of the population no change?
+
+not so crucial.
+
+4. Adaptive sampling - adjust the lr online
+
+meta-learning based(sample new \theta, if quality significantly better, continue with \theta_hat), apply hill-climbing and the Mann-Witney U-Test
+
+5. rotation-invariant distribution
+
+local-natural coordinate
+sampling from radical distribution
+
+
+* Experiment
+
+* Ideas
+
+multi-variant gaussian, fisher information matrix
+
+- closely related to CMA-ES(Convariance Matrix Adaptation Evolutional Strategy)
+
+
+
+

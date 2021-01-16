@@ -120,11 +120,46 @@ Motivation: 不使用对比这一scheme,Representation Learning 解构为用一�
 后续的工作发现这个MLP中的BN非常关键，BN在显示的做对比，除去batch内相同的部分
 不依赖负样本之后，其对数据增强就更加鲁棒了
 
-- [SimSam]()
+- [SimSiam]()
 
 > Kaiming针对孪生网络的follow-up work
 
 follow了BYOL的思路，找到了collapse的避免方法是stop-gradient
 左侧的encoder产生z1，经过MLP之后输出p1，右侧生成z2，计算p1与z2的Cosine Similarity，左右调换，计算p2与z1的Cosine Similarity，并且最大化以上两个余弦距离的和，右侧encoder一直不回传梯度
 为什么会work，参考[Andy's Blog](http://link.zhihu.com/?target=https%3A//mp.weixin.qq.com/s/-Vtl_8nND7WCPLdL5bNlMw)
+
+---
+
+- [SimSiam](http://arxiv.org/abs/2011.10566)
+
+* 🔑 Key:         
+
+new flow in self-supervised learning, simply using the siamese flow(max the similarity of a image between 2 augmentations)
+without relying on: 1. neg pair 2. large bs 3. momentum encoder
+
+* 🎓 Source: 
+* 🌱 Motivation: 
+* 💊 Methodology: 
+
+simple scheme: same encoder network takes in 2 augmented image, one follows a MLP, the other uses the stop-grad, then maximize their similarity
+![](https://github.com/A-suozhang/MyPicBed/raw/master//img/20201226085919.png)
+![](https://github.com/A-suozhang/MyPicBed/raw/master//img/20201226091728.png)
+
+
+Stop-gradient is critical, as formula above, the encoder's weights are not updated through grad of z1,z2 but from p1, p2
+
+Min their negative cosine similarity
+![](https://github.com/A-suozhang/MyPicBed/raw/master//img/20201226091547.png)
+
+* 📐 Exps:
+* 💡 Ideas:  
+
+Vanilla Simamese network(serve for comparing entities) have a trivial case of all outputs falling into a constant - `collapse`(contrastive learning such as SimCLR aims to solve it)
+tricks like momentum encoder / use neg pairs / online clustering(SwAV)
+
+
+Comparison with other Siamese methods
+![](https://github.com/A-suozhang/MyPicBed/raw/master//img/20201226094617.png)
+
+
 
