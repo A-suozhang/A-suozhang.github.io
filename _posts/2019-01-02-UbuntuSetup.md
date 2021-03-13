@@ -657,6 +657,9 @@ Host *.eva*
   * 在登陆时候指定比如 ```ssh -L 8888(Local Port):localhost:6006(Remote Port) ztc.eva0``` 将远程服务器端口映射到本机8888
   * 在服务器上用6006端口启动Jupyter
   * 如果Jupyter的版本错了，可以先```which jupyter```然后将对应的位置建立软连接到我们想要的```ln -s SOURCE_FILE TARGET_FILE```
+* 如果发现端口映射的时候没有反应的话：可以ck一下是不是本机有多个ssh都占用了这个端口
+* 在ssh-copy的时候报错私钥的Bad Permission
+   ```chmod 400 path/to/filename```
 
 ### Docker
 * 3个基本概念： 

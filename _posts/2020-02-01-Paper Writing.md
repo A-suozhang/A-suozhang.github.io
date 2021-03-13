@@ -103,6 +103,8 @@ usepackage{tikz}
 * [常见错误](https://www.weibo.com/ttarticle/p/show?id=2309403955741387052924)
 * [Table相关](https://zhuanlan.zhihu.com/p/19749566)
 * Fig. （大写，加点）
+  * 而Figure不用加点
+  * Tab.同理
 * 特有名词，比如GPU，以及方法AMC需要大写
 * 两张图并列(注意这种方式两张图标号是a/b，但是如果用```\begin{subfigure}```的话标注就是新的fig)
 * 调整图片格式实在是太痛苦了！很容易一张图就会被卡到最后去，整个格式都会崩溃
@@ -113,6 +115,7 @@ usepackage{tikz}
 * alias的方式 ```\newcommand{\method}{BARS\xspace}```
 	* xspace是表示在需要的时候加空格
 
+```
 \begin{figure*}[th]
   % include first image
   \subfigure[]{
@@ -126,8 +129,8 @@ usepackage{tikz}
 \caption{The effect of the number of GCN or GATES layers. (a) Experiments on NAS-Bench-101. The proportion of training samples is 0.1\% (381 training architectures, 42362 testing architectures). (b) Experiments on NAS-Bench-201. The proportion of training samples is 10\% (781 training architectures, 7812 testing architectures).}
 \label{fig:gates_layers}
 \end{figure*}
-
 ```
+
 
 * 当内容实在长需要压空间的时候，在fig或者table中加```\vspace{-10pt}```来压缩空间
 * 在标题中换行 \title{something \protect\\ something}
@@ -256,11 +259,37 @@ usepackage{tikz}
 * 注意arxiv并不会给你跑bibtex
 	* 所以提交的时候一定要将bbl文件给包含了，否则会没有引用信息！
 
-### 2020-04-20 Rebuttal
+
+# Rebuttal
+
+## 常用素材
+
+* 开头的客套话
+
+```We thank all the reviewers 1 for acknowledging our novel contributions and providing valuable feedback.```
+```we address the common concerns followed by detailed comments from each reviewer```
+```We thank all the reviewers for their insightful and constructive feedbacks! We will revise the final version according to this rebuttal.```
+```We’ll carefully proofread the paper and fix the typos in the final version.```
+```Thanks for the suggestion.We’ll make the claim more rigorous in our finalversion```
+	
+
+* 委婉的喷
+
+```We suspect / There may be some misunderstanding```
+
+* 给AC说
+
+```
+We appreciate the constructive comments given by the reviewers.However, we’d like to mention thataccording to the comments, Reviewer 4’s knowledge about GCNdoes not seem to align with other reviewers, e.g., asking whether better minibatch gradients of GCN is a problem, and asking why GCNs need dropout.Moreover, there seems to be misunderstanding on Theorem 1.
+```
+
+
+
+### 2020-04-20 ICML2020 Rebuttal
 
 * 对于给高分的，先舔，表示XX很重要，然后说我们考虑了XX，没做什么是为什么，还会做什么
 
-### 2020-05-26
+### 2020-05-26 ECCV Rebuttal 
 
 * 阅读了[浅谈Rebuttal](https://zhuanlan.zhihu.com/p/104298923)
 * 体会审稿人的意图，从他的角度出发
@@ -272,7 +301,11 @@ usepackage{tikz}
   * rebuttal时不要漏点，要逐点回应做到有问必答。若因篇幅有限，可将类似的意见合成一点，万不可因篇幅有限擅自删除一些要点或遗漏要点，以免造成含糊不清、浑水摸鱼之嫌
 * **要有问必答**
 
-### 2020-06-20
+### 2021-01-22 CVPR2021 Rebuttal
+
+
+
+### 2020-06-20 Trans Review 
 
 * Review Trans Paper
 * 有什么不懂的就加Question

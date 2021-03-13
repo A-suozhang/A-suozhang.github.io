@@ -1,11 +1,15 @@
 # []()
 
+🔑 Key:         
 
-##  🔑 Key:         
-##  🎓 Source: 
-##  🌱 Motivation: 
-##  💊 Methodology: 
-##  📐 Exps:
-##  💡 Ideas:  
+🎓 Source: 
+
+🌱 Motivation: 
+
+💊 Methodology: 
+
+📐 Exps:
+
+💡 Ideas:  
 
 

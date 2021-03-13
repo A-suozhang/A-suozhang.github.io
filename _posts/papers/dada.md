@@ -44,24 +44,25 @@ PKU & Edingburg
 
 * 💡 Ideas:  
 
+1. 看起来它就是一半train训练aug一半valid训练weight，然后训练weight的时候没有用aug，只是训练而已,这样和正常DARTS的本质区别在于，正常DARTS在训练weight的时候也有sample,并且只训练sample过的weight。它这里不采样是否合理?
 
-# Related Works
 
-- [AutoAugment: Learning Augmentation Policies from Data](http://arxiv.org/abs/1805.09501)
+
+# [AutoAugment: Learning Augmentation Policies from Data](http://arxiv.org/abs/1805.09501)
 
 - RL for Search
 
 ![](https://github.com/A-suozhang/MyPicBed/raw/master//img/20210116140406.png)
 ![](https://github.com/A-suozhang/MyPicBed/raw/master//img/20210116140604.png)
 
-- [Fast AutoAugment](http://arxiv.org/abs/1905.00397)
+# [Fast AutoAugment](http://arxiv.org/abs/1905.00397)
 
 - faster search based on Density Matching
 
 ![](https://github.com/A-suozhang/MyPicBed/raw/master//img/20210116141216.png)
 
 
-- [PBA:Population Based Augmentation: Efficient Learning of Augmentation Policy Schedules](http://arxiv.org/abs/1905.05393)
+# [PBA:Population Based Augmentation: Efficient Learning of Augmentation Policy Schedules](http://arxiv.org/abs/1905.05393)
 
 - Evo for search
 
