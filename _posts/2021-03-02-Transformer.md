@@ -1,3 +1,4 @@
+---
 layout:     post                    # 使用的布局（不需要改）
 title:      Sth. About Transformer            # 标题 
 subtitle:  热度热度… 
@@ -8,12 +9,29 @@ catalog: true                       # 是否归档
 tags:                               #标签
 
      - survey
+---
 
 # Transformers
 
 > 由于Transformer在各个领域都十分火热，终于想起来要蹭这个热度
 
 ## Basics
+
+> https://www.youtube.com/watch?v=TrdevFK_am4
+
+* take in a set of points(tokens), do pair-wise inner product(has N^2 connections - quadratic attention)
+  * quadratic too big - local-attention
+    * VIT: glocal attention to patches(更加粗粒度的基本单元)
+* Transformer's params w(maybe the attention map) is not fixed, 是on the fly计算的
+  * 主要是对于输入的位置不是固定的，所以是order invariant的，需要positional encoding
+* Vit的本质就是将一个16x16的patch转化为一个transformer能够理解的单元：
+  * 就是256长度的一个seq乘上了一个learnable embedding
+* Different with Conv & MLP
+  * conv(image, neighbourhood mechanism) & mlp(could fit any function) has strong inductive prior
+  * conv could be viewed as the inductive bias(我们已知一个完备的模型能够拟合任何函数(MLP)但是我们由于数据不足，不足以完全的刻画func，所以我们只需要bias to其中一个部分，让其有某种性质(Conv)
+  * Transformer是一种比MLP更加general的方法
+    * 但是现在的shortcut其实也是一种inductive bias
+  * 由于其非常general，非常inductive，所以在数据量激增的现在能够更好的表现
 
 ### Attention & Self-Attention
 
@@ -34,11 +52,16 @@ tags:                               #标签
 # Output - [num_token, dim]
 ```
 
+* 本质上就是：
+
+  * 对每个time-step的输入token；都算出一个key，value(feature_dim可以自定义，由input token乘一个weight matrix得到,但是这两者需要一样)，然后做dot product，对所有的token做softmax，就可以获得attention map；之后的结果乘上Value(也是由input token经过一个weight matrix得到的)，就是最后的输出。
+  * ![](https://github.com/A-suozhang/MyPicBed/raw/master//img/20210313220040.png)
+  
 * 尺度变化：
 
-  * 原本比如说输入是[4,3]
-  * 对应[4，4]的W，点积猴得到[4,3]的key/query
-  * key query做点积之后得到[3,3]的score，在dim=-1做Softmax： 这一步的物理意义是，对于3个input的的分别有一个归一化的[3,1]的查询，表示更倾向于去query 3个value中的哪一个
+  * 原本比如说输入是[4(num_token),3 token_feature]
+  * 对应[token_features，key_feature]的W，点积猴得到[num_token,key_feature]的key/query
+  * key query做点积之后得到[num_feature ,num_token]的score，在dim=-1做Softmax： 这一步的物理意义是，对于3个input的的分别有一个归一化的[3,1]的查询，表示更倾向于去query 3个value中的哪一个
   * 每个score会加权上所有token所对应的embedding并且sum起来
   * sum(dim=0) -> [3,3]
 
@@ -89,6 +112,12 @@ tags:                               #标签
 * 最早是用来替代last stage of convs, 将一些pixel按照semantic来group起来作为token
 * iGPT：self-supervised Pretraiing of visual Transformer
 * ViT: 是一个pure transformer，applied on seq of image patches
+
+### [VIT的代码实现](https://github.com/lucidrains/vit-pytorch)
+
+
+
+
 
 ## Efficient
 

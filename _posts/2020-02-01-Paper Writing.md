@@ -11,6 +11,16 @@ tags:                               #标签
      - 重新学习
 ---
 
+# Paper Write
+
+### Needs CK
+
+1. 一些Term的一致性： 
+2. Fig. Figure Tab. Table 
+3. 公式/图表的caption最后有没有标点
+4. e.g. / i.e. 后面可以加逗号可以加
+5. 单双引号 
+6. 括号前面的空格
 
 # LaTex
 
@@ -442,6 +452,7 @@ This paper is poorly written. There are many grammar mistakes, many sentences ca
 * [Synonym](https://www.synonym.com/synonyms/)
 * [New Better Synonym](https://www.thesaurus.com/browse/optimize?s=t)
 * 有道翻译
+* [ESODA](http://www.esoda.org/)
 
 
 ## Bib
