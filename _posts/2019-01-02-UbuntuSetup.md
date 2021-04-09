@@ -512,7 +512,8 @@ let g:netrw_banner = 0
 * 启动的时候，初次登陆需要验证token，就是term中的这种
   * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20191209123716.png)
 * 安装jupyterthemes，直接用pip安装即可
-  * 然后导入配置 ```jt -t onedork -f roboto -fs 14 -nfs 14 -tfs 14 -ofs 11```
+  * 然后导入配置 ```jt -t onedork -f roboto -fs 14 -nfs 14 -tfs 14 -ofs 11 -cellw 90%```
+  * 修改宽度的话用`jt -t oceans16 -f roboto -fs 12 -cellw 90%`
   * (如果用apt安装jupyter可能会出现无法往.jupyter目录写的问题，手动修改权限即可)
 * 有的时候jupyter对应的python版本不一定正确
   * 直接修改```which jupyter```所出现的jupyter文件中第一行的python路径，不起效果(ipython和pip这样能够达成，但是jupyter不行)

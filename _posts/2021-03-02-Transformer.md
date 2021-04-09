@@ -115,9 +115,31 @@ tags:                               #标签
 
 ### [VIT的代码实现](https://github.com/lucidrains/vit-pytorch)
 
+1. 最传统的ViT
 
+   * 就是直接把图片分成pacth，每个patch认为是一个sentence，硬怼
 
+2. TNT: Tranformer in Transformer: 内部用pixel embedding通过一个inner transformer块的得到的结果再和Patch embedding相加起来作为outer transformer块的输出
 
+   * ![](https://github.com/A-suozhang/MyPicBed/raw/master//img/20210330134139.png)
+
+3. SwinTransformer：Shifted Window, Hierarchical Transformer
+
+   * ![](https://github.com/A-suozhang/MyPicBed/raw/master//img/20210330134613.png)
+
+   * ![](https://github.com/A-suozhang/MyPicBed/raw/master//img/20210330141314.png)
+     * Patch-Merging： 由于输出的时候每个patch会对应一个dim=C的feature，需要downsample的时候，将2x2的patch给concat起来过一个linear(4c-in 2c-out )
+     * 选取了4x4作为初始的patch大小，一开始的输入尺度就是W/4xH/4xC, window是在patch的上面的,一般用7x7 window：(224=7x4x8)
+   * window-based的MSA，window的数目会随着网络的加深而变细，同时channel数目增加； quadratic to num-token -> linear to num-token
+     * ![](https://github.com/A-suozhang/MyPicBed/raw/master//img/20210330140247.png)
+   * 对比原本是直接一个patch中全部做global attn，传统的改用window-based的W-MSA，虽然可以减少计算量，但是每个window都是independent的，缺少了cross-window的information；这里用sliding window，每隔一个transformer块，会将window平移M/2个块,突出体现(Neighboring Non-Overlapping)
+     * ![](https://github.com/A-suozhang/MyPicBed/raw/master//img/20210330140413.png)
+   * 用了UperNet的Framework来做Seg(应该是替换了PPM)
+     * ![](https://github.com/A-suozhang/MyPicBed/raw/master//img/20210330152602.png)
+
+4. [[2012.12877\] Training data-efficient image transformers & distillation through attention (arxiv.org)](https://arxiv.org/abs/2012.12877)
+
+   * 原本的ViT需要很大数据集的pretrain才能获得好的效果，这里只需要在正常imgnet上训练
 
 ## Efficient
 
@@ -147,6 +169,41 @@ tags:                               #标签
 
 * 在CV任务当中，Transformer更多的被作为一个feature selector(通常是从一些patch或者是pre-acquired feature作为token，来寻找他们之间的关联)，因为它本身更注重于比较远的数据之间联系的mining
 * Transformer相比于RNN更加efficient，因为其linear层和self-attention层可以parallel起来
+
+## Point Transformers
+
+#### [[2011.00931\] Point Transformer (arxiv.org)](https://arxiv.org/abs/2011.00931)
+
+* 分为两支分别去capture local和global的feature，其中local feature，设计了一个SortNet(select points on a learnt score)去pool出top-k的点； attention是用来融合glocal和local feature的
+*  强调了permutation invariant，貌似是motivation的来源？attn过程本身是permutation-invariant的，但是output仍然不是permutation-invariant的？所以提出了一个sortnet去给出ordered subset(containing latent local feature)， attention output is permutation-invariant & ordered？
+* RW中提到了一个Set Transformer which adapt transformer to process unordered set elements
+* 介绍了一种对于两个Set的Cross-multi-head attention方法 A^MH(P,Q)
+  * （表示输出是ordered且depend on the order of the P ）
+  * 查阅了代码是Q用LocalFeature生成，然后KV用GlobalFeature生成？
+* Method:
+  1. SortNet: 一个row-wise MLP给降维到每个点一个值，然后取top-K(with sort),然后对每个点，以欧式距离r做grouping；然后将score和local feature相concat得到最后的结果
+  2. Glocal Feature Gen. : use MSG(multi-scale grouping): subsample with FPS, find neighbour to aggregate
+  3. Local-Global Attention(目的是relate the local & global feature set):
+     * Cross-Attn(SelfAttn(F_local), SelfAttn(F_global))
+
+
+
+## LayerNorm
+
+1. [Rethinking Batch Normalization](https://arxiv.org/pdf/2003.07845.pdf)
+   * 由于在用BN的transformer训练的时候，batch的mean和var一直在振荡，偏离全局的running-static
+   * 提出了一种改进，不用zero-mean，用quadratic-mean来代替方差的位置
+   * (可能因为Text与Image的输入数据的batch组成本身会有一些区别)
+2. [On Layer Normalization in the Transformer Architecture. ICML 2020](https://arxiv.org/abs/2002.04745)
+   * transformer需要很好的warmup lr才能更好的训练
+     * 认为是常用的Adam由于在训练的一开始样本的差距过大，调整学习率的方差也过大了，导致了出现问题
+     * 后续这篇paper question了这个观点。
+   * 分析了post-LN以及pre-LN的方法：
+     * 原始的ver LN是放在residue的add之后的
+     * post的最后一层的梯度很大，各层之间梯度不稳定
+     * 原因：各子层之后的 Layer Normalization 层会使得各层的输入尺度与层数 L 无关，因此当 Layer Normalization 对梯度进行归一化时，也应当与层数 L 无关。
+   * 将 Layer Normalization 放到残差连接中的两个子层之前，并在最后的输出之前也用一个LayerNorm
+     * 造成了对每个层数的梯度范数近似不变
 
 
 
