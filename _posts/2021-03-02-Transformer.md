@@ -115,31 +115,103 @@ tags:                               #标签
 
 ### [VIT的代码实现](https://github.com/lucidrains/vit-pytorch)
 
-1. 最传统的ViT
+### ViT
 
-   * 就是直接把图片分成pacth，每个patch认为是一个sentence，硬怼
+* 就是直接把图片分成pacth，每个patch认为是一个word，整张图片是一个16x16的sentence，直接学习这些patch之间的联系。
+* Standart Learnable 1-d pos encoding
+* ![](https://github.com/A-suozhang/MyPicBed/raw/master//img/20210528204014.png)
 
-2. TNT: Tranformer in Transformer: 内部用pixel embedding通过一个inner transformer块的得到的结果再和Patch embedding相加起来作为outer transformer块的输出
+### TNT: Tranformer in Transformer: 
 
-   * ![](https://github.com/A-suozhang/MyPicBed/raw/master//img/20210330134139.png)
+* 内部用pixel embedding通过一个inner transformer块的得到的结果再和Patch embedding相加起来作为outer transformer块的输出
 
-3. SwinTransformer：Shifted Window, Hierarchical Transformer
+* ![](https://github.com/A-suozhang/MyPicBed/raw/master//img/20210330134139.png)
 
-   * ![](https://github.com/A-suozhang/MyPicBed/raw/master//img/20210330134613.png)
+### SwinTransformer：Shifted Window, Hierarchical Transformer
 
-   * ![](https://github.com/A-suozhang/MyPicBed/raw/master//img/20210330141314.png)
-     * Patch-Merging： 由于输出的时候每个patch会对应一个dim=C的feature，需要downsample的时候，将2x2的patch给concat起来过一个linear(4c-in 2c-out )
-     * 选取了4x4作为初始的patch大小，一开始的输入尺度就是W/4xH/4xC, window是在patch的上面的,一般用7x7 window：(224=7x4x8)
-   * window-based的MSA，window的数目会随着网络的加深而变细，同时channel数目增加； quadratic to num-token -> linear to num-token
-     * ![](https://github.com/A-suozhang/MyPicBed/raw/master//img/20210330140247.png)
-   * 对比原本是直接一个patch中全部做global attn，传统的改用window-based的W-MSA，虽然可以减少计算量，但是每个window都是independent的，缺少了cross-window的information；这里用sliding window，每隔一个transformer块，会将window平移M/2个块,突出体现(Neighboring Non-Overlapping)
-     * ![](https://github.com/A-suozhang/MyPicBed/raw/master//img/20210330140413.png)
-   * 用了UperNet的Framework来做Seg(应该是替换了PPM)
-     * ![](https://github.com/A-suozhang/MyPicBed/raw/master//img/20210330152602.png)
+* ![](https://github.com/A-suozhang/MyPicBed/raw/master//img/20210330134613.png)
 
-4. [[2012.12877\] Training data-efficient image transformers & distillation through attention (arxiv.org)](https://arxiv.org/abs/2012.12877)
+* ![](https://github.com/A-suozhang/MyPicBed/raw/master//img/20210330141314.png)
+  * Patch-Merging： 由于输出的时候每个patch会对应一个dim=C的feature，需要downsample的时候，将2x2的patch给concat起来过一个linear(4c-in 2c-out )
+  * 选取了4x4作为初始的patch大小，一开始的输入尺度就是W/4xH/4xC, window是在patch的上面的,一般用7x7 window：(224=7x4x8)
+* window-based的MSA，window的数目会随着网络的加深而变细，同时channel数目增加； quadratic to num-token -> linear to num-token
+  * ![](https://github.com/A-suozhang/MyPicBed/raw/master//img/20210330140247.png)
+* 对比原本是直接一个patch中全部做global attn，传统的改用window-based的W-MSA，虽然可以减少计算量，但是每个window都是independent的，缺少了cross-window的information；这里用sliding window，每隔一个transformer块，会将window平移M/2个块,突出体现(Neighboring Non-Overlapping)
+  * ![](https://github.com/A-suozhang/MyPicBed/raw/master//img/20210330140413.png)
+* 用了UperNet的Framework来做Seg(应该是替换了PPM)
+  * ![](https://github.com/A-suozhang/MyPicBed/raw/master//img/20210330152602.png)
 
-   * 原本的ViT需要很大数据集的pretrain才能获得好的效果，这里只需要在正常imgnet上训练
+### DeiT: [[2012.12877\] Training data-efficient image transformers & distillation through attention (arxiv.org)](https://arxiv.org/abs/2012.12877)
+
+* 原本的ViT需要很大数据集的pretrain才能获得好的效果，这里只需要在正常imgnet上训练
+* 一篇偏Technique report的文章
+
+### Aggregating Nested Transformers
+
+1. 不是和其他的Vision TR一样使用一个Hierarchy的结构，而是用Local-TR on non-overlapping blocks, then aggregate them hierarchically
+
+   * 如何选取aggregation func就非常关键了
+
+2. 做到了**Converge Faster & Less Training Data **
+
+3. 直观看起来这个flow很像pyramid
+
+   * 文中表示了和Pyramid的区别是:
+     * pyramid一般都是用的global SA + spatial ds：(local attention which is efficient)
+   * 作者表示对于 **如何建模long-range的information communication**对translation invariance关键，其他方法用了一些比较sophisticated的方法来做到这种
+     * 而作者认为它通过将Block aggregation映射回到原图来做，所以nearby blocks可以很方便的沟通信息(与Swin当中的Window overlap异曲同工)
+   * 有一个部分专门讨论了如何aggregation
+     * 是否在SA内部进行query subsample(在len_seq的维度上)： 在data-efficient数据集上问题很大(reso直接和seq len有联系)
+     * 如何使用Conv （小size）
+     * which pooling   (Maxpool比别人好很多)
+     * 是否是unblocking关键
+
+   * 实际aggregation的过程中由于有一个Unblock和conv，所以映射到原图时候这个aggregation中其实涉及到了information communication among blocks
+
+     ![image-20210528211003775](C:\Users\A-suozhang\AppData\Roaming\Typora\typora-user-images\image-20210528211003775.png)
+
+* ![](https://github.com/A-suozhang/MyPicBed/raw/master//img/20210528210710.png)
+
+### PVT
+* 类CNN Macro的TR，堆叠多个TR-block，channel数目逐渐增加，spatial逐渐减小
+
+
+### DeepViT：Retention
+
+* 提出了ViT不能过于Deep，到了深层attention的map比较similar了
+
+* 做了一个参考实验，加大Attention的embedding dim，确实一定程度上解决了这个问题，所以证明了**Attention Collapse确实是Bottleneck所在**
+* Retention: **Interaction between AttnHeads**
+  * 发现了同一个TRBlock的不同head之间attnmap很类似
+    * 它们本来应该focus on different aspects of input token
+  * 去找Cross-head Communication去regenerate map
+    * ？本身引入multihead的意义是对一个token的feature有更rich的解读，但是现在它学不出来了，所以不把它们隔离开来，而是融合成一个head
+    * 引入了一个learnable的Transofmation，在head-dim上aggregate attn-map，做norm之后再乘上V
+    * 说自己是effective & easy2implement
+
+### Twin：
+* focus在Spatial Attention Mechanism的设计
+* 一个问题是CPVT有Swin好嘛？(ck文章里有没有对比)
+1. Pos Encoding related
+	* 提到了PVT的结构，对于dense prediction的任务很重要，作者表示surprsing SwinTR更好
+	* 发现了PVT的核心问题在于使用了继承自ViT的absoulte pose encoding，因为这样就没有translation invariance了
+	* 使用了CPVT中所提出的CondPosEnc，在每个stage的第一个encoder block中用PosEncGen利用最朴素的CondPosEnc产生方式: 2-d Depthwise Conv
+2. Attention Scheme related: Spatially Separable Self Attention
+	* 第一个层面: Locally grouped: 分2-d图片为小的patch，每个patch只是local的做attn(Swin的做法，问题是没有inter-patch的information communication)； receptive fieled从NxN变成了KxK，文中表示这样做掉了很多点 O(k1k2HWd)
+	* 第二个Global SubSampled Attention，去做cross-group info exchange，本质上就是在window维度做attn。O(HW^2xd/k1k2) 
+	* 两者结合起来就像Depthwise-Pointwise一样
+
+### CondPosEnc：
+* 文章里没有和Swin比，可能是出现前后
+* 本质上就是一个DeothwiseConv on input-Feature Map
+	* condition体现在它的计算是condition在它的local neighbor下的，(也涉及了一个从seq revert回2d然后再apply conv的这样一个过程)
+	* Permutation variant but translation invariant
+	* having the aibility to express the absolute to some extent（作者通过实验表示这点很重要）
+* 整理了Pos_enc的Main scheme
+	1. absolute: Sinsoido / Learnable
+	2. relative: retlative 2-d >> 2-d Sinsoido 
+	3. Dynamic: 
+	4. this paper's
 
 ## Efficient
 
@@ -160,7 +232,6 @@ tags:                               #标签
 5. Compact NN Design
 
    * (dot product between representations from different input tokens in a given sequence)
-     
 * simplify the self-attn to the span-based conv (就是最后的atten-map对tokens加权求和的时候只选取一部分的)
    * sparse graph 
    * Local Sensitive Hashing: (Reformer)

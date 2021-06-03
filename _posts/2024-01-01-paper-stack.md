@@ -4,7 +4,7 @@ title:      Note Stack 笔记堆栈           # 标题
 subtitle:   无处安放的笔记   #副标题
 date:       2020-08-06            # 时间
 author:     tianchen                      # 作者
-header-img:  img/7_1/3-build.jpg  #这篇文章标题背景图片  
+header-img:  img/2021_0603/4.jpg  #这篇文章标题背景图片  
 catalog: true                       # 是否归档
 tags:                               #标签
      - 心得
@@ -92,7 +92,6 @@ sampling from radical distribution
 multi-variant gaussian, fisher information matrix
 
 - closely related to CMA-ES(Convariance Matrix Adaptation Evolutional Strategy)
-
 
 
 
