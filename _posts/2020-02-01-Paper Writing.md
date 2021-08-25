@@ -436,6 +436,28 @@ This paper is poorly written. There are many grammar mistakes, many sentences ca
 * 关于看ddl可以加个群或者用[AI Deadlines](https://aideadlin.es/) - 可以不用搞复杂的时区换算了
 
 
+
+### 2021-08-05 TIP Recycle
+
+1. 对每个reviewer需要给一个Detailed Contribution
+
+>  [你了解作者中的贡献者角色分类法（CRediT）吗？ - WORDVICE的文章 - 知乎](https://zhuanlan.zhihu.com/p/374106127)
+
+```
+* Tianchen Zhao: Conceptualization and BNN related papers investigation, software design(BNN & NAS part), All Experimental Designs, Writing – original draft
+* Xuefei Ning: Conceptualization and NAS related papers investigation, software design(NAS part),  All Experimental Designs, Writing – original draft
+* Xiangsheng Shi: Software design and Experiments about BNN baseline methods, Experimental results Visualization
+* Songyi Yang: Software design and Experiments about NAS baseline methods, Writing – original draft
+* Shuang Liang: Validation of the searched BNN, Writing - Review & Editing
+* Peng Lei: Validation of the effectiveness of the NAS method, Writing - Review & Editing
+* Jianfei Chen: Methodology verification, Writing - Review & Editing
+* Huazhong Yang: Project administration
+* Yu Wang: Resources, Project administration
+```
+
+
+
+
 # Resources
 
 ## Docs
