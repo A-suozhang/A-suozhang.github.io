@@ -2,7 +2,7 @@
 layout:     post                    # 使用的布局（不需要改）
 title:      Music Trip.         # 标题 
 subtitle:   Listen to me NOW.
-date:       2021-06-01            # 时间
+date:       2020-06-01            # 时间
 author:     tianchen                      # 作者
 header-img:  img/2021_0603/6.jpg  #这篇文章标题背景图片  
 catalog: true                       # 是否归档
