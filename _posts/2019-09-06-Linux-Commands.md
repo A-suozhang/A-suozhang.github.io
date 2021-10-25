@@ -2,7 +2,7 @@
 layout:     post                    # 使用的布局（不需要改）
 title:      Linux常用命令笔记              # 标题 
 subtitle:   学了忘，忘了学(Learning and then Forget, then Forgot to Learn)     #副标题
-date:       2019-09-06              # 时间
+date:       2024-01-01              # 时间
 author:     tianchen                      # 作者
 header-img:  img/bg-term.png   #这篇文章标题背景图片
 catalog: true                       # 是否归档

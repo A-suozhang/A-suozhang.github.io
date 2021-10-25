@@ -2,7 +2,7 @@
 layout:     post                    # 使用的布局（不需要改）
 title:      鸟哥的Linux私房菜           # 标题 
 subtitle:   CookBook  #副标题
-date:       2020-08-06            # 时间
+date:       2024-01-01            # 时间
 author:     tianchen                      # 作者
 header-img:  img/2021_0603/5.jpg  #这篇文章标题背景图片  
 catalog: true                       # 是否归档
@@ -22,7 +22,6 @@ tags:                               #标签
 
 > 需要恶补一下网络知识了呢！
 
-
 # Frac-knowledges
 
 1. 所谓“命令行”本质上指的是shell，它是一个程序，接受键盘的输入，将命令传送给OS来执行。
@@ -31,7 +30,7 @@ tags:                               #标签
     - shell前面的提示符，一般是“$”,如果是“#”,那么表示是root
     - 幕后的控制台: 即使没有terminal正在运行，后台仍然会运行着几个会话，大多数Linux系统中都可以用`CTRL+ALT+F1~6`
 2. 使用less来看文件内容（优雅），上下滚，q退出
-3. 通配  `*  ？  []    [!]`
+3. 通配  `*  ？  []    [!]` 
 4. 硬连接的问题是：不能跨磁盘或者是连接一个目录
 5. man某个命令来看args
     - whatis+某命令来看间接用法
@@ -62,6 +61,18 @@ tags:                               #标签
     - `~/.profile  /etc/profile`
     - `~/.bash_profile   bash_login`
     - `/etc/bash.bashrc ~/.bashrc`
+14. 包管理工具:
+    - debian-like: 低层dpkg，上层apt-get
+    - Fedora/RedHat/CentOs, 低层rpm，高层yum
+15. 磁盘
+    - 虚拟存储设备： RAID(Redundant Array of Independent Disks) & LVM(Logical Volume Manager)
+    - 命令 
+        -  fsck： check and repair file system
+        - fdisk: 分区表控制器
+        - mkfs: 创建文件系统
+        - dd: 直接写入磁盘
+    - `/etc/fstab`  
+        - ![](https://github.com/A-suozhang/MyPicBed/raw/master//img/20210922092004.png)
 
 
 
