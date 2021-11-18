@@ -76,6 +76,33 @@ tags:                               #标签
 
 
 
+# IPADS实验室的shell教学
+
+>  [IPADS新人培训第一讲：Shell-哔哩哔哩](https://b23.tv/8DIwrX)， 上交IPADS组的一个shell教程，非常推荐看一下，包含了一些command-line tools以及bash-scripts的使用
+
+1. Shell以及CLI的基本概念辨析
+    - CLI描述的是基于命令行的交互方式，对应GUI
+    - shell是一个系统级的CLI程序
+    - Bash是"bourne again shell"，一种更加advaned shell
+    - terminal(emulator) 是一个”终端仿真器“，bridge了你所看到的图形界面和CLI
+2. pipe与redicrect, 组合command line工具
+    - 管道 `|`
+    - 重定向: `> < &`
+        -  一般2是默认错误流 `./test > test-out.log 2>test-error.log`
+3. 简单function
+    - sort
+    - wc(word count)
+    - ag(find keyword), 直接search当前目录下的特定关键词可能出现的位置 `sudo apt-get install silversearcher-ag`
+        - also支持regex以及stdin  `ag "^something$" `   `ps -a | ag nvidia`
+    - awk(text-processing language)
+        - `cat tmp | awk '{print $2}'` - 打印第二列， awk默认每一行都触发一次，所以每行都打印出第二个数据(默认空格符作为分割)
+        - awk支持 begin和end，可以在文件的开始和结束做操作，可以比如说做AVERAGE `cat tmp | awk 'BEGIN {cnt=0} {sum+=$1; cnt+=1} END {print (sum/cnr)}'` 
+        - conditional logic, `cat tmp | awk '{if($1>3) print $2}'`
+    - sed: 
+4. bash script
+
+
+
 # 一些其他的素材:
 
 1. [Linux工具快速教程](https://linuxtools-rst.readthedocs.io/zh_CN/latest/index.html#)

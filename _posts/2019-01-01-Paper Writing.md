@@ -11,144 +11,54 @@ tags:                               #标签
      - 重新学习
 ---
 
-# Paper Write
+# Paper Write 注意点
 
-### Needs CK
+# 最终检查的细节
 
-1. 一些Term的一致性： 
-2. Fig. Figure Tab. Table 
+1. 一些Term的一致性
+2. Fig. Figure Tab. Table 是否一致
 3. 公式/图表的caption最后有没有标点
 4. e.g. / i.e. 后面可以加逗号可以加
 5. 单双引号 
-6. 括号前面的空格
+6. 括号前面的空格  
+  - ~~(一个10块红包)~~
 
-# LaTex
+# 相对Meta的一些知识
 
-> Linux下安装```sudo apt-get install texlive-full cjk-latex latex-cjk-chinese```
+- 文章8页没有写满，或者是中间有太多的换段只有几个单词的情况，会被人认为 **不够丰满**
+- 整个文章应该是一个Hierachical的结构，Abs里最重故事说理，intro里部分展开，method里尽量展开
 
-### 使用姿势
+- 画图：
+  - 不要想着能够包含所有信息，突出最关键的，要Clean
+  - Teaser(开头的图) 一定要简单，就只说最核心的一个点
 
+- 实验结果：
+  - 要全面，考虑别人会如何Question
+  - 有些看起来一般的要不就干脆别放
+  - 仔细考虑**如何排布你的实验数据**让它看起来好
 
-* 一般flow是xelatex-bibtex-xelatex
-	* 用xelatex来创建(pdflatex几乎同等)
-	* 用bibtex xx.aux来建立ref
-* 文件意义
-	* .tex是主要的代码文件
-	* .bib内部包含了从google scholar等地方获取的引用
-	* .aux首次编译的时候产生
-		* .blg也是生成的中间文件
-	* .bbl bibtex所输出的bib
-	* 一些模板会包含比如说
-		* ruler.sty
-		* splncs04.bst
-		* llncs.cls
-
-* 有的时候会因为pdf文件被占用而导致失败，导致了bib炸了
-
-
-### Table 
-
-* basic template
+- 文字层面
+  - 每个概念(容易混淆的，自定义的) 第一次出现的时候加一句话解释一下 （对于觉得很重要的可以用脚注 - 一般不用）
+    - `\footnote{We summarize the geometric pattern and density of voxels as their ``geometric information''.}`
+  - 公式书写之前，每一个字母都一定要出现过，不要让别人Lost
+  - 避免一些领域内有争议/不显然的结论，出现的话一定要有引用
+  - 不要跳逻辑！写结论或者insight分析，只写当前层的，不要直接导到核心观点
 
 
-> [overleaf-guide](https://no.overleaf.com/learn/latex/Tables)
+# 文字相关积累
 
-```
-\begin{table*}[hb]   % hb means here-bottom
-\centering
-\caption{head of the table}
-\label{tab: some_table}    % for reference \cite{tab:xx}
-\begin{tabular}{c|c|c|c}   % denote the vlines
-	something & something & something & something \\
-	...
-\end{tabular}
-\end{table}
-```
+## 写作注意点(Explicit)
 
-* use \hline \vline \cline{1-2} if lines are needed
-* 默认情况的vline只有在对应位置的地方有东西的时候才会出现
-	* 所以有的时候要写空的 ```& & & & \\```
-* for multi-row - use ```\userpackage{multirow}```
-
-```
-\multirow{2}{*}{some word} A1 & B1 & C1 \\
-						   A2 & B2 & C2 \\
-\hline
-```
-
-
-### Formula
-
-* 用\begin{equation} \end{equation} - 讲道理它会自己标上序号
-* 在公式前后加上\begin{split} \end{split} 用作分割
-* 对于两条公式的对齐，手动在内部加上 & - 公式里的&的位置会自动对齐
-* 对于s.t.这样的东西需要给它加上\mbox{}， 并且保持一个空格
-
----
-
-> 打公式常用的一些符号的cheat sheet,[更完整](https://www.rpi.edu/dept/arc/training/latex/LaTeX_symbols.pdf)
-
-* `\int` - 积分
-* `\l(g)eq` - 大于等于号
-* `\cdot` - 点乘
-* `\times` - 叉乘
-* `\infty` - 无限符号
-
-### checkmark
-
-```
-usepackage{tikz}
-\def\checkmark{\tikz\fill[scale=0.4](0,.35) -- (.25,0) -- (1,.7) -- (.25,.15) -- cycle;} 
-```
-
-### Tips
-
-* 对一个section用```\label{sec:method-grouping}```来指定，在别的地方用```~\ref{sec:method-grouping}```
-* 在cite前面加一个```~```表示小于一个空格的空间
-* 排图片一般默认[ht]，h表示是当前位置，t表示在最上面（指的是下一页的最上面）
-* 表格中cmidr，表示加一部分横线 \cmidrule(lr){1-2}
-  * \hline是一整条线
-* [合并表格](https://blog.csdn.net/sinat_36301420/article/details/79334767)
-* ```\multirow{2}{*}{$n_i$}``` 当表格同一行的东西占的列数目不一样的时候
-* [常见错误](https://www.weibo.com/ttarticle/p/show?id=2309403955741387052924)
-* [Table相关](https://zhuanlan.zhihu.com/p/19749566)
-* Fig. （大写，加点）
-  * 而Figure不用加点
-  * Tab.同理
-* 特有名词，比如GPU，以及方法AMC需要大写
-* 两张图并列(注意这种方式两张图标号是a/b，但是如果用```\begin{subfigure}```的话标注就是新的fig)
-* 调整图片格式实在是太痛苦了！很容易一张图就会被卡到最后去，整个格式都会崩溃
-	* 目前发现可以用```[H]```大写的H来强制将其锁在Here！
-* \footnote{} 脚注
-* 表示星号要用```$^*$```
-* 引用链接  ```\href{http://www.sharelatex.com}{Something Linky}```
-* alias的方式 ```\newcommand{\method}{BARS\xspace}```
-	* xspace是表示在需要的时候加空格
-
-```
-\begin{figure*}[th]
-  % include first image
-  \subfigure[]{
-    \includegraphics[width=0.45\linewidth]{eccv2020kit/figs/layer_nasbench101.pdf} 
-    \label{fig:layers_nb101}
-  }
-  \subfigure[]{
-    \includegraphics[width=0.45\linewidth]{eccv2020kit/figs/layer_nasbench201.pdf} 
-    \label{fig:layers_nb201}
-  }
-\caption{The effect of the number of GCN or GATES layers. (a) Experiments on NAS-Bench-101. The proportion of training samples is 0.1\% (381 training architectures, 42362 testing architectures). (b) Experiments on NAS-Bench-201. The proportion of training samples is 10\% (781 training architectures, 7812 testing architectures).}
-\label{fig:gates_layers}
-\end{figure*}
-```
-
-
-* 当内容实在长需要压空间的时候，在fig或者table中加```\vspace{-10pt}```来压缩空间
-* 在标题中换行 \title{something \protect\\ something}
-* 有的时候编译莫名错误 ```File ended while scanning use of ```
-	* 首先删除本次编译产生的aux，brf，bbl文件
-	* 然后记得要关闭pdf解决文件占用问题
-
-# Digest
+- 某些词可能会有特殊含义，可以上Google直接搜这个词，比如`resort to`负面
+- 注意复数性质会延申到后面 
+- and
+  - 前后的**时态一致**
+  - 表示同级，前后两者应该是一个Level的  
+    - ```$\cap$'' calculates the intersection of these two regions and is normalized by the geometric region size $N(\varphi(\theta_{ij}))$` 这句里后半句的主语是这个cap操作，而不是前面紧跟的东西
+  - 注意用and连接的句子的**主语**到底是什么
+- the
+  - 名词没有复数，或者没有形容词描述，就要加the
+  - 特质某个东西，可以用the(与用a的辨析)
 
 ### 常用词语及Synonym整理
 
@@ -160,7 +70,7 @@ usepackage{tikz}
 * subpar 次佳
 * paradigm 范例
 * scheme 方式
-* generic 一般
+* generic 一般(普遍)
 * derive 获得
 * compelling 引人瞩目的
 * consolidate 巩固
@@ -175,6 +85,10 @@ usepackage{tikz}
 * anticipate 预计
 * contemporary 当代
 * prohibitive 禁止的(很困难的)
+* exploit 利用起来
+* leverage 利用xxx
+* specifically(More concretely) 详细展开
+* incorporate 嵌入
 
 ### 常用短语
 
@@ -189,7 +103,8 @@ usepackage{tikz}
 * sth. degree (Lr decay degree)
 * engage/involve with 涉及 （engage with -> involve）
 * in-depth comparison
-* ouptut response - 输出的激活值
+* ad-hoc - (for this purpose only)
+* serve-as:  作为
 
 ### 常用缩写
 
@@ -214,7 +129,64 @@ usepackage{tikz}
 
 * To sum up, we make the following contributions:
 * The rest of this paper is organized as follows. The related studies are introduced in Sec.~\ref{sec:related}. In Sec.~\ref{sec:methods}, we introduced our fixed-point training. Then in Sec.~\ref{sec:exp}, the effectiveness of our method is illustrated by experiments. We further discuss XXX in Sec.~\ref{sec:discuss}.Finally, we conclude our work in Sec.~\ref{sec:conclusion}.
-* ad-hoc - (for this purpose only)
+
+
+# 公式书写
+
+- TODO：  感觉自己对这个没有系统认知，不知道应该用什么方式来表达
+
+
+# Tools
+
+1. detex以搭配grammarly使用： 因为grammarly不能很好的处理latex，所以学习了detex工具来将latex文件输出成raw text，将其拷贝如grammarly就不会报错了(美中不足是这样不能改完之后粘贴回原文了)
+
+- Detex  `detex PaperForReview.tex | grep -v '^\s*$' > PaperForReview.raw`
+  - sudo apt-get install libfl-dev
+  - sudo apt-get install make gcc flex
+    - ![](https://github.com/A-suozhang/MyPicBed/raw/master//img/20211118112458.png)
+  - [](https://www.cnblogs.com/lovychen/p/7429682.html)
+  - [DeTex 方法](http://keyvaneslami.com/blog/knowledge/opendetex-package-remove-tex-constructs)
+
+2. 
+
+
+# 相关资源以及网站
+
+## Docs
+
+* 石墨
+* 腾讯
+* Google Docs
+* Notion
+
+## Writing
+
+* Grammarly
+* [Liggle](https://linggle.com/)： 查句子搭配的网站
+* [Synonym](https://www.synonym.com/synonyms/) 查同义词的网站，但是感觉用处不是很大
+* [New Better Synonym](https://www.thesaurus.com/browse/optimize?s=t)
+* [ESODA](http://www.esoda.org/)： 贵系做的网站，能包含一些找句子等的功能
+* 有道翻译
+* 直接google这个单词，看释义以及隐藏含义
+
+
+## Bib
+* [ResearchGate](https://www.researchgate.net/?_sg=9D8JkWoEvbx5lKepanzgM0bx2GcheNWitXm5LIwKovHl43ewI72-pQS0vPCyRAmRJA37PppxLEoD)
+* [Semantic Scholar](https://www.semanticscholar.org/)
+
+
+## Plot
+
+* [Color Hex](https://www.color-hex.com/)
+* [Matplotlib Doc](https://matplotlib.org/contents.html)
+  * [Cmap](https://matplotlib.org/3.1.1/tutorials/colors/colormaps.html)
+  * [Marker](https://matplotlib.org/3.1.1/api/markers_api.html#module-matplotlib.markers)
+* [Matplotlib Tutorial(Not Official)](https://riptutorial.com/matplotlib/)
+* [Mathematcia Doc](https://reference.wolfram.com/language/)
+* [这篇文章图不错](https://arxiv.org/pdf/2006.05467.pdf)
+
+
+
 
 # 心得 (他人经验)
 
@@ -238,7 +210,40 @@ usepackage{tikz}
 * 有些文章会用一个单独的section来解释名词(可能当领域比较混搭的时候)
   * 以及一些文章在exp部分会优先将各个baseline介绍一哈
 
+
+
+
+
+# Rebuttal
+
+## 常用素材
+
+* 开头的客套话
+
+```We thank all the reviewers 1 for acknowledging our novel contributions and providing valuable feedback.```
+```we address the common concerns followed by detailed comments from each reviewer```
+```We thank all the reviewers for their insightful and constructive feedbacks! We will revise the final version according to this rebuttal.```
+```We’ll carefully proofread the paper and fix the typos in the final version.```
+```Thanks for the suggestion.We’ll make the claim more rigorous in our finalversion```
+	
+
+* 委婉的喷
+
+```We suspect / There may be some misunderstanding```
+
+* 给AC说
+
+```
+We appreciate the constructive comments given by the reviewers.However, we’d like to mention thataccording to the comments, Reviewer 4’s knowledge about GCNdoes not seem to align with other reviewers, e.g., asking whether better minibatch gradients of GCN is a problem, and asking why GCNs need dropout.Moreover, there seems to be misunderstanding on Theorem 1.
+```
+
+
+
+
+
 ---
+
+> 下面是年轻时候写paper的一些心得体会，尴尬的很，放到最下面来了
 
 ### 2020-03-06 ECCV 心得
 
@@ -270,31 +275,6 @@ usepackage{tikz}
 	* 所以提交的时候一定要将bbl文件给包含了，否则会没有引用信息！
 
 
-# Rebuttal
-
-## 常用素材
-
-* 开头的客套话
-
-```We thank all the reviewers 1 for acknowledging our novel contributions and providing valuable feedback.```
-```we address the common concerns followed by detailed comments from each reviewer```
-```We thank all the reviewers for their insightful and constructive feedbacks! We will revise the final version according to this rebuttal.```
-```We’ll carefully proofread the paper and fix the typos in the final version.```
-```Thanks for the suggestion.We’ll make the claim more rigorous in our finalversion```
-	
-
-* 委婉的喷
-
-```We suspect / There may be some misunderstanding```
-
-* 给AC说
-
-```
-We appreciate the constructive comments given by the reviewers.However, we’d like to mention thataccording to the comments, Reviewer 4’s knowledge about GCNdoes not seem to align with other reviewers, e.g., asking whether better minibatch gradients of GCN is a problem, and asking why GCNs need dropout.Moreover, there seems to be misunderstanding on Theorem 1.
-```
-
-
-
 ### 2020-04-20 ICML2020 Rebuttal
 
 * 对于给高分的，先舔，表示XX很重要，然后说我们考虑了XX，没做什么是为什么，还会做什么
@@ -310,10 +290,6 @@ We appreciate the constructive comments given by the reviewers.However, we’d l
   * Rebuttal时若发现审稿人的factual error，如ta提出的某个观点有显然错误、提出需要对比的数据集显然不是该领域常用的数据等，作者可在rebuttal回应此人时首先指出其错误
   * rebuttal时不要漏点，要逐点回应做到有问必答。若因篇幅有限，可将类似的意见合成一点，万不可因篇幅有限擅自删除一些要点或遗漏要点，以免造成含糊不清、浑水摸鱼之嫌
 * **要有问必答**
-
-### 2021-01-22 CVPR2021 Rebuttal
-
-
 
 ### 2020-06-20 Trans Review 
 
@@ -413,6 +389,7 @@ This paper is poorly written. There are many grammar mistakes, many sentences ca
 ```
 
 
+
 ### ECCV Camera Ready
 
 > 开始准备eccv2020的camera ready了
@@ -455,39 +432,3 @@ This paper is poorly written. There are many grammar mistakes, many sentences ca
 * Yu Wang: Resources, Project administration
 ```
 
-
-
-
-# Resources
-
-## Docs
-
-* 石墨
-* 腾讯
-* Google Docs
-* Notion
-
-## Writing
-
-* Grammarly
-* [Liggle](https://linggle.com/)
-* [Synonym](https://www.synonym.com/synonyms/)
-* [New Better Synonym](https://www.thesaurus.com/browse/optimize?s=t)
-* 有道翻译
-* [ESODA](http://www.esoda.org/)
-
-
-## Bib
-* [ResearchGate](https://www.researchgate.net/?_sg=9D8JkWoEvbx5lKepanzgM0bx2GcheNWitXm5LIwKovHl43ewI72-pQS0vPCyRAmRJA37PppxLEoD)
-* [Semantic Scholar](https://www.semanticscholar.org/)
-
-
-## Plot
-
-* [Color Hex](https://www.color-hex.com/)
-* [Matplotlib Doc](https://matplotlib.org/contents.html)
-  * [Cmap](https://matplotlib.org/3.1.1/tutorials/colors/colormaps.html)
-  * [Marker](https://matplotlib.org/3.1.1/api/markers_api.html#module-matplotlib.markers)
-* [Matplotlib Tutorial(Not Official)](https://riptutorial.com/matplotlib/)
-* [Mathematcia Doc](https://reference.wolfram.com/language/)
-* [这篇文章图不错](https://arxiv.org/pdf/2006.05467.pdf)
