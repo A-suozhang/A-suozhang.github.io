@@ -81,6 +81,7 @@ tags:
     * `tar -tvf supp.tar.gz` 来看具体在哪个目录里
     * zip/unzip 
         * `zip -r compressed.zip /path/to/dir`
+        * `unzip xxx.zip -d ./DIR`
     
 * 命令行挂载一系列操作：
     * sudo fdisk -l 查看自己的盘是/dev/sdx (未挂载的也会看见)

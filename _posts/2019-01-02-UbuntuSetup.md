@@ -10,7 +10,11 @@ tags:                               #标签
     - 环境配置
     - Linux
 ---
-# Set Up Ubuntu
+
+
+> 区分一下该post与[POST - Linux-Commands]()的区别，本post下主要是一些安装配置的QA，而另一个主要是系统的知识梳理
+
+# 0. Installation : Set Up Ubuntu
 
 ## 选择版本
 * 尽量选择LTS的版本（16.04/18.04）
@@ -95,10 +99,6 @@ sslocal -c PATH_TO_YOUR_SHADOWSOCKS_JSON (~/shadowsocks.json)
 * 默认安装的ss版本比较低，不能支持```gcm```的加密方式
   * 用```sudo pip install https://github.com/shadowsocks/shadowsocks/archive/master.zip -U```更新到3.0
   * ```sslocal --version```检查
-
-
-
-
 
 1. Chrome配置
 * 在[Chrome应用商店](https://chrome.google.com/webstore/)中安装Switchy Omega
@@ -241,10 +241,20 @@ sslocal -c PATH_TO_YOUR_SHADOWSOCKS_JSON (~/shadowsocks.json)
 
   
 ## Trouble Shooting
+
 * 硬盘识别不出来```Mount error: “unknown filesystem type 'exfat'”```
   * ```sudo apt-get install exfat-fuse exfat-utils```
 * Ubuntu与Win双系统时候时间崩坏
   * ```sudo vim /etc/default/rcS```将UTC yes改成no
+
+
+> 以上部分是较为早的ubuntu安装相关内容
+
+---
+
+
+
+# 1. Useful Software Set Up
 
 ## Vim Set Up
 
@@ -452,8 +462,31 @@ let g:netrw_banner = 0
    * ```sudo apt-get install vim-gtk vim-scripts vim-gnome```
    * 用````vim --version | grep clipboard```来检查是不是支持
    * 用```+"y```来剪切vim中的内容到系统剪贴板 
-   
 
+
+---
+
+9. 重新尝试了vim-plug这种vim插件管理方式
+  - 下载 `mkdie ~/.vim/autoload; wget https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim ./.vim/autoload `
+  - 在vimrc中添加配置
+  - 执行`PlugStatus`并`PlugInstall`
+
+```
+call plug#begin('~/.vim/plugged')
+Plug 'junegunn/vim-easy-align'
+call plug#end()
+```
+   
+- [初代目网管的配置](https://bigeagle.me/2015/05/vim-config/)
+  1. clone `git clone https://github.com/bigeagle/neovim-config.git`
+  2. 软连接地址 `ln -s ~/neovim-config ~/.config/nvim`
+  3. 下载vim-plug `curl -fLo ~/.config/nvim/autoload/plug.vim --create-dirs \  https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim`
+  4. 安装neovim `sudo apt-get install python3-neovim`
+  5. type `nvim` 进入，并执行`PlugInstall`
+  6. 将`~/neovim-config/config`连接到`~/.nvim/config`
+
+
+- [vim-配置awesome](https://vimawesome.com/)
 
 
 ## 一些其他软件
@@ -491,6 +524,7 @@ let g:netrw_banner = 0
 
 
 # Win当中的Ubuntu - WSL(Windows SubSystem Linux)
+
 * 按[这篇文章进行了一些配置](https://zhuanlan.zhihu.com/p/57556340)
     * 这篇文章里修改登录地点（建立/etc/wsl.conf之后我找不到Win的文件了，好迷...）删除文件并且重启之后恢复来
     * Win的文件在 **/mnt/c/User/xxx** 下
@@ -508,6 +542,7 @@ let g:netrw_banner = 0
 # 关于服务器上Ubuntu的配置[EVA 开发日记](http://a-suozhang.xyz/1024/10/20/Eva/)
 
 ## Jupyter Notebook 
+
 * 安装没有问题了
 * 启动的时候，初次登陆需要验证token，就是term中的这种
   * ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20191209123716.png)
@@ -520,7 +555,8 @@ let g:netrw_banner = 0
   * 原因是需要修改kernel的cfg，在比如```~/.local/share/jupyter/kernels/python3/kernel.json```将里面的python修改为需要指定的python绝对路径
     * ![](https://github.com/A-suozhang/MyPicBed/raw/master//img/20200520075549.png)
 
-##　pip3
+## pip3
+
 * 首先需要给它换源,在~目录下建立```.pip/pip.conf```
   * 里面输入 ``` [global] \n index-url = https://pypi.tuna.tsinghua.edu.cn/simple ```
 * which pip3 查看目前pip指向的python
@@ -663,6 +699,7 @@ Host *.eva*
    ```chmod 400 path/to/filename```
 
 ### Docker
+
 * 3个基本概念： 
   * Image - 可以看作是一个特殊的Filesystem，提供了容器运行的程序，资源以及特殊参数(环境变量)，但是*不包含任何动态数据* - 看成是一个空的房子
   * Container - 一个轻量级的Sandbox，可以看作是一个极简的Linux环境，容器是image创建的instance，各个容器之间隔离
