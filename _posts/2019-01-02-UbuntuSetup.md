@@ -630,19 +630,15 @@ run '~/.tmux/plugins/tpm/tpm'
 * MyConfig
 
 ``` py
-
-Host eva
-	HostName 101.6.64.169
-	Port 22
-	User zhaotianchen
-	ProxyCommand ssh zhaotianchen@101.6.64.67 -p 42222 -W %h:%p
-Host fpga
-	HostName 101.6.68.236
-	Port 22
-	User ztc
-	ProxyCommand ssh zhaotianchen@101.6.64.67 -p 42222 -W %h:%p
+Host admin-205
+  ForwardAgent yes
+  HostName 101.6.64.67
+  User zhaotianchen
+  Port 22222
+  LocalForward 127.0.0.1:12888 127.0.0.1:80
 
 Host 205
+  ForwardAgent yes
   HostName 101.6.64.67
   User zhaotianchen
   Port 42222
@@ -651,36 +647,23 @@ Host eva*
   HostName %h.nics.cc
   User zhaotianchen
   ProxyCommand ssh zhaotianchen@205 nc %h %p
+  RemoteForward 127.0.0.1:10809 127.0.0.1:10809
+  LocalForward 127.0.0.1:5000 127.0.0.1:5000
 
-Host *-eva10
+Host eoe*
+  HostName %h.nics.cc
   User zhaotianchen
-  ProxyCommand ssh -p 32222 zhaotianchen@eva10 nc %h %p
-
-Host proxy-eva10
-  HostName eva10.nics.cc
-  Port 32222
-  User zhaotianchen
-
-Host proxy-eva8
-  HostName eva8.nics.cc
-  Port 32222
-  User foxfi
-
-Host ztc.eva8
-  HostName foxfi-eva8
-  User foxfi
-  ProxyCommand ssh -p 32222 foxfi@eva8 nc %h %p
-
-Host ztc.eva10
-  HostName foxfi-eva10
-  User zhaotianchen
-  ProxyCommand ssh -p 32222 zhaotianchen@eva10 nc %h %p
+  ProxyCommand ssh zhaotianchen@205 nc %h %p
+  RemoteForward 127.0.0.1:10809 127.0.0.1:10809
+  LocalForward 127.0.0.1:5000 127.0.0.1:5000
 
 Host *.eva*
   HostName %h.nics.cc
   User zhaotianchen
-  ForwardAgent yes
   ProxyCommand ssh zhaotianchen@205 nc %h %p
+  RemoteForward 127.0.0.1:10809 127.0.0.1:10809
+  LocalForward 127.0.0.1:8888 127.0.0.1:8888
+
 ```
 
 * [使用 SSH config 文件](http://daemon369.github.io/ssh/2015/03/21/using-ssh-config-file)
@@ -697,6 +680,8 @@ Host *.eva*
 * 如果发现端口映射的时候没有反应的话：可以ck一下是不是本机有多个ssh都占用了这个端口
 * 在ssh-copy的时候报错私钥的Bad Permission
    ```chmod 400 path/to/filename```
+   - Permission的写法： (三组 3个字母 rwx)：
+    - r-4; w-2; x-1; 比如755就是`rwx r-x r-x`
 
 ### Docker
 

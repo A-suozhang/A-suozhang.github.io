@@ -76,12 +76,13 @@ tags:
   * 卸载 ```sudo apt remove filezilla && sudo apt autoremove```
 
 * tar -zxvf xxx.tag.gz
+    * **解压到特定目录很反人类的arg是不一致的，tar用的是C，而unzip用的是D**
     * 其实都用　```tar -xvf```就行，加一个`-C $DIR`表示解压到某个目录
     * 压缩用　```tar -zcvf XXX.tar.gz XXX/```
     * `tar -tvf supp.tar.gz` 来看具体在哪个目录里
     * zip/unzip 
         * `zip -r compressed.zip /path/to/dir`
-        * `unzip xxx.zip -d ./DIR`
+        * `unzip xxx.zip -D ./DIR`
     
 * 命令行挂载一系列操作：
     * sudo fdisk -l 查看自己的盘是/dev/sdx (未挂载的也会看见)
@@ -170,6 +171,7 @@ tags:
 
 * rsync 命令　带不带“/”　差距很大  
     * 一个是复制目录，一个是把目录里面的东西复制过去　(如果搞错了就会把一大堆乱七八糟文件夹直接复制到根目录地下)
+    * 一个很好的例子就是我需要拷贝某个文件夹下的所有以“.sh”为后缀的文件，scp无法完成，但是rsync可以
 
 * ldd　$EXEUCATBLE　查看运行文件所用到的动态链接库
 
@@ -302,6 +304,23 @@ tags:
     * ```*``` - 匹配任意字符串
     * ```？``` - 匹配单个字符
     * ```[]``` - 匹配括号内字符（类似re）
+
+### xargs
+
+> 用于批量执行命令，或者在命令行里执行命令,从标准输入转为命令行参数
+
+```
+kill `ps -a | grep python | awk '{print $1}'`
+ps -a | grep python | awk '{print $1}' | xargs -I {} kill {}
+```
+
+- `echo "one two three" | xargs mkdir`
+- `-L 1` 表示对管道输出的每一行都执行
+- `-n 2`表示一行内多少项  `echo {0..9} | xargs -n 2 echo`
+- `-I {}` 后面的内容表示命令行参数的替代字符串  `echo {0..9} | xargs -I sth echo sth`
+
+
+
 
 ### Sed
 

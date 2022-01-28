@@ -88,7 +88,8 @@ tags:                               #标签
 * exploit 利用起来
 * leverage 利用xxx
 * specifically(More concretely) 详细展开
-* incorporate 嵌入
+* incorporate 嵌入,引入
+* granularity 粒度(用在量化的粒度的时候)
 
 ### 常用短语
 
@@ -105,6 +106,7 @@ tags:                               #标签
 * in-depth comparison
 * ad-hoc - (for this purpose only)
 * serve-as:  作为
+* a surge of research efforts
 
 ### 常用缩写
 
@@ -130,10 +132,9 @@ tags:                               #标签
 * To sum up, we make the following contributions:
 * The rest of this paper is organized as follows. The related studies are introduced in Sec.~\ref{sec:related}. In Sec.~\ref{sec:methods}, we introduced our fixed-point training. Then in Sec.~\ref{sec:exp}, the effectiveness of our method is illustrated by experiments. We further discuss XXX in Sec.~\ref{sec:discuss}.Finally, we conclude our work in Sec.~\ref{sec:conclusion}.
 
-
 # 公式书写
 
-- TODO：  感觉自己对这个没有系统认知，不知道应该用什么方式来表达
+- TODO：感觉自己对这个没有系统认知，不知道应该用什么方式来表达
 
 
 # Tools
@@ -146,9 +147,6 @@ tags:                               #标签
     - ![](https://github.com/A-suozhang/MyPicBed/raw/master//img/20211118112458.png)
   - [](https://www.cnblogs.com/lovychen/p/7429682.html)
   - [DeTex 方法](http://keyvaneslami.com/blog/knowledge/opendetex-package-remove-tex-constructs)
-
-2. 
-
 
 # 相关资源以及网站
 
@@ -173,6 +171,7 @@ tags:                               #标签
 ## Bib
 * [ResearchGate](https://www.researchgate.net/?_sg=9D8JkWoEvbx5lKepanzgM0bx2GcheNWitXm5LIwKovHl43ewI72-pQS0vPCyRAmRJA37PppxLEoD)
 * [Semantic Scholar](https://www.semanticscholar.org/)
+* [Wiki-Cite](https://irl.github.io/bibwiki/)
 
 
 ## Plot
@@ -184,8 +183,6 @@ tags:                               #标签
 * [Matplotlib Tutorial(Not Official)](https://riptutorial.com/matplotlib/)
 * [Mathematcia Doc](https://reference.wolfram.com/language/)
 * [这篇文章图不错](https://arxiv.org/pdf/2006.05467.pdf)
-
-
 
 
 # 心得 (他人经验)
@@ -210,11 +207,47 @@ tags:                               #标签
 * 有些文章会用一个单独的section来解释名词(可能当领域比较混搭的时候)
   * 以及一些文章在exp部分会优先将各个baseline介绍一哈
 
-
-
-
+---
 
 # Rebuttal
+
+> 参考 [如何写学术论文的rebuttal？ - 王晋东不在家的回答 - 知乎](https://www.zhihu.com/question/32055996/answer/187612713)，[Rebuttal指南](https://mp.weixin.qq.com/s/ZCHm7qGebxWiI54eHvEY3Q)
+
+### 从思路上
+
+首先要定义清楚，reviewer的类型，reviewer的给分可能并不一定表示他的potential的态度(这也就是为什么那么多文章能够334逆袭这样子)。Reviewer实际想要拒绝你的理由，或者实际的评估，其实并不一定是给出的comment。有可能是因为文章和他的taste不符，但是又没有找到硬伤，只能general的评价。
+
+1. Type1：（大概率是WR）有可能是因为文章和他的taste不符，但是又没有找到硬伤，只能general的评价： 可能给出一些很general，并不是很本质的漏洞，态度偏打压；**基本就是寄了**
+2. Type2：（大概率是WR）很了解你的领域，能够找到甚至挑剔的提出一些很细节的点： 大概率是小同行，想搞你，**基本寄了**
+3. Type3：（B或者是WR）对你的文章有一些误解/或者是提出了一些有意义，但是不是硬伤的问题。可能会给一些相对模糊的话，比如”some issues in the paper should be fixed before being fully accepted”，或者是"may raise score"。**一定要抓住，划重点解释清楚他的误解/问题**
+
+要抓住重点，团结可能团结的人，可以利用其他Reviewer的观点来against others。
+一定要show enough respect，舔舒服了
+一定不能出现主观而且不公认的语句
+
+### 从实践上
+
+
+- Rebuttal的目的不需要有很强的逻辑性和优美的writing，而是要很直接明确的把问题点出来！
+  - 每个回答的第一句**直接**回答甚至更正R的理解和问题，一定要highlight我们想表达的重点，免得被认为是在答非所问或者绕问题
+  - 不能漏问题，每个都要回答！
+  - R的理解有错误可以用`there might be sime misunderstanding`
+  - 对于有需要对比其他文章的(novelty)层面，不要从motivation层面说我们处理的是不同问题，而是要说他们的方法为何不能apply到我们的场景下
+
+- 每个R会有7-8篇文章，甚至有emergency能有10以上，所以大概率看rebuttal很快，甚至不会回头去ref自己系统里的问题，而是只看rebuttal的pdf(有可能都忘记自己问的啥问题了)
+  - 在pdf中写清楚reviewer的问题，并且把重要的提前
+  - 不用重复回答，可以提取共性问题，merge小问题到一个点，Please Ref R2Q3
+  - 可以简写和ref文章/Appendix的其他部分
+
+- 提出的一些要求可以先答应着能做，然后final version加不加就是你的主动权了
+  - 当然如果R要求的实验结果或者讨论不说，得有明确理由为啥没有，不然就可能被认为是逃避问题
+
+- 对于一些实际上自己错误或者不足的点，大方承认；表示自己会修正；(如果他认为问题比较大，就*解释为什么这个问题不本质，或者可以怎么被fix*)
+
+- 如果真的命中了比较关键的缺点，一定**不能逃避**！可以承认一下，表示我们会对这个点作为future work来改进。
+  - 当然如果提出问题的人给Accept，直接表示赞同他的观点，并且表示We consider your concern and will add it into the limitation of our work. (可能大概率是小同行，希望这个领域多点人)
+
+- 如果去喷实验，最好的方法是补充他要的实验，如果补不上，说明resource constraint，并且表示会supplement in future version. 如果还是不行的话，强调自己的两点和contribution，我们focus on xxx，相比于一些点数，xxx更matter
 
 ## 常用素材
 
@@ -224,9 +257,8 @@ tags:                               #标签
 ```we address the common concerns followed by detailed comments from each reviewer```
 ```We thank all the reviewers for their insightful and constructive feedbacks! We will revise the final version according to this rebuttal.```
 ```We’ll carefully proofread the paper and fix the typos in the final version.```
-```Thanks for the suggestion.We’ll make the claim more rigorous in our finalversion```
+```Thanks for the suggestion.We’ll make the claim more rigorous in our final version```
 	
-
 * 委婉的喷
 
 ```We suspect / There may be some misunderstanding```
@@ -237,11 +269,14 @@ tags:                               #标签
 We appreciate the constructive comments given by the reviewers.However, we’d like to mention thataccording to the comments, Reviewer 4’s knowledge about GCNdoes not seem to align with other reviewers, e.g., asking whether better minibatch gradients of GCN is a problem, and asking why GCNs need dropout.Moreover, there seems to be misunderstanding on Theorem 1.
 ```
 
-
-
-
+### Examples:
+1. [./others/rebuttal/bars.md](./others/rebuttal/bars.md)
+2. [./others/rebuttal/mojito.pdf](./others/rebuttal/mojito.pdf)
+3. [./others/rebuttal/codedvtr.md](./others/rebuttal/codedvtr.md)
 
 ---
+# 流水账
+
 
 > 下面是年轻时候写paper的一些心得体会，尴尬的很，放到最下面来了
 
@@ -262,8 +297,6 @@ We appreciate the constructive comments given by the reviewers.However, we’d l
     * 配色，这个倒是可以展开讲，目前我的体会是，饱和度拉低，色系倒是可以稍微跨越一些
     * 字体大小放大！
     * 实际放到文中的图里的字大小，和ppt里字大小不完全相关联，有时候需要把图压扁或者拉长才是真正关键的，因为论文格式里页宽就这么多
-
-
 ### 2020-05-01 挂arxiv
 
 * 注意arxiv需要的是latex source code
@@ -296,99 +329,7 @@ We appreciate the constructive comments given by the reviewers.However, we’d l
 * Review Trans Paper
 * 有什么不懂的就加Question
   * 给Major Revision / Minor Revision 
-* Template
-
-```
-Decision: Major revision
-
-Comments:
-The authors argue that imposing uniform regularizations on filters during structured pruning is problematic. And they propose to modify the existing regularization-based structured pruning methods, by weighting the regularization of different filters based on the saliency scores. The saliency score is calculated as ||grad x scale||^2 / FLOPs reduction.
-
-Strength:
-The accuracy results on CIFAR-10 and ImageNet are impressive. 
-
-Weakness:
-You should analysis the computational efficiency of the overall pruning process. In you abstract, you state that the overhead of calculating the saliency is minimum, however, there is an inner iteration to calculate the saliency scores every epoch during SASL, which might be time-consuming. Also, the post-processing pruning and fine-tuning may be time-consuming. I'm aware that you utilize a hard-mining technique to accelerate the pruning process, and in Ablation 4), you said “hard sample mining strategy can not only reduce the complexity overhead for the saliency estimation“. I would like to see a quantitive study on the computational efficiency of your proposed framework.
-
-The description of the method and experiment settings is not very clear, here are some queries about the method and experimental settings:
-- How do you “classify” the filters into different “ hierarchy”? Define thresholds, or just uniform distribute them according to the ranking?
-- How many iterations are there in the iterative pruning and fine-tuning process? In each iteration, how many filters are discarded?
-- In the ablation study 2), how do you change the base regularization value according to the number of classes? Did you experiment with class number larger than 5?
-- In SASL* (a.k.a, the aggressive scheme), what hyper-parameters are tuned? The base regularization value in SASL, or only the post-processing iterative pruning process?
-- How do you handle skip connections?
-
-
-Other comments:
-- Page 5 line 24, Page 8 line 30 (right column): wrong quotation marks
-- I don’t think hierarchy is a very proper terminology for describing different saliency levels.
-
-
-From my perspective, i suppose using the product of the gradient magnitude and the weight/activation magnitude as the saliency signal is common in early studies, e.g., [1][2]. Thus, the main contribution of this paper is to propose to use the quotient of the commonly used saliency score and the FLOPs reduction as the new saliency score, and then, the saliency scores are used to determine the weighting value for the regularizer.
-
-[1] P. Molchanov, S. Tyree, T. Karras, T. Aila, and J. Kautz, Pruning convolutional neural networks for resource efficient inference, ICLR 2017.
-[2] Michael Figurnov , Aijan Ibraimova, Dmitry Vetrov, and Pushmeet Kohli, PerforatedCNNs: Acceleration through Elimination of Redundant Convolutions, NIPS 2016.
-```
-
-
-```
-This paper proposes several techniques to improve dense video caption performance, including an event-level feature fusion, a scene-level topic predictor, an NMS procedure that takes both temporal and linguistic similarity into consideration. By combining these techniques, this paper achieves very good results. Also, this paper conducts comprehensive ablation studies on the proposed techniques.
-
-Basically, I think this is a good paper. Although the event-level feature fusion method is simple, the ablation studies have demonstrated its effectiveness. And, I like the idea of using topic model to discover latent topics, and then using the topic distribution of each video as the scene-level training signal. And it’s good to see that the ablation study demonstrates its effectiveness on the evaluation metrics. Is this idea original? 
-
-I have some queries:
-- In equation (2), why do you use asymmetric linear embedding layers, W_Q, and W_K, this doesn’t seem like a reasonable distance metric.
-- Page3 line39 column right, you say that “the low-dim vector P may not be easily separable”. I think separable is not a proper word here, since we are not solving a classification problem.
-```
-
-```
-TCSVT review: multi-feature adaptive late fusion image retrieval based on cross-entropy normalization
-
-
-Review confidence level: 4
-Technical content:
-novelty: 1
-Tutorial: 1
-Technical correctness: 1
-Technical depth: 1
-Application: 1
-
-Presentation:
-clarity: 1
-organization: 1
-conciseness: 1
-english: 1
-references: 2
-
-Decision: Reject
-
-Comments:
-This paper proposes to select reference curves for each query image by minimizing the “cross-entropy”, and then use the calibrated similarity curves to fuse multiple features.
-
-Basically, I think there is a lot to be improved on this paper. 
-
-(1) Writing and Clarity
-This paper is poorly written. There are many grammar mistakes, many sentences cannot convey the points, and many terminologies are not used correctly. The authors should check the grammar, and polish the presentation.
-
-(2) Organization and conciseness
-      Related work: The summary of the related work is not well organized, the logic chain between subsections is weak.
-      Method: The organization of the method section is not good, it’s hard to follow your method description and capture the crucial points, and I must read for the second time to capture what you mean. For an example, the title of III.C “Effect Analysis of Cross-Entropy Normalization” does not fit with the content.
-
-(3) Technical correctness and depth
-     I have some doubts about the method. The description in the paper seems to indicates that the S curve for each feature is normalized, and this paper aims to find a reference curve that can calibrate each feature’s curve by fitting its tail. However, It seems from Eq.4 that S_i(u:v) is normalized across different features, maybe the notation is wrong that the summation is not across the index “i”?  If so, the summation of S_i(u, v) across the u-v segment should be less than 1 instead of equal 1.
-     
-     This method is purely heuristic and empirical, I don’t think the derivation about the positiveness of the “relative entropy” is suitable in a paper, since it’s a fact that is well known in textbooks. Thus, I would recommend that you remove the two theorems in your paper.
-
-      Why do you use “area under curve” to calculate the fusion weights. The only place that mentions this intuition is the II.D section where you discuss that [17] utilized this intuition. Can you provide more theoretical or intuitive background , or at least, can you experiment with other alternatives to demonstrate the rationality of this weighting scheme. 
-
-     The word “complementarity” is repeatedly used in the paper, you emphasize that your method of selecting the reference curve can “optimize” the complementarity. However,  I fail to capture the logic behind this statement. According to your description in III.D, it seems like you think minimizing the “complementarity” of the reference curve and the current feature’s similarity curve is a way to “optimize” the complementarity? I suppose that utilizing feature complementarity means that you should choose features that maximally complement each other, and this is not related to the proposed method.
-
-(4) Experiments, Application of the method
-     This method might not be so useful in application. The proposed method is an incremental one, and brings extra memory footprints and query latency overhead. 
-
-     In IV.G, you said that “we’re not going to make a direct comparison on the query time”. I don’t think the differences in the computer’s performance or the feature number is the reason for not doing the quantitive latency comparison, since all these variables can be controlled. So, you should compare the query time with more baselines.
-```
-
-
+* [Example](./others/rebuttal/trans-review.md)
 
 ### ECCV Camera Ready
 
@@ -399,10 +340,8 @@ This paper is poorly written. There are many grammar mistakes, many sentences ca
 	* copyright pdf - 需要签名
 	* supplmentary material
 
-
 * gates
 	* baseline文字的图片和文字改一下
-
 
 ### CVPR2021 -  2020-11-28
 
@@ -411,8 +350,6 @@ This paper is poorly written. There are many grammar mistakes, many sentences ca
 	- 自己写的时候语法错误好多，还需要锻炼，包括文章的表达方式，以后读文章的时候还需要多积累
 	- 开着grammarly写把
 * 关于看ddl可以加个群或者用[AI Deadlines](https://aideadlin.es/) - 可以不用搞复杂的时区换算了
-
-
 
 ### 2021-08-05 TIP Recycle
 
@@ -431,4 +368,23 @@ This paper is poorly written. There are many grammar mistakes, many sentences ca
 * Huazhong Yang: Project administration
 * Yu Wang: Resources, Project administration
 ```
+### 2021-11-17 CVPR22 Submission以及准备Rebuttal
+
+- 在投稿期间的
+  - CV的会审稿人相对比较Lazy，图很重要！图需要画的美观以及包含想表达的信息(一个teaser，一个flow图，一个方法的细化图)，很多R可能就看一眼图就有了一个对方法自己的理解，而且很难改变！
+  - 一开始teaser的图(这个是电影预告片的意思)，一定要简单，概括出最关键的点，让大家一眼能明白核心contribution（参考SwinTR）
+  - 文中一定不要有可能会misleading的表述，R很可能先入为主而且很难修正意见
+  - intro和RW额外小心不要overclaim或者说一些比较bold的表述，所有的主观评价性的表述都要有依据！否则会给人不好的映像
+  - 与well-known的类似的文章一定要有对比，否则实验很容易被人question
+  - 可以说Code will be released来增强印象
+  - 方法的细节可以放appendix(但是按照这次的规律来看基本是没什么人去看…review里狂问)
+
+- 等Review时候补充实验的时候，CV会的reviewer最喜欢问问题的方式
+  1. 从Novelty角度，本身是仁者见仁的事情：
+    - 继续重复我们的想法，尝试说明其重要性
+    - 援引其他的文章也探索过这个问题，说明这个问题本身的
+  2. 实验不够充分，不能说明你的观点
+    - 补实验吧…一种是和你直接类似的paper的文章结果，另外一种是你的一个方法上的claim的ablation是否全
+    - 关于加实验，CVPR的态度是R不能要求你加实验，并且因为这个拒你，但是可以自己补充实验结果来说明问题
+
 
