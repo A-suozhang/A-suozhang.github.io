@@ -8,6 +8,7 @@ header-img:  img/6_1/bat.jpg #这篇文章标题背景图片
 catalog: true                       # 是否归档
 tags:                               #标签
     - 环境配置
+    - 常用
     - Linux
 ---
 

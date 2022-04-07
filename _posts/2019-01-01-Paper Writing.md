@@ -9,6 +9,7 @@ catalog: true                       # 是否归档
 tags:                               #标签
      - 常用
      - 重新学习
+
 ---
 
 # Paper Write 注意点
@@ -90,6 +91,10 @@ tags:                               #标签
 * specifically(More concretely) 详细展开
 * incorporate 嵌入,引入
 * granularity 粒度(用在量化的粒度的时候)
+* warrant（ensure/guarantee）
+* intractable 棘手
+* damage （原文是the reorganization of BN damages the sparsity）
+* surpass 超过（outperform的换一种说法）
 
 ### 常用短语
 
@@ -107,6 +112,9 @@ tags:                               #标签
 * ad-hoc - (for this purpose only)
 * serve-as:  作为
 * a surge of research efforts
+* 一件事情比较难，不要用cant，用can hardly be
+* ease the xxx problem
+* elaborate on
 
 ### 常用缩写
 

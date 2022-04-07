@@ -161,8 +161,15 @@ $$ F(x) = P\{ X <= x \} = \int_{-\infty}^x f(x)\,dx $$
 * ```理论上这样设置完了之后就可以正常的进行评论了,评论会在博客的repo下面建立一个issue```
 
 
+## 域名
 
-
+* 在[阿里云 - 域名控制台(https://dc.aliyun.com/basic/domainDetail.htm?spm=a21av.7665006.a2a47.d1176444209.460b2a2d5fZSWr&dtoken=TlpOZe6X3jrIJRU9ng5E)上买了域名
+* 在git-repo里配置CNAME
+  - ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20220407104202.png)
+  - [官方教程](https://docs.github.com/cn/pages/configuring-a-custom-domain-for-your-github-pages-site/managing-a-custom-domain-for-your-github-pages-site)
+- 配置SSL Secure登录（Https）
+  - [一个博客](https://tzhou2018.github.io/2018/04/%E4%B8%BAGitHub-Pages%E8%87%AA%E5%AE%9A%E4%B9%89%E5%9F%9F%E5%90%8D%E5%B9%B6%E6%B7%BB%E5%8A%A0SSL-%E5%BC%80%E5%90%AFHTTPS%E5%BC%BA%E5%88%B6/)
+  - 直接在 `github-repo的Settings - Pages - Enforce HTTPS`
 
 ## Other Trouble Shooting
 * 网站渲染的时候出现某一个大标题右缩进
