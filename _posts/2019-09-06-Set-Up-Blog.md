@@ -171,6 +171,10 @@ $$ F(x) = P\{ X <= x \} = \int_{-\infty}^x f(x)\,dx $$
   - [一个博客](https://tzhou2018.github.io/2018/04/%E4%B8%BAGitHub-Pages%E8%87%AA%E5%AE%9A%E4%B9%89%E5%9F%9F%E5%90%8D%E5%B9%B6%E6%B7%BB%E5%8A%A0SSL-%E5%BC%80%E5%90%AFHTTPS%E5%BC%BA%E5%88%B6/)
   - 直接在 `github-repo的Settings - Pages - Enforce HTTPS`
 
+## 图床
+
+- 用到了Mac之后，需要配置好代理才能使用Picgo，注意使用代理的时候要加上 http://127.0.0.1:10809
+
 ## Other Trouble Shooting
 * 网站渲染的时候出现某一个大标题右缩进
     > 大标题紧跟的行数的上一行缩进了，再空一行即可
