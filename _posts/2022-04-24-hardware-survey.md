@@ -4,7 +4,7 @@ title:      Personal Survey of Hardware Acceleration of Neural Network          
 subtitle:   个人总结一下认真写一个持续更新的post  #副标题
 date:       2022-04-24            # 时间
 author:     tianchen                      # 作者
-header-img:  img/wallpaper/shigatsuwa.jpg  #这篇文章标题背景图片  
+header-img:  img/wallpaper/shigatsuwa.png  #这篇文章标题背景图片  
 catalog: true                       # 是否归档
 tags:                               #标签
      - 论文阅读
