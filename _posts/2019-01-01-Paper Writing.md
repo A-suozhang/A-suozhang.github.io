@@ -14,6 +14,8 @@ tags:                               #标签
 
 # Paper Write 注意点
 
+> 一个包含了许多Tips的[git repo](https://github.com/MLNLP-World/Paper_Writing_Tips)
+
 # 最终检查的细节
 
 1. 一些Term的一致性
