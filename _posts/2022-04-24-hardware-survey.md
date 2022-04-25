@@ -4,7 +4,7 @@ title:      Personal Survey of Hardware Acceleration of Neural Network          
 subtitle:   个人总结一下认真写一个持续更新的post  #副标题
 date:       2022-04-24            # 时间
 author:     tianchen                      # 作者
-header-img:  img/wallpaper/Solitude.png  #这篇文章标题背景图片  
+header-img:  img/wallpaper/Solitude.jpeg  #这篇文章标题背景图片  
 catalog: true                       # 是否归档
 tags:                               #标签
      - 论文阅读
@@ -20,11 +20,13 @@ tags:                               #标签
 
 > 我们熟悉的Pruning，Quantization，NAS等等都可以认为是该种方式，主要特征是：获得计算量或者存储的节省
 
-- 例子：我们熟悉的几乎所有
+- 例子：我们熟悉的几乎所有Paper
 
 - 表现出来的指标： `FLOPs，Param Size，GPU end2end latency`
 
-- 但是这里的一些计算存储的优化，并不能直接反应到硬件设计的效率，why？
+- 部署实例：如TF，Torch自带的一些轻量化方式(如torch中的quantize)
+
+❓： 但是这里的一些计算存储的优化，并不能直接反应到硬件设计的效率，why？
 
 首先，一些软件层面的优化，不会直接反馈到硬件指标。举个例子，比如对于FPGA加速器，你减去了一半的Channel，纸面上减少了一半的显存和计算。但是实际上在部署时候，本身模型还是大到不能存到片上，
 所以只是多算了几个时钟周期，可能对端到端的Latency/吞吐量throughput有优化，但是对计算效率Energy Efficiency并没有提升。（以上两个部分分别代表了硬件加速器的两大指标：速度和能效）
@@ -35,7 +37,7 @@ tags:                               #标签
 
 > 硬件感知（Hardware-aware）的算法优化或者是协同优化（涉及到硬件架构中一些设计的优化，但是不是pure硬件优化）
 
-- 例子：[Hardware-aware Pruning/NAS的工作，如NAAS](https://arxiv.org/abs/2105.13258) [PIMNAS](http://nicsefc.ee.tsinghua.edu.cn/%2Fnics_file%2Fpdf%2Fb6a3130a-52cc-4896-9cb5-d34b56adc968.pdf)
+- 例子：[Hardware-aware Pruning/NAS的工作](https://arxiv.org/abs/2105.13258) [PIMNAS](http://nicsefc.ee.tsinghua.edu.cn/%2Fnics_file%2Fpdf%2Fb6a3130a-52cc-4896-9cb5-d34b56adc968.pdf)
 
 - 指标：(与硬件加速器指标类似且相关)
     - 算法中的一些指标：FLOPs，Param
@@ -45,15 +47,21 @@ tags:                               #标签
 - 该层面优化的一些层次？
 
 
-# 3. 硬件层面的优化
+## 3. 硬件层面的优化
 
 ### 3.1: 针对特定硬件平台(GPU/FPGA)的优化
+
+> 其实也可以是软件层，主要因为针对GPU的优化，GPU有CUDA语言以及很多的Library
+
+- 例子： [torchsparse]()
+
+- 部署实例：如TensorRT，后端是平台代码(CUDA)，且包含了计算图以及编译的优化。
 
 ### 3.2: DSA(Domain-specific Architecture)设计
 
 # Surveys
 
-### [ACM TRETS 19] A Survey of FPGA-Based Neural Network Inference Accelerator
+### [ACM TRETS 19] A Survey of FPGA-Based Neural Network Inference Accelerator （我们的DPU架构）
 
 ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20220424100631.png)
 
@@ -114,7 +122,6 @@ tags:                               #标签
         - 类似XLA的功能,在其中的替代品是GLOW和TensorComprehension
         - 生成 a serializable IR(high-level IR)
             - 包含了fusion of pointwise operations
-
 - GPU:
     - software libraries like cuBLAS，cuDNN
     - TensorCore 针对DL应用的硬件单元（可以switch多种bitwidth）
@@ -123,9 +130,15 @@ tags:                               #标签
     - 属于ASIC，不需要cater to除了DL之外的其他应用， which GPU has to
     - Systolic Array Design
         - ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20220424115852.png)
+        - systolic array面对的是memory-bounded的任务，由于computing不再是瓶颈，脉动阵列尽可能在一次memory读取中执行更多的运算，来balance memory&compute
+        - 与传统的单PE结构不同，Systolic array中有多个PE，数据流经过PE1处理完之后又进入下一个PE，`在较小的内存带宽的情况下获得较高的内存吞吐率`
+        - `优化memory读取的方法？`
+            - Tiling & Data Reuse，尽量减少片外memory的读取次数
+            - 增加On-Chip Memory以及片上buffer的大小
     - EdgeTPU： ASIC for edge devices, 针对的平台是Raspberry-Pie，Pixel Smart phone
 
-
+- NVLink： 更快的接口能和片外memory更好的交互：
+    - 对标PCIe
 
 ### A few other stuff
 
@@ -158,3 +171,34 @@ tags:                               #标签
         - 将权重写到DDR中，然后通过AXI总线配置FPGA寄存器。
         - 对Zynq平台的标准操作： 1）制作RTL工程，生成bit和hardware配置； 2）利用SDK生成fsbl，对zynq器件的一些硬件配置； 3）制作linux系统的uboot，kernel，deviceTree等；制作打包成一个boot.bin制作SD卡镜像并烧录到SD卡。
     - ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20220424205009.png)
+
+
+- [陈天奇： 深度学习编译技术的现状和未来](https://zhuanlan.zhihu.com/p/65452090)
+    1. Polyhedral Model
+
+- [深度学习编译器有哪些有价值的研究方向和参考文献？： TVMCon的主题报告](https://www.zhihu.com/question/338039895/answer/2278797498)
+    - 深度学习的几种抽象层次：
+        1. 计算图 Computational Graph：将计算图表示成DAG，可以进行算子的fuse，改写，并行等操作。（Relay，XLA，TorchMLIR，ONNX都在一个级别）
+        2. Tensor程序表示 Tensor Program： 对子图的loop优化，对于DSA设计还要包含内存搬运的优化 （TVM，MLIR）
+        3. 算子库和运行库 Library & Runtime： 类似cuDNN，cuSparse等
+        4. 硬件指令 Hardware Primitive： 专用硬件的硬件张量指令 （LLVM）
+    - 目前的生态会在各个层面单独做Multi-stage Lowering，然后把问题丢给下一个层级继续优化
+
+
+- [Adi Fuchs的加速器系列文章](https://medium.com/@adi.fu7/ai-accelerators-part-i-intro-822c2cdb4ca4)
+- [Part2 处理器演变](https://zhuanlan.zhihu.com/p/465787742)
+- [Part3 架构基础](https://www.jiqizhixin.com/articles/2022-02-13-2)
+- [Part4 The rich landscape](https://medium.com/@adi.fu7/ai-accelerators-part-iv-the-very-rich-landscape-17481be80917)
+- [Part5 Final thoughts](https://medium.com/@adi.fu7/ai-accelerators-part-v-final-thoughts-94eae9dbfafb)
+    - (没有特别get到他的体系和逻辑走向…但是提供了很多strong evidence)
+    - AI加速器的基本架构类型： ISA（指令集加速器），典型例子Intel的X86，ARM，MIPS，RISC-V（与CISC对比），一般由算术指令，内存操作，控制操作
+    - Systolic Array：（目前主要的AI加速引擎都采用了该种方式，比如Tensor Core）
+        - ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20220425101354.png)
+    - 数据流操作Dataflow，程序被表达成数据流图：DGF（Dataflow Graph）
+    - 内存管理：内存访问能耗比较多，比计算高处几个数量级，可以用近存的方式(Near-memory Computing,更激进的方案就是PIM)
+
+
+### TODO
+
+- more tvm 
+- read digest of DAC/Sysarch papers
