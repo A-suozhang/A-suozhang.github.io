@@ -80,9 +80,33 @@ Reflection模型： 如果一条光线与多个物体产生的intersection，那
 
 ### 1.2 Voxel-based
 
+最朴素的voxel是store occupancy，对每个voxel有一个0~1之间的值。更advanced的方式是保存SDF(Signed distance function)存储voxel中心到物体表面的距离。或是还有额外的信息来denote Material材质。
+
+可以用Volumetric Rendering的方式来渲染，对一跟ray上的所有voxel做aggregation, which is used in Nerf.
+
+### 1.3 Point Cloud based
+
+渲染一个point cloud分几个步骤： 1. 将3d点云投影到相机平面   2. 对每个点对pixel的影响“Influence”做定义 3. 将所有点aggregate到一起
+核心在于对“influence”的定义，如果每个点到一个pixel会是一个很sparse的图片，所以会让一个点覆盖一个区域（比如套一个truncated gaussian blur）
+
+多点aggregation的时候：为了考虑occulusion，选取最近的点做覆盖
+
+### 1.4 Implicit Representation
+
+example： Nerf flow
+
+![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20220425204855.png)
+
+## 2 Neural Rendering
+
+核心是不handcraft how to differentiate, directly end2end learn a rendering process. 可以替代其他模态，但是问题是在sample points along a ray的时候很computational expensive. 
 
 
-# Survey Paper: [Differentiable Rendering: A Survey](http://arxiv.org/abs/2006.12057)
+## 3. Takeaways
+
+1. 目前的DiffRender的方法用local illumination简单，但是难以获得真实的图像； 用global illumination computational难以接受
+2. Game engine中有一些real-time的render方法，但是其和diff之间的gap还没有被bridge
+3. DiffRender of video worth explore
 
 
 
@@ -90,3 +114,4 @@ Reflection模型： 如果一条光线与多个物体产生的intersection，那
 # Reference
 
 1. [之前的Notion整理](https://cuddly-sandal-df1.notion.site/Neural-Rendering-deaf540e14a148f29a6d75ac19d754b7)
+2. Survey Paper: [Differentiable Rendering: A Survey](http://arxiv.org/abs/2006.12057)
