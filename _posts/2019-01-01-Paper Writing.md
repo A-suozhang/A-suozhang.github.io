@@ -71,7 +71,7 @@ tags:                               #标签
 * excel 超过
 * extensive 广泛的
 * subpar 次佳
-* paradigm 范例
+* paradigm 范例 （范式）
 * scheme 方式
 * generic 一般(普遍)
 * derive 获得
@@ -89,18 +89,23 @@ tags:                               #标签
 * contemporary 当代
 * prohibitive 禁止的(很困难的)
 * exploit 利用起来
+* exploration 探索
 * leverage 利用xxx
 * specifically(More concretely) 详细展开
-* incorporate 嵌入,引入
+* incorporate 嵌入,**引入**
 * granularity 粒度(用在量化的粒度的时候)
 * warrant（ensure/guarantee）
 * intractable 棘手
 * damage （原文是the reorganization of BN damages the sparsity）
-* surpass 超过（outperform的换一种说法）
+* surpass 超过（replace outperform的换一种说法）
+* several （replace some）
+* promising （replace good）
+* costly (replace hard)
+* ubiquitous 普及的，普遍存在的
+
 
 ### 常用短语
 
-* In light of above
 * is based on 可以用
 * seamlessly incorporated into / work in parallel with
   * 前者的主语稍微小一些
@@ -115,8 +120,15 @@ tags:                               #标签
 * serve-as:  作为
 * a surge of research efforts
 * 一件事情比较难，不要用cant，用can hardly be
-* ease the xxx problem
+* ease the xxx problem 缓和，一定程度上解决
 * elaborate on
+* equipped with
+
+#### 转折/连接词
+
+* to this end （应该怎么翻译，类似因此？）
+* therefore
+* In light of above
 
 ### 常用缩写
 
@@ -141,6 +153,15 @@ tags:                               #标签
 
 * To sum up, we make the following contributions:
 * The rest of this paper is organized as follows. The related studies are introduced in Sec.~\ref{sec:related}. In Sec.~\ref{sec:methods}, we introduced our fixed-point training. Then in Sec.~\ref{sec:exp}, the effectiveness of our method is illustrated by experiments. We further discuss XXX in Sec.~\ref{sec:discuss}.Finally, we conclude our work in Sec.~\ref{sec:conclusion}.
+
+
+
+
+#### 搭配
+
+* a natural/straightforward solution/usual scheme is to ...
+* compared with prior/previous studies/researches
+
 
 # 公式书写
 
