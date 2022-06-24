@@ -216,35 +216,80 @@ tags:                               #标签
      - ”西方的佛教“： YOLO，不要对事物有深刻的感情，不要严肃
      - event is a dramatic encounter: 追溯性的创造了自己的原因
 
+
+- “能指“和所指”
+     - （著名的烟斗）Real & Representation（画中的烟斗不是烟斗，而是烟斗的represent）
+     - The Sign（符号）由两个部分组成
+          - the signifier: 能指是表征，Representation
+          - the signified: 所指是要表征的东西
+     - Signifier可不变，Signified改变
+     - 拉康的“the signifying chain”
+     - 在语言中，我们可以改变能指而不改变意思：
+          - 两种常见修辞：
+               - Metonymy 转喻：交换两个词，但是所指仍然保持相同
+                    - 例子： 30个帆表示30个船
+                    - 是基于word2word relation的
+               - Metaphor 隐喻： 也是交换Signifier，但是与主题无关
+                    - 例子： 他的刀既不嫉妒也不愤怒
+                    - 他的刀本身不具有这些特性，实际上是在描述“他”
+                    - 通过将他的所属物来替代他，减少了对他的直接负面影响（诗歌中常用）
+               - 与数学定义建立联系：从心理学上考虑，成为了**语言学和Unconscious之间的Bridge**
+                    - Metonymy - Displacement  “情感行为可以从原本的对象转移到另外一个人或事”
+                    - Metaphor：condensation “心灵的凝聚”（？）
+     - 弗洛伊德的解释：能指与所指的精神病理学解释：
+          - 梦是一个被能指所支配的地方（不自然的，符号化的，所以需要解梦）
+     - 拉康 "the unconscious is structured like a language"
+          -  精神分析Therapy中的一个步骤“Free Association”：分析师会给患者一系列图片。让他们建立联系(link between signifier)
+     - 弗洛伊德等老派精神分析认为： 无意识是我们本能(instincts)的所在，是我们的欲望（desire）出现的地方。
+     - 拉康则认为我们的欲望和本我并不是从语言中表达出来，认为是language本身创造了这些欲望
+          - 我们并不是有了意识才有了语言能力，而是我们掌握（接触）语言之后才有了意识
+          - 有了语言我们就能够去“表达”事物
+     - 符号必须根据他们所作为的能指来分析，而不是他们的本身的物理
+
 ## 黑格尔的辩证法
 
 - [意识形态的崇高客体 什么叫扬弃？ - 刘司墨的文章 - 知乎](https://zhuanlan.zhihu.com/p/73030889)
 
+## Marx
 
+- ”人的本质是其社会关系的综合“
 
 
 # Notes
 
 - [试论鲁智深与尼奥的深层精神联系 | 《黑客帝国》哲学元素缝合式乱谈](https://cuddly-sandal-df1.notion.site/30c13db34c8a43d5b99fc539b0559568)
 - [《西部世界》的文化根源与理论基础座谈会 | 机核 GCORES](https://cuddly-sandal-df1.notion.site/GCORES-cc0c3c49ee104a6f96b1696b928f7d18)
-
-
+- [齐泽克Freud lives——精神分析的运用与实践](https://www.bilibili.com/video/BV16v4y1N7X1?share_source=copy_web)
+     - psychoanalysis attracts bad fame 
+     - the idea of feeling(感觉)
+          - Freud： feeling lies to you 
+     - the contradiction of brain science and psycoanalyst
+          - not going into the same place
+          - the unconscious: we donot know our desire, and deprived of the direct access to ourselves
+     - 齐泽克：用拉康派的理论来解释意识形态问题
+     - 一个有趣的精神分析故事，齐泽克本人因为恋情有自杀情绪，在接受分析师Miller（拉康的女婿）的精神分析，他会说“今天我活够了，但是明天还要精神分析治疗”
+          - 他后来开始使坏了，提前准备好需要说的，和编造一些症状
+     - 斯大林主义者：我们比人民更知道他们想要什么
+     - “后现代的恋情，开放的性爱“的实质是将爱情完全物质化，商品化（Commodification）
+          - we trade ourselves，纯粹的契约感情
+          - you have to take risk'
+     - 由于社交媒体，现代人有一个public self, 以及一个public private self(公开展示并塑造的私密形象)，以及本质的private-private self.
+          - 齐泽克开始举例子，facebook上po裸照和暴露狂的本质不同
+     - Trump： psychological Imperialism
+     - 为什么psychoanalyst如此的unpopular以及terrifying
+          - 齐本人对其的sabotage：患者和诊疗室之间本身的不对等关系，并不是表面上看起来的温和询问，更深层的主人关系
 
 ### Topics：
 
 1. 经验主义与理性主义？ Empirical or Rational?
-
-**参考上一章节的大卫休谟部分**，以及康德的一部分
+     - **参考上一章节的大卫休谟部分**，以及康德的一部分
 
 2. 人择原理？
-
-很有趣是由一个天体物理学家所提出的。物质宇宙必须与他观测到的智慧生命所匹配，因为我们从人类的视角去观察世界，世界才会因此而存在。反对者会说因果关系错了，人类进化是为了适应物理规律。
+     - 很有趣是由一个天体物理学家所提出的。物质宇宙必须与他观测到的智慧生命所匹配，因为我们从人类的视角去观察世界，世界才会因此而存在。反对者会说因果关系错了，人类进化是为了适应物理规律。
 
 3. “元” 的含义？
-
-本质的，第一性的，超越的，“形而上学”的英文是metaphysics，更合适直观的翻译应该是“元物理学”（出现在亚里士多德的物理学之后），在古早时期，是“哲学”的代名词。其描述的是就是比物理更深刻本质的对世界本源的思考。
-
-黑格尔抨击辩证逻辑之前的哲学，认为他们预设了一种“永恒不变的理性秩序”
+     - 本质的，第一性的，超越的，“形而上学”的英文是metaphysics，更合适直观的翻译应该是“元物理学”（出现在亚里士多德的物理学之后），在古早时期，是“哲学”的代名词。其描述的是就是比物理更深刻本质的对世界本源的思考。
+     - 黑格尔抨击辩证逻辑之前的哲学，认为他们预设了一种“永恒不变的理性秩序”
 
 4. 消费主义？ 
 
@@ -261,8 +306,12 @@ tags:                               #标签
 - 莫名想到了怎么将两个tensor寻找一个space去project，是让他们最相似的，但是并没有找到对应的数学工具，我能写出数学formulation用数值方式解决，但是感觉这个东西应该有工具（类比两个人找到共同话题）
 
 
+
+
 # References
 
 - [Jacques Lacan: Why We Feel So Empty (Psychoanalysis)](https://www.youtube.com/watch?v=OA4qIuqiS0Q)
 - [The Imaginary, Symbolic and the Real: Register Theory of Lacan (Lacan and Zizek)](https://www.youtube.com/watch?v=BD9rMahFFHc)
 - [齐泽克 - 意识形态的崇高个体]()
+
+- [齐泽克Freud lives——精神分析的运用与实践](https://www.bilibili.com/video/BV16v4y1N7X1?share_source=copy_web)

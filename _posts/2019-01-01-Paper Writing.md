@@ -244,6 +244,10 @@ tags:                               #标签
 
 > 参考 [如何写学术论文的rebuttal？ - 王晋东不在家的回答 - 知乎](https://www.zhihu.com/question/32055996/answer/187612713)，[Rebuttal指南](https://mp.weixin.qq.com/s/ZCHm7qGebxWiI54eHvEY3Q)
 
+- 一个参考模板[Google Doc](https://drive.google.com/file/d/1bEBS-uxmVEc7WVuX35NCodxDu17s_d8m/view)
+
+- [北京大学施柏鑫：从审稿人视角，谈谈怎么写一篇CVPR论文](https://mp.weixin.qq.com/s/YN3Ij_4gBxaWVRHn14va4w)
+
 ### 从思路上
 
 首先要定义清楚，reviewer的类型，reviewer的给分可能并不一定表示他的potential的态度(这也就是为什么那么多文章能够334逆袭这样子)。Reviewer实际想要拒绝你的理由，或者实际的评估，其实并不一定是给出的comment。有可能是因为文章和他的taste不符，但是又没有找到硬伤，只能general的评价。
