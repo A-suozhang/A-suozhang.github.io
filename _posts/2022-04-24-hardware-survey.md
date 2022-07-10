@@ -4,11 +4,13 @@ title:      Personal Survey of Hardware Acceleration of Neural Network          
 subtitle:   个人总结一下认真写一个持续更新的post  #副标题
 date:       2022-04-24            # 时间
 author:     tianchen                      # 作者
-header-img:  img/wallpaper/Solitude.jpg  #这篇文章标题背景图片  
+header-img:  img/2022_0624/1.JPG  #这篇文章标题背景图片  
 catalog: true                       # 是否归档
 tags:                               #标签
      - 论文阅读
      - 综述
+     - 硬件相关
+
 ---
 
 > Eff Deep Learning与Hardware Accel相关的一些自己不成熟的想法的梳理

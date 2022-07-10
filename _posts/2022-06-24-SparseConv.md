@@ -4,10 +4,12 @@ title:      稀疏卷积计算     # 标题
 subtitle:   缝合一下几篇post  #副标题
 date:       2022-06-24            # 时间
 author:     tianchen                      # 作者
-header-img:  img/wallpaper/radiohead.png  #这篇文章标题背景图片  
+header-img:  img/2021_0624/2.JPG #这篇文章标题背景图片  
 catalog: true                       # 是否归档
 tags:                               #标签
      - 论文阅读
+     - 碎片知识
+     - 硬件相关
 ---
 
 # 3D稀疏卷积流程

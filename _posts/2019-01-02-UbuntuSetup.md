@@ -589,6 +589,9 @@ call plug#end()
 	2. Load it into tmux conf
 	3. maybe install plugins with ```set -g @plugin '...'```
 	4. go into tmux and use ```PREFIX+SHITF+I```
+* 多人协作的时候多个prefix，在config中添加：
+  - ```set-option -g prefix C-q   set-option -g prefix2 C-b```
+
 
 ```
 
