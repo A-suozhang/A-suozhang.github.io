@@ -9,6 +9,11 @@ url: "https://a-suozhang.github.io/"          # your host, for absolute URL
 baseurl: ""      # for example, '/blog' if your blog hosted on 'host/blog'
 github_repo: "https://github.com/A-suozhang/A-suozhang.github.io" # you code repository
 
+# Gems
+plugins:
+  - jekyll-paginate
+future: true
+
 # Sidebar settings
 sidebar: true                           # whether or not using Sidebar.
 sidebar-about-description: "六畳一间のドンキホーテ\n a-suozhang，本科在北京飞机汽修学院的电信诈骗专业就读(已续约)，目前短暂在NICS EFC打杂学习"
@@ -106,3 +111,8 @@ friends: [
         href: "https://www.xilinx.com/products/design-tools/ai-inference/ai-developer-hub.html#edge"
     }
 ]
+
+
+# the gallery image folder
+imagesurl: "img/gallery-imgs"
+thumbsurl: "img/gallery-thumbs"

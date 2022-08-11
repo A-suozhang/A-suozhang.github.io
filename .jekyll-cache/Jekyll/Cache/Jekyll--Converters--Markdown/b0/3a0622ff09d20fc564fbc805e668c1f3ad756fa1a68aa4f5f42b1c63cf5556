@@ -1,4 +1,4 @@
-I"�<h1 id="问题描述">问题描述</h1>
+I"�<h1 id="问题描述">问题描述</h1>
 <ul>
   <li>采用JekyII搭建博客之后,花了一个上午鼓捣了一个白嫖图云(充分利用github),然后发现图云到博客里面没有效果</li>
   <li>在本地用VScode的Markdown渲染,没东西</li>
@@ -7,7 +7,7 @@
 
 <h1 id="问题解释">问题解释</h1>
 <ul>
-  <li><code class="highlighter-rouge">https://github.com/A-suozhang/MyPicBed/blob/master/img/andromeda-galaxy-755442__340.jpg</code>这个是从git中直接浏览图片的链接</li>
+  <li><code class="language-plaintext highlighter-rouge">https://github.com/A-suozhang/MyPicBed/blob/master/img/andromeda-galaxy-755442__340.jpg</code>这个是从git中直接浏览图片的链接</li>
   <li>长这样
 <img src="https://github.com/A-suozhang/MyPicBed/raw/master/img/20190907135124.png" alt="" /></li>
   <li>github里面markdown的解析方式貌似 能够把这种图片解析出来,但是博客不行</li>

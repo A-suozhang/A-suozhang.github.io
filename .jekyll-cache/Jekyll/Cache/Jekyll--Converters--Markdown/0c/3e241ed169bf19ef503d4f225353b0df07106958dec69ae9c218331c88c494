@@ -1,4 +1,4 @@
-I"<h1 id="dpu配置">DPU配置</h1>
+I"T<h1 id="dpu配置">DPU配置</h1>
 <ul>
   <li>本文章内容是用于讲解与整理<a href="https://a-suozhang.github.io/2019/09/06/ZCU102-Set-Up/">在ZCU102上配置DPU</a>的一部分内容的原理</li>
   <li>背景知识:
@@ -19,7 +19,7 @@
   </li>
 </ol>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>FILESEXTRAPATHS_prepend := "${THISDIR}/files:"
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>FILESEXTRAPATHS_prepend := "${THISDIR}/files:"
 
 SRC_URI += "file://system-user.dtsi \
 	    file://dpu.dtsi"                        // 这一行是后来加入的,表示要索引当前目录下./files中的dpu.dtsi
@@ -34,7 +34,7 @@ SRC_URI += "file://system-user.dtsi \
   <li>dpu.dtsi的位置在刚才目录下的./files/dpu.dtsi中,内容为</li>
 </ol>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/ {
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/ {
         amba{
 		dpu{
 		    #address-cells = &lt;1&gt;;
@@ -114,7 +114,7 @@ SRC_URI += "file://system-user.dtsi \
   <li>之后把生成的dpu.ko拷贝到我们自己的rootfs中,并且需要设置开机自启动
     <ul>
       <li>在/etc/rc.local中加入
-        <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>insmod dpu.ko
+        <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>insmod dpu.ko
 </code></pre></div>        </div>
       </li>
     </ul>
