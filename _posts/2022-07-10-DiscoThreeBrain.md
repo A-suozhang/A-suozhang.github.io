@@ -14,6 +14,13 @@ tags:                               #标签
 
 > The furies are at home in the mirror: it is their address. Even the clearest water, if deep enough can drown - R.s. Thomas
 
+
+<div id="html" markdown="0">
+<h1>HTML part</h1>
+
+{% include image-gallery.html folder="img/gallery-imgs/" %}
+
+</div>
 ## Intro
 
 该部分来自于ZAUM(游戏出品方)所设计的架空世界观，选取了一些已经被认为是“过时”或者有些“朋克”的现实世界要素来作为世界观的一部分。(e.g., 神秘动物学与我们下面要讨论的“脑的三位一体学说”)。
