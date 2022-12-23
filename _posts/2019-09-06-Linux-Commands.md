@@ -255,6 +255,9 @@ tags:
      - also支持regex以及stdin  `ag "^something$" `   `ps -a | ag nvidia`
     - 比如可以在`C:\Users\A-suozhang\Zotero\storage`查关键词,搭配
 
+- 在某个目录中搜索一些文件内的内容  `find . -iname "*.md" | xargs grep -i $RULE` 
+    - 利用xargs将管道之前的所有文件名切分，并作为grep的内容
+
 ---
 
 ##

@@ -170,8 +170,6 @@ tags:                               #标签
 * The rest of this paper is organized as follows. The related studies are introduced in Sec.~\ref{sec:related}. In Sec.~\ref{sec:methods}, we introduced our fixed-point training. Then in Sec.~\ref{sec:exp}, the effectiveness of our method is illustrated by experiments. We further discuss XXX in Sec.~\ref{sec:discuss}.Finally, we conclude our work in Sec.~\ref{sec:conclusion}.
 
 
-
-
 #### 搭配
 
 * a natural/straightforward solution/usual scheme is to ...
@@ -180,7 +178,8 @@ tags:                               #标签
 
 # 公式书写
 
-- TODO：感觉自己对这个没有系统认知，不知道应该用什么方式来表达
+- ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20221223114009.png)
+- ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20221223114026.png)
 
 
 # Tools
@@ -347,6 +346,7 @@ We appreciate the constructive comments given by the reviewers.However, we’d l
     * 配色，这个倒是可以展开讲，目前我的体会是，饱和度拉低，色系倒是可以稍微跨越一些
     * 字体大小放大！
     * 实际放到文中的图里的字大小，和ppt里字大小不完全相关联，有时候需要把图压扁或者拉长才是真正关键的，因为论文格式里页宽就这么多
+  
 ### 2020-05-01 挂arxiv
 
 * 注意arxiv需要的是latex source code
