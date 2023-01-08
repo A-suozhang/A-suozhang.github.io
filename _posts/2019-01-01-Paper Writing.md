@@ -117,6 +117,8 @@ tags:                               #标签
 * promising （replace good）
 * costly (replace hard)
 * ubiquitous 普及的，普遍存在的
+* predominant 主要的
+* applicable 不适用
 
 
 ### 常用短语
@@ -138,6 +140,16 @@ tags:                               #标签
 * ease the xxx problem 缓和，一定程度上解决
 * elaborate on
 * equipped with
+
+
+
+---
+
+#### 相对不那么常用的
+
+- delve into
+- is desirable for
+- shed light on
 
 #### 转折/连接词
 
@@ -181,6 +193,7 @@ tags:                               #标签
 - ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20221223114009.png)
 - ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20221223114026.png)
 
+- 参考资源：[Suggested Notations for ML](https://github.com/mazhengcn/suggested-notation-for-machine-learning)
 
 # Tools
 
