@@ -246,7 +246,8 @@ tags:
     - 可以理解为一个**三通管道**，截取管道中的内容，输出到某个地方
     - `ls /usr/bin | tee ls.txt | grep zip`
 
-* `CTRL+r` 增量搜索
+* `CTRL+r` bash中的命令增量搜索
+    -  [如何在当前已经输入命令的情况下搜索历史命令](https://unix.stackexchange.com/questions/231605/search-for-a-previous-command-with-the-prefix-i-just-typed)
     - 输入索引值，继续输入`CTRL+r`以切换，回车以键入命令行
 
 * `printenv` 看所有环境变量
@@ -257,6 +258,8 @@ tags:
 
 - 在某个目录中搜索一些文件内的内容  `find . -iname "*.md" | xargs grep -i $RULE` 
     - 利用xargs将管道之前的所有文件名切分，并作为grep的内容
+
+
 
 ---
 

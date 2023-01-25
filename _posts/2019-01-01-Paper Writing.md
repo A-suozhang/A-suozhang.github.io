@@ -222,6 +222,7 @@ tags:                               #标签
 * [Synonym](https://www.synonym.com/synonyms/) 查同义词的网站，但是感觉用处不是很大
 * [New Better Synonym](https://www.thesaurus.com/browse/optimize?s=t)
 * [ESODA](http://www.esoda.org/)： 贵系做的网站，能包含一些找句子等的功能
+* [缩写](https://acronymify.com/)
 * 有道翻译
 * 直接google这个单词，看释义以及隐藏含义
 
@@ -275,20 +276,39 @@ tags:                               #标签
 
 - [北京大学施柏鑫：从审稿人视角，谈谈怎么写一篇CVPR论文](https://mp.weixin.qq.com/s/YN3Ij_4gBxaWVRHn14va4w)
 
+- [如何写学术论文的rebuttal？ - 电光幻影炼金术的回答 - 知乎](https://www.zhihu.com/question/32055996/answer/2499959871)
+
 ### 从思路上
 
 首先要定义清楚，reviewer的类型，reviewer的给分可能并不一定表示他的potential的态度(这也就是为什么那么多文章能够334逆袭这样子)。Reviewer实际想要拒绝你的理由，或者实际的评估，其实并不一定是给出的comment。有可能是因为文章和他的taste不符，但是又没有找到硬伤，只能general的评价。
 
 1. Type1：（大概率是WR）有可能是因为文章和他的taste不符，但是又没有找到硬伤，只能general的评价： 可能给出一些很general，并不是很本质的漏洞，态度偏打压；**基本就是寄了**
 2. Type2：（大概率是WR）很了解你的领域，能够找到甚至挑剔的提出一些很细节的点： 大概率是小同行，想搞你，**基本寄了**
+  - “领域专家型”
 3. Type3：（B或者是WR）对你的文章有一些误解/或者是提出了一些有意义，但是不是硬伤的问题。可能会给一些相对模糊的话，比如”some issues in the paper should be fixed before being fully accepted”，或者是"may raise score"。**一定要抓住，划重点解释清楚他的误解/问题**
+  - “新人型”
 
+从Review长短与Writing反映reviewer对这篇文章的认真程度（可能反映他是否是小同行），参考它合理的**分配文字**
+”声音更大“的，态度更鲜明的reviewer更能够影响AC最后的判断（很多文章最终其实也是存在争议的 ）
 要抓住重点，团结可能团结的人，可以利用其他Reviewer的观点来against others。
 一定要show enough respect，舔舒服了
 一定不能出现主观而且不公认的语句
+抓住R的积极的一致性的意见，AC相对比较难推翻一致性意见
+
+- 一些原则：
+  - “团结能接受的，讨好想拒绝的”
+  - “Everything is a story”：不是清单式的回答问题，要有条理、主次
+  - 惜字如金：
+    - 共性的问题，统一探讨
+    - 文中说了的，多Ref
 
 ### 从实践上
 
+- 典型问题类型：
+  1. 喷Technical Novelty不足：**比较难办**，如果他的理解有误，准确的辨析与说明他忽视了我们那里的别人没做过的地方。如果他的确喷对了，还是可以强调自己的相关的亮点。
+  2. 论文细节问题（Writing等），大方承认，表示之后的版本会修改
+  3. 喷实验的缺乏：尽量补充，实在补充不上/无理要求，说明资源限制做不了，将来会补充。或者**实在不合理**说明我们的focus on xxx,他要的这个实验确实是不关键
+  5. (less likely)提出了方法层面确实存在的疏漏和问题？：**不能逃避！**，具体问题具体分析，尽量补充说理圆
 
 - Rebuttal的目的不需要有很强的逻辑性和优美的writing，而是要很直接明确的把问题点出来！
   - 每个回答的第一句**直接**回答甚至更正R的理解和问题，一定要highlight我们想表达的重点，免得被认为是在答非所问或者绕问题
