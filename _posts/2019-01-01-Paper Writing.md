@@ -278,6 +278,8 @@ tags:                               #标签
 
 - [如何写学术论文的rebuttal？ - 电光幻影炼金术的回答 - 知乎](https://www.zhihu.com/question/32055996/answer/2499959871)
 
+- [Ding Xiaohan的Rebuttal经验分享](https://mp.weixin.qq.com/s/1lfnc74_VMnA55ZEJBpxmg)
+
 ### 从思路上
 
 首先要定义清楚，reviewer的类型，reviewer的给分可能并不一定表示他的potential的态度(这也就是为什么那么多文章能够334逆袭这样子)。Reviewer实际想要拒绝你的理由，或者实际的评估，其实并不一定是给出的comment。有可能是因为文章和他的taste不符，但是又没有找到硬伤，只能general的评价。
