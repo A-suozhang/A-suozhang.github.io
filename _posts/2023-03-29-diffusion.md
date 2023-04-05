@@ -80,22 +80,84 @@ $$p(y\mid x; \theta) = \mathcal{N}(y, \theta^T x, I)$$
 
 $$p(y=1\mid x;\theta) = \sigma(\theta^T x)$$
 
+#### AutoEncoder
 
+Autoencoder本身只是一个encoder-decoder架构的神经网络，它与主成分分析PCA有着许多联系，如果activation function中不带有非线性性时候， autoencoder is reduced to PCA。其中encoder-decoder的中间hidden-state(图中的code，有时候也叫做bottleneck层)的size设置较为关键。过小会导致表征能力不足而难以恢复出原图（一个合理的hidden size表示了minimal information to encode the image）。autoencoder的训练过程可以看做是寻找一种方式，将原始图片**"compresse into hidden state"**，同时又能够**”保持足够多的信息(能够恢复出原始图片)“**。它可以无监督的进行训练(无需label，目标为拟合输入自己)。其问题定义较为简单，对于输入$$x$$，希望autoencoder输出$$x'$$拟合原本的输入：
 
+$$L(x,x')=||x-x'||^2$$
 
+![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20230331111731.png)
 
+一个典型的autoencoder的应用就是去噪任务，对于一个加噪的输入，加一个噪声，希望恢复出原本的图片。引导训练不会overfit到noise之中。   
 
+**那么autoencoder的问题是什么？**，autoencoder接受**离散的**各个数据点，而不能access到the whole continuous latent space。（类似于supervised learning setting中的样本不足的问题），因为在训练数据中没有见过，所以autoencoder难以保证能够泛化到latent space中的其他部分。autoencoder难以处理**连续的latent space**，它不能adapt to arbitrary input since it is not trained on。 为解决这些问题，**Variational AutoEncoder利用采样来填充离散的latent space**。
 
+#### Variational AutoEncoder
 
+> 主要参考并引用了[这篇博文](https://jaan.io/what-is-variational-autoencoder-vae-tutorial/)的介绍逻辑
 
+与autoencoder只学习恢复回原始数据这样的**某一个数据点**不同，VAE在latent space进行采样，并学习的是一个**后验分布** $$p(z \mid x)$$（类似Bayesian Statistics中的思想
 
+为理解VAE的推导过程，我们需要从两种视角看这个问题。首先，我们将从**概率模型**(Probabilistic Model)的角度分析该问题并给出ELBO(Evidence Lower Bound)的推导。然后，用**神经网络**的语言重新解释该过程，将两者对应。
 
+---
+
+当**从概率模型的视角**看这个过程，我们需要先放下关于Deep Leanring与NN的术语。在概率模型的视角下，一个VAE包含了概率模型，建模了数据$$x$$与隐变量$$z$$之间的关系(某个概率模型$$p(x,z)$$建模了数据和隐变量的联合分布joint distribution)。生成的步骤可以看做，对某一个数据点$$i$$,我们会从某个连续的隐空间分布$$p(z)$$中采样一个$$z_i$$，然后利用模型的likelyhood$$p(x \mid z)$$生成$$x_i$$。likelyhood可以由贝叶斯公式得到$$p(x \mid z)=p(x,z)/p(z)$$。从该分布中采样即可得到我们需要的$$x_i$$。
+
+如何训练该概率模型，我们希望该模型能够对给定的观测数据$$x$$，给定隐变量的先验分布$$p(z)$$，让概率模型能较好的拟合后验分布$$p(z \mid x)$$.
+
+$$p(z \mid x) = \frac{p(x \mid z)p(z)}{p(x)}$$
+
+分母上的evidence（观测结果的分布）是intractable的，如果要得到它，我们需要对latent variable $$z$$，计算其边缘分布$$p(x)=\int p(x \mid z)p(z)dz$$,而遍历z需要指数时间的代价，所以我们需要去拟合该后验分布。当没有解析解法的时候，通常需要用数值方法进行近似。
+
+Variational Inference的方法用a family of distribution去拟合某一个分布。$$q_{\lambda(z \mid x)}$$包含了variational parameter $$\lambda$$实际是在索引(indexing)分布簇。e.g., 当$$q$$是一个高斯分布簇的时候$$\lambda_{x_i} = (\mu_{x_i},\sigma^2_{x_i})$$,表示了均值与方差（*不去优化某个特定分布，而是优化其分布的代表参数*）。我们用KL散度来描述函数簇的拟合程度，我们需要找到能最小化KL散度的变分参数$$\lambda$$:
+
+$$q^{*}_{\lambda}(z \mid x) = \underset{\lambda}{\operatorname{argmin}}KL(q_{\lambda}(z \mid x)||p(z \mid x)) = $$
+
+$$E_q[\log q_{\lambda}(z \mid x)] - E_q[\log p(x,z)] + \log p(x)$$
+
+上式中仍然包含intractable的Evidence $$p(x)$$。将上式进行变化:
+
+$$\log p(x) = KL(q_{\lambda}(z \mid x)||p(z \mid x)) - (E_q[\log q_{\lambda}(z \mid x)] - E_q[\log p(x,z)])$$
+
+由于KL散度非负，总大于0，所以p(x)的下界，也就是Evidence Lower Bound就是：$$-(E_q[\log q_{\lambda}(z \mid x)] - E_q[\log p(x,z)])$$，其与$\lambda$有关。上式写为：
+
+$$ELBO(\lambda) = KL(q_{\lambda}(z \mid x)||p(z \mid x)) - \log p(x) $$
+
+由于$$\log p(x)$$与$$\lambda$$无关，所以对于$$\lambda$$最小化KL散度的优化问题，可以等效为最大化ELBO的优化问题。而ELBO是可以被计算的。
+由前式得到：
+
+$$ELBO(\lambda) = E_q[\log p(x,z)] - E_q[\log q_{\lambda}(z \mid x)]$$
+
+由于各个样本采样独立，每个样本的ELBO可以被decompose为：(用贝叶斯公式将左项拆分出一个$$1/p(z)$$并且到右边组成KL散度的形式)
+
+$$ELBO_i(\lambda) = E_{q_{\lambda}(z \mid x_i)}[\log p(x_i \mid z)] - KL(q_{\lambda}(z \mid x_i)||p(z))$$
+
+由于varaiational parameter是对每个数据点都shared的，所以可以利用SGD去优化$$\lambda$$。
+
+In practice, 我们用encoder直接预测Normal Distribution的$$\mu,\sigma$$得到一个分布，再采样得到一个确定的隐变量$$z$$。有趣的是，该采样步骤并不可导，不能进行反向传播。因此，我们需要引入重参数化Reparametrization，来估计采样过程的梯度。（我们或许会把它放在一个单独的section里）。
+
+---
+
+当从神经网络的视角看，我们首先会用一个encoder $$q_{\theta}(z \mid x,\lambda)$$去拟合后验分布。encoder由参数$$\lambda$$和输入$$x$$，输出隐变量$$z$$。其次，用另外一个decoder网络去拟合似然$$p(x\mid z)$$,接受隐变量z，输出x。认为encoder和decoder分别被$$\theta,\phi$$所parameterize。重写ELBO可以得到，为了最大化ELBO，直接将其负值作为神经网络的loss。
+
+$$ELBO_i(\theta,\phi) = E_{q_{\theta}(z \mid x_i)}[\log p_{\phi}(x_i \mid z)] - KL(q_{\theta}(z \mid x_i)||p(z)] $$
+
+对此式的解释，第一项我们可以看做是希望最大化likelyhood函数$$\log_p(x \mid z)$$,作为"Reconstruction Loss"，希望尽可能的从$$z$$中能够复原出$$x$$的信息。第二项可以看做是一个regularization，我们希望去最小化这两个分布之间的距离，保证后验分布$$q(z \mid x)$$不偏离$$p(z)$$太远，描述”减少latent space compression“过程的信息损失。整个优化过程的物理意义较为清晰，这两者合起来就是为了保证approximated posterior $$q_{\lambda}(z \mid x)$$与真实的posterior $$p(z \mid x)$$之间的距离。
+
+另外值得提到的一点是，”The variational inference“的过程本身，仅描述了用ELBO去优化variational parameter $$\lambda$$（encoder中改的参数）的过程。在NN训练过程中，我们的decoder参数也是通过优化一样的loss得到的，我们可以将其看做variationalEM(Expectation Maximization).
+
+另外一个有趣且我没有完全理解的点是variational inference中的mean-field inference与amortized inference的对比，两者的主要区别在于是否**共享了参数** among data points。mean-field指的是将各个数据点分别独立处理，将分布factorized到每个样本的分布。$$q(z) = \Pi_i^N q(z_i;\lambda_i)$$,对于新样本，我们需要重新优化ELBO，并选择它所适合的参数。这样有更严格的更好的表征能力（无shared weight）。但是可以认为一定程度上limit模型的capacity和representation power，因为parameter被tied to samples.（看起来作者这样的写法区分了expressive与model representative power.）而amortized的意思为”平摊“，训练代价被平摊到了各个样本上，各个样本shared parameter。当应对新的数据的时候，可以选择微调，或者只是认为现有的参数能够泛化到它。
 
 
 
 # References
 
 - [Tutorial - What is a variational autoencoder?](https://jaan.io/what-is-variational-autoencoder-vae-tutorial/)
+- [Comprehensive Introduction to Autoencoders](https://towardsdatascience.com/generating-images-with-autoencoders-77fd3a8dd368)
+- [Yang Song - Generative Modeling by Estimating Gradients of the Data Distribution](https://yang-song.net/blog/2021/score/)
+- [The illustrated stable diffusion](https://jalammar.github.io/illustrated-stable-diffusion/)
+- [How diffusion works](https://theaisummer.com/diffusion-models/)
 
 
 ### 测试公式撰写
