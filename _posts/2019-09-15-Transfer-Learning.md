@@ -4,7 +4,7 @@ title:      迁移学习 Transfer Learning            # 标题
 subtitle:   能不能举一反三呢？        #副标题
 date:       2019-10-22              # 时间
 author:     tianchen                      # 作者
-header-img:  img/10_1/bg-3.jpg  #这篇文章标题背景图片
+header-img:  img/diffusion/dnd-28.png  #这篇文章标题背景图片
 catalog: true                       # 是否归档
 tags:                               #标签
      - DL

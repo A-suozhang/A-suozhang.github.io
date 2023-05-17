@@ -4,14 +4,13 @@ title:      Ubuntu 配置心得               # 标题
 subtitle:   已经不知道是第几次安装Ubuntu了 #副标题
 date:       2020-01-01            # 时间
 author:     tianchen                      # 作者
-header-img:  img/6_1/bat.jpg #这篇文章标题背景图片
+header-img:  img/diffusion/cyber-1.png #这篇文章标题背景图片
 catalog: true                       # 是否归档
 tags:                               #标签
     - 环境配置
     - 常用
     - Linux
 ---
-
 
 > 区分一下该post与[POST - Linux-Commands]()的区别，本post下主要是一些安装配置的QA，而另一个主要是系统的知识梳理
 

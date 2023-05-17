@@ -4,7 +4,7 @@ title:      重学线性代数 Linear-Algebra             # 标题
 subtitle:   一个感慨自己本科三年白学了的系列        #副标题
 date:       2020-04-15              # 时间
 author:     tianchen                      # 作者
-header-img:  img/4_1/neon3.jpg  #这篇文章标题背景图片
+header-img: img/diffusion/dnd-19.png  #这篇文章标题背景图片
 catalog: true                       # 是否归档
 tags:                               #标签
     - 重新学习

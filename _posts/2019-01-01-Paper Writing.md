@@ -4,7 +4,7 @@ title:      Paper Wrting 心得 & Digest           # 标题
 subtitle:   高考英语作文都被说口语化的人怎么写文章    #副标题
 date:       2020-04-21            # 时间
 author:     tianchen                      # 作者
-header-img:  img/1_28/nantong-3.jpg  #这篇文章标题背景图片  
+header-img:  img/diffusion/dnd-1.png  #这篇文章标题背景图片  
 catalog: true                       # 是否归档
 tags:                               #标签
      - 常用

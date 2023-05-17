@@ -4,7 +4,7 @@ title:      可微分渲染         # 标题
 subtitle:   不懂图形学  #副标题
 date:       2022-04-25            # 时间
 author:     tianchen                      # 作者
-header-img:  img/wallpaper/sola.png  #这篇文章标题背景图片  
+header-img: img/diffusion/disco-19.png  #这篇文章标题背景图片  
 catalog: true                       # 是否归档
 tags:                               #标签
      - 论文阅读

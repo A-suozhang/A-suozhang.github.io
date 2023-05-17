@@ -4,7 +4,7 @@ title:      网络安全笔记           # 标题
 subtitle:   真就一节课没听过…        #副标题
 date:       2020-11-22            # 时间
 author:     tianchen                      # 作者
-header-img:  img/2020/zhichun.jpg  #这篇文章标题背景图片  
+header-img: img/diffusion/disco-8.png  #这篇文章标题背景图片  
 catalog: true                       # 是否归档
 tags:                               #标签
      - 课程

@@ -4,7 +4,7 @@ title:      2019 NUEDC 全国电设心得               # 标题
 subtitle:   你永远不知道你会怎么扑街 #副标题
 date:       2019-09-06              # 时间
 author:     tianchen                      # 作者
-header-img:     #这篇文章标题背景图片
+header-img: img/diffusion/steam-1.png     #这篇文章标题背景图片
 catalog: true                       # 是否归档
 tags:                               #标签
     - 竞赛

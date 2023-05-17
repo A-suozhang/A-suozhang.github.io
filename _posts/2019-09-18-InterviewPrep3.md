@@ -4,7 +4,7 @@ title:      保研面试-电路           # 标题
 subtitle:   电路相关的一些东西        #副标题
 date:       2019-09-18              # 时间
 author:     tianchen                      # 作者
-header-img:  img/bg-shahe0.jpg  #这篇文章标题背景图片  
+header-img: img/diffusion/dnd-25.png  #这篇文章标题背景图片  
 catalog: true                       # 是否归档
 tags:                               #标签
      - 重新学习

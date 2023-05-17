@@ -4,7 +4,7 @@ title:      dpu配置的设备树配置与驱动产生              # 标题
 subtitle:   How 2 Connect'em    #副标题
 date:       2019-09-07              # 时间
 author:     tianchen                      # 作者
-header-img:     #这篇文章标题背景图片
+header-img: img/diffusion/dnd-12.png    #这篇文章标题背景图片
 catalog: true                       # 是否归档
 tags:                               #标签
     - 嵌入式

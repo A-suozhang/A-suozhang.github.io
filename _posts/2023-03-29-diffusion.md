@@ -4,7 +4,7 @@ title:      从VAE到Diffusion # 标题
 subtitle:   personal notes about generative model #副标题
 date:       2023-03-29            # 时间
 author:     tianchen                      # 作者
-header-img:  img/2022_0710/5.png   #这篇文章标题背景图片  
+header-img: img/diffusion/disco-25.png  #这篇文章标题背景图片  
 catalog: true                       # 是否归档
 tags:                               #标签
      - survey
@@ -120,7 +120,7 @@ $$E_q[\log q_{\lambda}(z \mid x)] - E_q[\log p(x,z)] + \log p(x)$$
 
 $$\log p(x) = KL(q_{\lambda}(z \mid x)||p(z \mid x)) - (E_q[\log q_{\lambda}(z \mid x)] - E_q[\log p(x,z)])$$
 
-由于KL散度非负，总大于0，所以p(x)的下界，也就是Evidence Lower Bound就是：$$-(E_q[\log q_{\lambda}(z \mid x)] - E_q[\log p(x,z)])$$，其与$\lambda$有关。上式写为：
+由于KL散度非负，总大于0，所以p(x)的下界，也就是Evidence Lower Bound就是：$$-(E_q[\log q_{\lambda}(z \mid x)] - E_q[\log p(x,z)])$$，其与$$\lambda$$有关。上式写为：
 
 $$ELBO(\lambda) = KL(q_{\lambda}(z \mid x)||p(z \mid x)) - \log p(x) $$
 
@@ -149,16 +149,136 @@ $$ELBO_i(\theta,\phi) = E_{q_{\theta}(z \mid x_i)}[\log p_{\phi}(x_i \mid z)] - 
 
 另外一个有趣且我没有完全理解的点是variational inference中的mean-field inference与amortized inference的对比，两者的主要区别在于是否**共享了参数** among data points。mean-field指的是将各个数据点分别独立处理，将分布factorized到每个样本的分布。$$q(z) = \Pi_i^N q(z_i;\lambda_i)$$,对于新样本，我们需要重新优化ELBO，并选择它所适合的参数。这样有更严格的更好的表征能力（无shared weight）。但是可以认为一定程度上limit模型的capacity和representation power，因为parameter被tied to samples.（看起来作者这样的写法区分了expressive与model representative power.）而amortized的意思为”平摊“，训练代价被平摊到了各个样本上，各个样本shared parameter。当应对新的数据的时候，可以选择微调，或者只是认为现有的参数能够泛化到它。
 
+### Diffusion
 
+
+
+#### Diffusion is a type of VAE
+
+再次简述一下vae，它建模的是一个含参概率分布
+
+$$p_{\theta}(x) = \int_z p_{\theta}(x \mid z)p_{\theta}(z)$$
+
+先验为$$p_{\theta}(z)$$服从某个分布，观测模型$$p_{\theta}(x \mid z)$$。我们假设$$p(z)$$服从高斯分布，其参数$$\mu_{\theta}(z)$$与$$\sigma_{\theta}(z)$$由一个神经网络预测。其优化目标为：
+
+$$\theta^{*} = \underset{\theta}{\operatorname{argmax}}E_{x\sim \hat{p}(x), z \sim p(z)}[\log p_{\theta}(x\mid z; \theta)]]$$
+
+由于这样需要遍历$$z$$的连续空间而导致每个特定数据点上的likelyhood无法保证（尤其对高维空间），因此，VAE采用采样方式，从一个参数化的分布$$q_{\theta}(z \mid x)$$中得到（VAE中的decoder部分），更倾向于focus on z that are more likely to generate x的部分。
+
+$$ \log p(x) = \int_z p_{\theta}(x \mid z)p(z) $$
+
+$$ \log p(x) = log E_{z \sim q_{\phi}(z \mid x)}[\frac{p_{\theta}(x\mid z)p(z)}{q_{\phi}(z \mid x)}] $$
+
+由于对期望取log无意义，需要**将log放到期望E里面**。此时，利用Jenson不等式可以得到ELBO项加以优化。
+
+$$\log p(x) \ge E_{z \sim q_{\phi}(z \mid x)}[\log \frac{p_{\theta}(x \mid z)p(z)}{q_{\phi}(z \mid x)}]$$
+
+为了获得对于$$\phi$$的导数，需要引入重参数化技巧，由于采样步骤$$z\sim q_{\phi}(z \mid x)$$.
+
+![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20230406192404.png)
+
+当我们认为diffusion是一种特殊的Hierarchical VAE，**前向过程inference model没有可学习参数**，且最后目标为接近标准高斯。前向模型为：
+
+$$q(x_t \mid x_{t-1}) = N(x_{T};x_{t-1}\sqrt{1-\beta_{t}},\beta_{t}I)$$
+
+让最终的$$q(x_t \mid x_0) \approx N(0,1)$$。其中$$\beta$$是一个超参数，follow了一种固定的annealing方式，方差逐渐减小。当我们定义$$\alpha_t := 1-\beta_t$$, $$\bar{x_t} = \Pi^{t}_{s=1} \alpha_{s} $$。该流程的优秀特性在于，“跳步采样”（在DDIM的文章中证明了），可以随意采样时间步$$p_{]\theta}(x_{t-1} \mid x_t)$$，而不用进行整个生成流程。
+
+$$q(x_t \mid x_0) = N(\sqrt{\bar{\alpha_t}}x_0, (1-\bar{\alpha_t})I)$$
+
+将该过程的ELBO展开后可得到：
+
+$$L = E_q[-\log p(x_T) - \log \frac{p_{\theta}(x_0 \mid x_1)}{q(x_1 \mid x_0)} - \sum_{t>1}^{T} \log \frac{p_{\theta}(x_{t-1} \mid x_t)}{q(x_t \mid x_{t-1})}]$$
+
+最后一项可以展开为：
+
+$$ \sum_{t>1}^{T} \log \frac{p_{\theta}(x_{t-1} \mid x_t)}{q(x_t \mid x_{t-1})} = \sum_{t>1}^T \log \frac{p_{\theta}(x_{t-1} \mid x_t)}{q(x_{t-1} \mid x_t,x_0)} + \log \frac{q(x_{t-1} \mid x_0)}{q(x_t \mid x_0)} $$
+
+其中$$\log q(x_t \mid x_0) = log q(x_T \mid x_0) - q(x_1 \mid x_0)$$,改写后的loss为(将原本的第二项和第三项右侧的sum拆开后合并)
+
+$$L := (-\log p(x_T) + \log q(x_T \mid x_0)) - \log p_{\theta}(x_0 \mid x_1) - \sum_{t>1}^{T} \log \frac{p_{\theta}(x_{t-1} \mid x_t)}{q(x_{t-1} \mid x_t,x_0)}$$
+
+第一项无参数，衡量了前向结果与标准高斯的差距。中间为重建项（Reconstruction Error）。$$L_{t-1}$$标识了转移概率与高斯的差距（实质上是$$ \sum_{t=2}^T D_KL(q(x_{t-1} \mid x_t) \| p_{\theta}(x_{t-1} \mid x_t)) $$）。
+
+以上过程是最早的Diffusion model的做法(*[1]:Deep Unsupervised Learning using Nonequilibrium Thermodynamics*)，与DDPM有所区别。DDPM(*[2]:Denoising Diffusion Probabilistic Models*)采取了不同的parameterization方式，简化了训练。Diffusion的前向过程的逆过程，如$$q(x_{t-1} \mid x_t)$$本身没有解析解，intractable。但是综合考虑初始态的$$q(x_{t-1} \mid x_t,x_0)$$可以通过Bayes Rule可以推导得到:
+
+$$ q(x_{t-1} \mid x_t, x_0) = \frac{q(x_t,x_0,x_{t-1})}{q(x_t,x_0)} = \frac{q(x_0)q(x_{t-1} \mid x_0)q(x_t \mid x_0,x_{t-1  })}{q(x_0)q(x_t \mid x_0)}$$
+
+
+$$ q(x_{t-1} \mid x_t, x_0) = q(x_t \mid x_{t-1},x_0)\frac{q(x_{t-1} \mid x_))}{q(x_t \mid x_0)} $$
+
+由马尔可夫性，有 $$q(x_t\mid x_{t-1},x_0) = q(x_t \mid x_{t-1})$$,则可得
+
+$$ q(x_{t-1} \mid x_t, x_0) = q(x_t \mid x_{t-1}) \frac{q(x_{t-1}\mid x_0)}{q(x_t \mid x_0)}$$
+
+由于上式的三个部分都服从高斯分布，或是高斯分布的乘积（依旧是高斯分布），因此可以写作：
+
+$$ q(x_{t-1} \mid x_t,x_0) = N(x_{t-1};\tilde{\mu}(x_t,x_0),\tilde{\beta_t}I) $$
+
+
+$$ \tilde{\mu_t}(x_t,x_0) = \frac{\sqrt{\bar{\alpha_{t-1}}}\beta_t}{1-\bar{\alpha_t}}x_0 + \frac{\sqrt{\alpha_t}(1-\bar{\alpha_{t-1}})}{1-\bar{\alpha_{t}}}x_t$$
+
+$$ \tilde{\beta_t} = \frac{1-\bar{\alpha_{t-1}}}{1-\bar{\alpha_t}}\beta_t $$
+
+对应的，我们用一个含参数的NN来拟合与建模该过程
+
+$$ p_{\theta}(x_{t-1} \mid x_t) = N(x_{t-1}; \mu_{\theta}(x_t,t),\sigma_t^2 I) $$
+
+其中，方差$$\sigma_t^2$$是一个时变的常数(类似$$\beta_t$$),而均值$$\mu_{\theta}(x_t,t)$$由神经网络得到，将输入图像映射到该期望。该神经网络在各个timestep共享参数，时间步$$t$$以positional embedding的方式引入。
+
+经过这样的处理与改写，损失中的第三项($$L_{t-1}$$)可以被改写为：
+
+$$ L_{t-1} = E_{t,x_t,x_0}[\frac{1}{2\sigma^2_t} \| \tilde{\mu_t}(x_t,x_0) - \mu_{\theta}(x_t,t)  \| ] $$
+
+原问题被看做了一个拟合两个高斯分布的均值的问题。但是，DDPM的作者further对这个形式进行了进一步的改写。
+
+通过一个重参数化（这里引入重参数化并不是为了让不可导的采样过程变可导，而只是更换一种$$x_t$$的表达方式）。$$x_t$$可以被改写为初值$$x_0$$加上了一系列随机采样得到的噪声$$\epsilon \in N(0,1)$$.
+
+$$x_t(x_0, \epsilon) = \sqrt{\bar{\alpha_t}}x_0 + \sqrt{1-\bar{\alpha_t}}\epsilon $$
+
+$$x_0 = \frac{x_t(x_0,\epsilon) - \sqrt{1-\bar{\alpha_t}}\epsilon}{\sqrt{\bar{\alpha_t}}}$$
+
+将其代入$$q(x_{t-1},\tilde{\mu}(x_t,x_0),\beta_t I)$$之中，该期望可以被写作,代入化简（参考$$ \bar{\alpha_t} = \bar{\alpha_{t-1}}\alpha_t$$, $$ \beta_t = 1-\alpha_t $$）得到：
+
+$$\tilde{\mu_t}(x_t(x_0,\epsilon),\frac{1}{\sqrt{\bar{\alpha_t}}}(x_t(x_0,\epsilon)-\sqrt{1-\bar{\alpha_t}}\epsilon))$$
+
+$$ \tilde{\mu_t} = \frac{1}{\sqrt{\alpha_t}}x_t - \frac{\beta_t}{\sqrt{\alpha_t}\sqrt{1-\alpha_t}} $$
+
+而我们要优化的目标可以被改写:
+
+$$ L_{t-1} = E_{x_0,\epsilon,t}[ \frac{1}{2\sigma_t^2} \| \frac{1}{\sqrt{\alpha_t}} \cdot (x_t(x_0,\epsilon) - \frac{\beta_t}{\sqrt{1-\bar{\alpha_t}}}\epsilon) - \mu_{\theta}(x_t(x_0,\epsilon),t)  \| ]  $$
+
+
+上式中，当NN $$\mu_{\theta}$$最接近$$\frac{1}{\sqrt{\alpha+t}}(x_t(x_0,\epsilon)-\frac{\beta_t}{\sqrt{1-\bar{\alpha_t}}})$$的时候，取得最优$$\theta$$。由于我们给NN的输入为$$\mu_{\theta}$$，所以NN实际上是在学习一个aaddine transform，包含了一些与t相关的常数与未知的噪声$$\epsilon$$。将$$\mu_{\theta}$$改写为$$\epsilon_{\theta}$$可以得到。
+
+$$\mu_{\theta}(x_t,t) = \frac{1}{\sqrt{\alpha_t}}(x_t(x_0,\epsilon) - \frac{\beta_t}{\sqrt{1-\bar{\alpha_t}}}\epsilon_{\theta}(x_t(x_0,\epsilon),t))$$
+
+从而有
+
+$$ E_{x_0,\epsilon,t} [\frac{\beta_t^2}{2\sigma_t^2\alpha_t(1-\bar{\alpha_t})} \| \epsilon - \epsilon_{\theta}(x_t(x_0,\epsilon),t) \| ]  $$
+
+这样将原本对齐两个分布的期望均值的任务，可以被改写为用一个NN预测每一步的噪声$$\epsilon$$的过程。
+
+总结DDPM的过程，分为以下几步。首先从随机噪声中采样出$$x_0 \sim p(x)$$,并选取一个随机的时间步$$t$$与一些噪声$$\epsilon \sim N(0,1)$$。按照前向推理加噪，计算$$x_t(x_0,\epsilon)$$。代表了从$$q(x_t,x_0)$$。前向的Posterior $$q(x_{t-1} \mid x_t,x_0)$$的解析解。我们希望一个含参数的模型$$p_{\theta}(x_{t-1} \mid x_t)$$能够拟合前向的posterior，减少KL散度（经过上述证明只要让NN去拟合噪声$$\epsilon$$即可。）
+
+总结来看，DDPM与VAE相同的地方主要在于算法范式，它可以被看做是一种特殊的Hierarchical VAE。前向过程不含参，且为标准高斯的加噪声过程。其优化目标(Obnjective)是类似ELBO的优化lower bound的方式。而也具有如下区别：如DDPM的前向过程destroy了输入的信息，将其退化为了标准高斯，而VAE需要的是获得输入信息的compressed的表征。DDPM的”隐空间“的尺度与原始数据一致，而VAE可以自主选择与设计隐空间。在DDPM中，不同timestep的generative model实际上是共享了同一个NN模型(U-Net)。
+
+#### DDIM
+
+> 该部分的笔记参考了[LilianWeng's blog: diffusion models](https://lilianweng.github.io/posts/2021-07-11-diffusion-models/)
 
 # References
+
+- [1] Deep Unsupervised Learning using Nonequilibrium Thermodynamics. Jascha Sohl-Dickstein, Eric A. Weiss, Niru Maheswaranathan, Surya Ganguli. 2015
+- [2] Denoising Diffusion Probabilistic Models Jonathan Ho, Ajay Jain, Pieter Abbeel. 20202. 
+- [3] Denoising Diffusion Implicit Models. Song Jiaming, 2022
 
 - [Tutorial - What is a variational autoencoder?](https://jaan.io/what-is-variational-autoencoder-vae-tutorial/)
 - [Comprehensive Introduction to Autoencoders](https://towardsdatascience.com/generating-images-with-autoencoders-77fd3a8dd368)
 - [Yang Song - Generative Modeling by Estimating Gradients of the Data Distribution](https://yang-song.net/blog/2021/score/)
 - [The illustrated stable diffusion](https://jalammar.github.io/illustrated-stable-diffusion/)
 - [How diffusion works](https://theaisummer.com/diffusion-models/)
-
+- [diffusion probabilistic model is a kind of VAE](https://angusturner.github.io/generative_models/2021/06/29/diffusion-probabilistic-models-I.html)
+- [Diffusion Models](https://lilianweng.github.io/posts/2021-07-11-diffusion-models/)
 
 ### 测试公式撰写
 

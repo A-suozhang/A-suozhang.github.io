@@ -4,7 +4,7 @@ title:      解决博客中图片不显示的问题              # 标题
 subtitle:   不是我寻思我发的图片都很健康啊    #副标题
 date:       2019-09-07              # 时间
 author:     tianchen                      # 作者
-header-img:     #这篇文章标题背景图片
+header-img: img/diffusion/dnd-16.png    #这篇文章标题背景图片
 catalog: true                       # 是否归档
 tags:                               #标签
     - 环境配置
@@ -15,7 +15,6 @@ tags:                               #标签
 * 采用JekyII搭建博客之后,花了一个上午鼓捣了一个白嫖图云(充分利用github),然后发现图云到博客里面没有效果
 * 在本地用VScode的Markdown渲染,没东西
 * 在github别的repo里面插入链接,能用
-
 
 # 问题解释
 * ```https://github.com/A-suozhang/MyPicBed/blob/master/img/andromeda-galaxy-755442__340.jpg```这个是从git中直接浏览图片的链接

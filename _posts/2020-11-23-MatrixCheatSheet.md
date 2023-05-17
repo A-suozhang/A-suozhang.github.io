@@ -4,7 +4,7 @@ title:      Matrix Cheet Sheet           # 标题
 subtitle:   我一定得好好记一下…       #副标题
 date:       2020-11-22            # 时间
 author:     tianchen                      # 作者
-header-img:  img/2020/skate.jpg  #这篇文章标题背景图片  
+header-img: img/diffusion/disco-9.png  #这篇文章标题背景图片  
 catalog: true                       # 是否归档
 tags:                               #标签
      - 课程

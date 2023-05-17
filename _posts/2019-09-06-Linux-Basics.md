@@ -4,7 +4,7 @@ title:      Linux基础补课               # 标题
 subtitle:   学不会Linux的哲学，学得会Linus的喷人     #副标题
 date:       2019-09-06              # 时间
 author:     tianchen                      # 作者
-header-img:     #这篇文章标题背景图片
+header-img:  img/diffusion/cyber-4.png   #这篇文章标题背景图片
 catalog: true                       # 是否归档
 tags:                               #标签
     - 学习笔记

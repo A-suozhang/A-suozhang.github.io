@@ -4,7 +4,7 @@ title:      漫谈极乐迪斯科P1：古老的爬虫脑和边缘系统 # 标题
 subtitle:   所以能不能有P2呢？  #副标题
 date:       2022-07-10            # 时间
 author:     tianchen                      # 作者
-header-img:  img/2022_0710/1.png   #这篇文章标题背景图片  
+header-img: img/diffusion/disco-36.png   #这篇文章标题背景图片  
 catalog: true                       # 是否归档
 tags:                               #标签
      - 碎片知识

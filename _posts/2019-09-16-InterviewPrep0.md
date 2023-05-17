@@ -4,7 +4,7 @@ title:      保研面试-数理            # 标题
 subtitle:   再看一遍发现自己是真的不适合学数学，告辞        #副标题
 date:       2019-09-17              # 时间
 author:     tianchen                      # 作者
-header-img:  img/bg-nmbsnow.jpg  #这篇文章标题背景图片
+header-img:  img/diffusion/dnd-27.png  #这篇文章标题背景图片
 catalog: true                       # 是否归档
 tags:                               #标签
      - 重新学习

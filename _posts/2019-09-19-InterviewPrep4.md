@@ -4,7 +4,7 @@ title:      保研面试-系统           # 标题
 subtitle:   一个很应该学却没怎么学的方向        #副标题
 date:       2019-09-19              # 时间
 author:     tianchen                      # 作者
-header-img:  img/bg-april3.jpg  #这篇文章标题背景图片  
+header-img:  img/diffusion/dnd-31.png  #这篇文章标题背景图片  
 catalog: true                       # 是否归档
 tags:                               #标签
      - 重新学习

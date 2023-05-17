@@ -4,7 +4,7 @@ title:      漫谈      # 标题
 subtitle:   图一乐  #副标题
 date:       2022-04-26            # 时间
 author:     tianchen                      # 作者
-header-img:  img/2022_0424/2.jpg  #这篇文章标题背景图片  
+header-img: img/diffusion/disco-20.png #这篇文章标题背景图片  
 catalog: true                       # 是否归档
 tags:                               #标签
      - 碎片知识

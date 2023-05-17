@@ -4,7 +4,7 @@ title:      Sth. About Transformer            # 标题
 subtitle:  热度热度… 
 date:       2021-03-02            # 时间
 author:     tianchen                      # 作者
-header-img:  img/2020/street3.jpg  #这篇文章标题背景图片  
+header-img: img/diffusion/disco-12.png #这篇文章标题背景图片  
 catalog: true                       # 是否归档
 tags:                               #标签
 

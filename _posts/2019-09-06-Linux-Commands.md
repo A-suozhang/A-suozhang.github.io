@@ -4,7 +4,7 @@ title:      Linux常用命令笔记(Cheat Sheet)            # 标题
 subtitle:   学了忘，忘了学(Learning and then Forget, then Forgot to Learn)     #副标题
 date:       2020-01-01              # 时间
 author:     tianchen                      # 作者
-header-img:  img/bg-term.png   #这篇文章标题背景图片
+header-img:  img/diffusion/cyber-5.png    #这篇文章标题背景图片
 catalog: true                       # 是否归档
 tags:    
     - 常用                           #标签

@@ -4,7 +4,7 @@ title:      Mathematica 学习笔记              # 标题
 subtitle:   总是学不会的优雅的函数式编程     #副标题
 date:       2020-01-29             # 时间
 author:     tianchen                      # 作者
-header-img:     #这篇文章标题背景图片
+header-img:  img/diffusion/dnd-4.png   #这篇文章标题背景图片
 catalog: true                       # 是否归档
 tags:                             #标签
     - 学习笔记
