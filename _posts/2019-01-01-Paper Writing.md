@@ -342,10 +342,51 @@ tags:                               #标签
 ```We thank all the reviewers for their insightful and constructive feedbacks! We will revise the final version according to this rebuttal.```
 ```We’ll carefully proofread the paper and fix the typos in the final version.```
 ```Thanks for the suggestion.We’ll make the claim more rigorous in our final version```
+
+```
+Thank you for your suggestion.
+Thank you for the positive/detailed/constructive comments.
+We sincerely thank all reviewers and ACs for their time and efforts. Below please find the responses to some specific comments.
+We thank the reviewers for their useful comments. The common questions are first answered, then we clarify questions from every individual review.
+We thank the useful suggestions from the reviewers. Some important or common questions are first addressed, followed by answers to individual reviews.
+表达同意
+We thank the reviewer for pointing out this issue.
+We agree with you and have incorporated this suggestion throughout our paper.
+We have reflected this comment by …
+We can/will add/compare/revise/correct ... in our revised manuscript/our final version.
+Due to the rebuttal policy, “authors should not include new experimental results in the rebuttal”, additional results may not be included. However, we will add these mentioned experiments and discussions in our final version. Thank you for the constructive comment.（对于CVPR/ICCV/ECCV rebuttal不能提供新结果的政策）
+```
 	
 * 委婉的喷
 
 ```We suspect / There may be some misunderstanding```
+
+```
+We respectfully disagree with Reviewer #id that ...
+The reviewer might have overlooked Table #id ...
+We can compare ... but it is not quite related to our work ...
+We have to emphasize that ...
+The reviewer raises an interesting concern. However, our work ...
+Thank you for the comment, but we cannot fully agree with the comment. As stated/emphasized ...
+You have raised an important point; however, we believe that ... would be outside the scope of our paper because …
+This is a valid assessment of …; however, we believe that ... would be more appropriate because ...
+```
+
+* 解释澄清
+
+```
+We have indeed stated/included/discussed/compared/reported/clarified/elaborated ... in our original paper ... (cf. Line #id).
+As we stated in Line #id, ...
+We have rewritten ... to be more in line with your comments. We hope that the edited section clarifies …
+```
+
+* 额外信息
+
+```
+We have included a new figure/table (cf. Figure/Table #id) to further illustrate…
+We have supplemented the xxx section with explanations of ...
+Thank you for the comment. We will explore this in future work.
+```
 
 * 给AC说
 
