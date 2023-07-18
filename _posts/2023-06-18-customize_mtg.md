@@ -1,7 +1,7 @@
 ---
 layout:     post                    # 使用的布局（不需要改）
 title:      用StableDiffuision自制万智牌卡面
-subtitle:   自己应用一下.
+subtitle:   Play with AIGC.
 date:       2023-05-18            # 时间
 author:     tianchen                      # 作者
 header-img: img/diffusion/dnd-46.png  #这篇文章标题背景图片  
@@ -90,3 +90,30 @@ tags:                               #标签
 ### Finalize
 
 ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20230618195641.png)
+
+
+# 为自己建立一个Secrete Lair！
+
+Evan
+
+```
+best quality, dark background, ink splashing, arcane glitter, complicated machine , wizard, (young boy), (hobbit), (steampunk),  white hair, man bun, pointy ear, pointy nose, (goggles),  (red gown), armor, yellow ribbon, magic the gathering, wizard of the coast, comic art   <lora:jim_lee:0.15> 
+
+(low quality, bad hands, worst quailty: 1.3). (lowres), (EasyNegative), (high contrast)
+```
+
+```
+best quality, dark background, ink splashing, arcane glitter, (Telepathy, mind, electrical curve:1.4), (wizard, red gawn: 1.6), (one young), (hobbit), white hair, man bun, pointy ear, pointy nose, (night vision goggles), magic the gathering, wizard of the coast, comic art   <lora:jim_lee:0.2> 
+```
+
+Minerva
+
+```
+best quality, dark background, ink splashing, (single machinery owl), repairing, assemble, (bronze), complicated mechanics, (steampunk),  wing spread, magic the gathering, comic art   <lora:jim_lee:0.15> 
+```
+
+Demelin
+
+```
+best quality, dark background, ink splashing, arcane glitter, single person,  (vampire touch), red hoodie, (red gawn, skull mask, female wizard), long hair, magic the gathering, wizard of the coast, comic art   <lora:jim_lee:0.5> 
+```

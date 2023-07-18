@@ -231,7 +231,7 @@ $$ L_{t-1} = E_{t,x_t,x_0}[\frac{1}{2\sigma^2_t} \| \tilde{\mu_t}(x_t,x_0) - \mu
 
 原问题被看做了一个拟合两个高斯分布的均值的问题。但是，DDPM的作者further对这个形式进行了进一步的改写。
 
-通过一个重参数化（这里引入重参数化并不是为了让不可导的采样过程变可导，而只是更换一种$$x_t$$的表达方式）。$$x_t$$可以被改写为初值$$x_0$$加上了一系列随机采样得到的噪声$$\epsilon \in N(0,1)$$.
+通过一个重参数化（这里引入重参数化并不是为了让不可导的采样过程变可导，而只是更换一种$$x_t$$的表达方式，将$$x_t$$与$$\mu$$相关，改为$$\epsilon$$来表示$$\mu$$，which is straightforward,去求加的噪声如何变化在去噪过程中比较合理）。$$x_t$$可以被改写为初值$$x_0$$加上了一系列随机采样得到的噪声$$\epsilon \in N(0,1)$$.
 
 $$x_t(x_0, \epsilon) = \sqrt{\bar{\alpha_t}}x_0 + \sqrt{1-\bar{\alpha_t}}\epsilon $$
 
@@ -248,7 +248,7 @@ $$ \tilde{\mu_t} = \frac{1}{\sqrt{\alpha_t}}x_t - \frac{\beta_t}{\sqrt{\alpha_t}
 $$ L_{t-1} = E_{x_0,\epsilon,t}[ \frac{1}{2\sigma_t^2} \| \frac{1}{\sqrt{\alpha_t}} \cdot (x_t(x_0,\epsilon) - \frac{\beta_t}{\sqrt{1-\bar{\alpha_t}}}\epsilon) - \mu_{\theta}(x_t(x_0,\epsilon),t)  \| ]  $$
 
 
-上式中，当NN $$\mu_{\theta}$$最接近$$\frac{1}{\sqrt{\alpha+t}}(x_t(x_0,\epsilon)-\frac{\beta_t}{\sqrt{1-\bar{\alpha_t}}})$$的时候，取得最优$$\theta$$。由于我们给NN的输入为$$\mu_{\theta}$$，所以NN实际上是在学习一个aaddine transform，包含了一些与t相关的常数与未知的噪声$$\epsilon$$。将$$\mu_{\theta}$$改写为$$\epsilon_{\theta}$$可以得到。
+上式中，当NN $$\mu_{\theta}$$最接近$$\frac{1}{\sqrt{\alpha+t}}(x_t(x_0,\epsilon)-\frac{\beta_t}{\sqrt{1-\bar{\alpha_t}}})$$的时候，取得最优$$\theta$$。由于我们给NN的输入为$$\mu_{\theta}$$，所以NN实际上是在学习一个affine transform，包含了一些与t相关的常数与未知的噪声$$\epsilon$$。将$$\mu_{\theta}$$改写为$$\epsilon_{\theta}$$可以得到。
 
 $$\mu_{\theta}(x_t,t) = \frac{1}{\sqrt{\alpha_t}}(x_t(x_0,\epsilon) - \frac{\beta_t}{\sqrt{1-\bar{\alpha_t}}}\epsilon_{\theta}(x_t(x_0,\epsilon),t))$$
 
@@ -258,6 +258,16 @@ $$ E_{x_0,\epsilon,t} [\frac{\beta_t^2}{2\sigma_t^2\alpha_t(1-\bar{\alpha_t})} \
 
 这样将原本对齐两个分布的期望均值的任务，可以被改写为用一个NN预测每一步的噪声$$\epsilon$$的过程。
 
+当然，“估计噪声”有一个**等效的做法**是“估计原始图片”，由于每个时间t都存在确定的,所以预测 $$\epsilon$$ ，和预测 $$x_0$$ 等效 (which is what is actually used). 
+
+$$ x_t = x_0 + \epsilon $$
+
+目标可以写成：
+
+$$ E_{x_0,x_t} [\frac{\beta_t^2}{2\sigma_t^2\alpha_t(1-\bar{\alpha_t})} \| x - x_{\theta}(x(t),t) \| ]  $$
+
+在实际的应用中，包含 $$\alpha, \beta$$的系数项，通常不采用exact形式，被写为 $$ \gamma_t $$（有时为 $$\frac{\alpha_t}{1-\alpha_t}$$ ,甚至有时为1）。
+
 总结DDPM的过程，分为以下几步。首先从随机噪声中采样出$$x_0 \sim p(x)$$,并选取一个随机的时间步$$t$$与一些噪声$$\epsilon \sim N(0,1)$$。按照前向推理加噪，计算$$x_t(x_0,\epsilon)$$。代表了从$$q(x_t,x_0)$$。前向的Posterior $$q(x_{t-1} \mid x_t,x_0)$$的解析解。我们希望一个含参数的模型$$p_{\theta}(x_{t-1} \mid x_t)$$能够拟合前向的posterior，减少KL散度（经过上述证明只要让NN去拟合噪声$$\epsilon$$即可。）
 
 总结来看，DDPM与VAE相同的地方主要在于算法范式，它可以被看做是一种特殊的Hierarchical VAE。前向过程不含参，且为标准高斯的加噪声过程。其优化目标(Obnjective)是类似ELBO的优化lower bound的方式。而也具有如下区别：如DDPM的前向过程destroy了输入的信息，将其退化为了标准高斯，而VAE需要的是获得输入信息的compressed的表征。DDPM的”隐空间“的尺度与原始数据一致，而VAE可以自主选择与设计隐空间。在DDPM中，不同timestep的generative model实际上是共享了同一个NN模型(U-Net)。
@@ -265,6 +275,81 @@ $$ E_{x_0,\epsilon,t} [\frac{\beta_t^2}{2\sigma_t^2\alpha_t(1-\bar{\alpha_t})} \
 #### DDIM
 
 > 该部分的笔记参考了[LilianWeng's blog: diffusion models](https://lilianweng.github.io/posts/2021-07-11-diffusion-models/)
+
+#### Score-based SDE formulation
+
+> in "Score-Based Generative Modeling through Stochastic Differential Equations"
+> Ref [Song Yang's Blog](https://yang-song.net/blog/2021/score/)
+
+--- 
+
+**Score-Matching的问题formulation:**它所对比的是一般的likehood-based method,直接去建模probability distribution本身（一般用PDF来建模），引入可训练参数并拟合：$$Z_{\theta}>0$$是一个常数，与$$\theta$$有关，保证$$\int p_{\theta}(x)dx=1 $$,而$$f_{\theta}$$通常被称作”unnormalized probability model/energy-model“
+
+$$ p_{\theta}(x) = \frac{e^{-f_{\theta}(x)}}{Z_{\theta}} $$
+
+优化目标为最大似然：
+
+$$ \max \sum_{t=1}^N \log p_{\theta}(x_i) $$
+
+由于该式需要计算遍历无限大的$$Z_{\theta}$$（对于一个general的$$f_{\theta}(x)$$），所以现有的方法通过限制模型架构的方式(autogressive中用casual convolution，invertible network for Normalizing flow)，或者去拟合$$Z_{\theta}$$(Variational Inference, MCMC sampling),问题在于**computationally expensive**. 
+
+通过将优化目标改为Score function(PDF的梯度) $$\nabla_x \log p(x)$$,可以省去这个intractable的normalization constant ($$\nabla_x \log Z_{\theta} = 0$$)。一般用一个Score-based model $$s_{\theta}(x)$$ 去拟合Score。类比于likelyhood-based model,优化目标为最小化**Fisher Divergence**(intuitive解释为：gt score与score-based model输出的square-L2距离)
+
+$$E_{p(x)}[||\nabla_x \log p(x) - s_{\theta}(x)||^2]$$
+
+有一系列”Score Matching“方法能够minimize fisher divergence, 且不需要gt data score的信息。可以直接在某个数据集上用SGD更新（类比似然模型的情况）。此外，Score matching的objective本身并不对$$s_{\theta}(x)$$加以限制，提供了模型的灵活性。
+
+完成Score-macthing的训练之后，可以利用Langevin Dynamics（郎之万动力学）从中采样（因为我们并不知道概率分布$$p(x)$$，需要从$$s(x)$$中采样。它提供了一个MCMC采样，只需要知道一个分布$$p(x)$$的score function。它初始化采样链，从一个任意的prior分布 $$x_0 \sim \pi (x)$$，然后进行如下的扩散过程：
+
+$$ x_{i+1} <- x_i + \epsilon \nabla_x \log p(x) + \sqrt{2\epsilon} z_i, i=0,1,..K $$
+
+其中，$$z_i \sim N(0,I)$$,当K趋向无穷大，$$\epsilon$$趋向无穷小的时候，误差为0。
+感性理解，从一个先验分布，沿着目标分布的score(概率分布的梯度方向)加上了一个噪声进行移动，逐渐收敛到向分布$$p(x)$$采样。
+ 
+---
+
+**SMLD (Score Matching with Langevin Dynamics):** 这篇是Song Yang之前的工作，从Score-matching角度做生成，训练了一个Noise Condition Score Network(NCSN) model去拟合score。相比于最朴素的用score-matching直接做生成，由于训练集合数据难以fit整个数据流形（不严谨的表述），概率空间存在很多low-density的区域，在这些区域难以准确的estimate score dunction。解决方案为perturb data points with noise，并采用multiple noise scale。
+
+对于这些加噪声的分布,可以在Langevin dynamics中逐渐减少Noise以完成逐步去除perturb，叫做annealed Langevin Dynamics过程。
+
+结果不如DDPM一定程度上原因是因为仅用了朴素的CNN，而不是DDPM所采用的U-Net（本文中通过实验结果验证了搭配U-Net,SMLD也可以取得和DDPM相似的性能）。该方法与DDPM一并作为SDE Formulation的生成模型的两种特殊情况。 
+
+---
+
+**SDE formulation**利用SDE作为描述逐渐增长的noise-level扩散的（as a continuous-time stochastic process），前向过程可以写为： 
+
+$$ dx = f(x,t)dt+g(t)dw $$
+
+$$f(\cdot,t)$$ 是一个vector function,一般叫做drift coefficient, $$g(t) \sim R$$ diffusion coefficient. w 是一个标准的布朗运动（维纳过程），dw可以看做是白噪声。该随机微分方程的解是一个continuous collection of random variables $$ {x(t)} t \in [0,T] $$。用$$p_t(x)$$表示第t时刻的边缘分布（$$x(t)$$，其实是$$x(t1,t2...tn)$$的联合分布）。$$p_0(x)$$是不带噪声的clean分布，当足够多的加噪步骤后，$$p_T(x)$$变成了纯粹的噪声，叫做prior distribution. 
+
+注意该SDE其实是handcrafted的(代表了加噪声的方式)，作者展示了3种典型的SDE：the Variance Exploding SDE (VE SDE), the Variance Preserving SDE (VP SDE), and the sub-VP SDE。这些SDE都有一个对应的具有相同边缘分布的反向SDE。反向去除noise pertubation过程可以通过annealed Langevin dynamics得到。
+
+$$dx = [f(x,t) - g^2(t) \nabla_x \log p_t(x)]dt + g(t) dw$$
+
+该反向SDE中，有Score是需要用神经网络$$s_{\theta}(x,t)$$进行拟合。在训练中，其优化目标为：
+
+$$ argmin E_t \{ \lambda(t) E_{x(0)}E_{x(t)} [ ||s_{\theta}(x(t),t) - \nabla_{x{t}} \log p_{0t}(x(t) \mid x(0)) ||^2 ] \} $$
+
+该公式描述了采样出某个$$x(0)$$与某个时间t的$$x(t)$$并进行训练的过程。其中$$\lambda(t)$$是一个时变的weighting value（通常让它能balance the magnitude of score）。可证明它和优化下式等效：
+
+$$ argmin E_t \{ \lambda(t) E_{x(t)} [ ||s_{\theta}(x(t),t) - \nabla_{x{t}} \log p_{0t}(x(t)） ||^2 ] \} $$
+
+此外，可以证明，当$$f(\cdot,t)$$是affine的情况下，transition kernel $$p(x_t \mid x_0)$$是高斯的。在这种情况下，Score function有解析解 $$ \nabla_x =  - \frac{x s- \mu}{\sigma^2} =  - \frac{\epsilon}{\sigma} $$, score matching等效为预估噪声,也等效于预估还原原始图片$$x_0$$。
+
+证明过程可以感性理解为，当f(t)关于x为affine时，前向过程可以改写为: 
+
+$$dx = f(t)x(t)dt + g(t)dw$$
+
+由于w是一个维纳过程，它的增量过程dw服从高斯分布，当t确定的时候，左侧项是一个无穷小值(乘上了dt)，dx代表了随机变量x的增量。
+
+
+#### 对High-Freq Redundancy的分析
+
+> in "Improving Diffusion Model Efficiency Through Patching"
+
+- denoise过程的感性图像化interpretation
+
+![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20230620171244.png)
 
 # References
 
