@@ -117,3 +117,9 @@ Demelin
 ```
 best quality, dark background, ink splashing, arcane glitter, single person,  (vampire touch), red hoodie, (red gawn, skull mask, female wizard), long hair, magic the gathering, wizard of the coast, comic art   <lora:jim_lee:0.5> 
 ```
+
+Ashta
+
+```
+best quality, dark background, ink splashing, (cemetery), melody, tune, (bard), friendly smile, playing the harmonica, drinking beer, (solo, one middle-aged male zombie),  long white hair, (ragged  gown), magic the gathering, wizard of the coast, comic art   <lora:jim_lee:0.15> 
+```

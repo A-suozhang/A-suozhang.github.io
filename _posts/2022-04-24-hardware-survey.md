@@ -1,8 +1,8 @@
 ---
 layout:     post                    # 使用的布局（不需要改）
 title:      Personal Survey of Hardware Acceleration of Neural Network           # 标题 
-subtitle:   个人总结一下认真写一个持续更新的post  #副标题
-date:       2022-04-24            # 时间
+subtitle:   Know Your Weapon.  #副标题
+date:       2023-08-24            # 时间
 author:     tianchen                      # 作者
 header-img: img/diffusion/disco-18.png  #这篇文章标题背景图片  
 catalog: true                       # 是否归档
@@ -15,55 +15,8 @@ tags:                               #标签
 
 > Eff Deep Learning与Hardware Accel相关的一些自己不成熟的想法的梳理
 
-# 工作的几个层面
-
-
-## 1. 算法(软件)层的加速
-
-> 我们熟悉的Pruning，Quantization，NAS等等都可以认为是该种方式，主要特征是：获得计算量或者存储的节省
-
-- 例子：我们熟悉的几乎所有Paper
-
-- 表现出来的指标： `FLOPs，Param Size，GPU end2end latency`
-
-- 部署实例：如TF，Torch自带的一些轻量化方式(如torch中的quantize)
-
-❓： 但是这里的一些计算存储的优化，并不能直接反应到硬件设计的效率，why？
-
-首先，一些软件层面的优化，不会直接反馈到硬件指标。举个例子，比如对于FPGA加速器，你减去了一半的Channel，纸面上减少了一半的显存和计算。但是实际上在部署时候，本身模型还是大到不能存到片上，
-所以只是多算了几个时钟周期，可能对端到端的Latency/吞吐量throughput有优化，但是对计算效率Energy Efficiency并没有提升。（以上两个部分分别代表了硬件加速器的两大指标：速度和能效）
-
-甚至，对于一些硬件设计上本身就不是瓶颈的case，优化某些操作对硬件效率完全不会有提升。比如对于某些层的剪枝，由于存在shortcut的结构，本身硬件上计算需要等待其他流程的数据done，卡在idle，对它做了优化，并不一定能够提升硬件效率。或者对于一个模型，降低了显存和计算之间的比例，但是这本身是一个计算bounded的任务，减少内存消耗并不能提升硬件效率。
-
-## 2. 软硬件协同优化
-
-> 硬件感知（Hardware-aware）的算法优化或者是协同优化（涉及到硬件架构中一些设计的优化，但是不是pure硬件优化）
-
-- 例子：[Hardware-aware Pruning/NAS的工作](https://arxiv.org/abs/2105.13258) [PIMNAS](http://nicsefc.ee.tsinghua.edu.cn/%2Fnics_file%2Fpdf%2Fb6a3130a-52cc-4896-9cb5-d34b56adc968.pdf)
-
-- 指标：(与硬件加速器指标类似且相关)
-    - 算法中的一些指标：FLOPs，Param
-    - High Speed：高throughput(IPS): 每s的inference次数（单位：s^{-1}）; 低Latency
-    - 能效： Energy Efficiency (GOP/J) Memory Efficiency（J/Byte）
-
-- 该层面优化的一些层次？
-
-
-## 3. 硬件层面的优化
-
-### 3.1: 针对特定硬件平台(GPU/FPGA)的优化
-
-> 其实也可以是软件层，主要因为针对GPU的优化，GPU有CUDA语言以及很多的Library
-
-- 例子： [torchsparse]()
-
-- 部署实例：如TensorRT，后端是平台代码(CUDA)，且包含了计算图以及编译的优化。
-
-### 3.2: DSA(Domain-specific Architecture)设计
-
-# Surveys
-
-### [ACM TRETS 19] A Survey of FPGA-Based Neural Network Inference Accelerator （我们的DPU架构）
+# Surveys & Talks
+### [ACM TRETS 19] A Survey of FPGA-Based Neural Network Inference Accelerator （DPU架构）
 
 ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20220424100631.png)
 
@@ -142,7 +95,81 @@ tags:                               #标签
 - NVLink： 更快的接口能和片外memory更好的交互：
     - 对标PCIe
 
-### A few other stuff
+
+### [Nvidia] Full-Stack, GPU-based Acceleration of Deep Learning
+
+> [CVPR23 Tutorial](https://nvlabs.github.io/EfficientDL/)
+> [Slides](https://nvlabs.github.io/EfficientDL/data/presentations/CVPR2023_tutorial_Clemons.pdf)
+
+- 典型硬件架构：    
+    - 特征：trade-off between flexibility and efficiency.
+        - ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20230824095554.png)
+    - CPU
+        - CPU的memory system更适合low-latency场合，有比L1 L2 Cache更快的resgiter（就在ALU旁边）
+        - ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20230824095959.png)
+    - GPU
+        - ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20230824100105.png)
+        - ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20230824100226.png)
+    - Systolic Array：basic arch of NN DSA
+        - ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20230824100327.png)
+    - NVDLA: nvidia's custom accelerator
+        - ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20230824100605.png)
+    - SoC: contain above parts
+        - ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20230824100800.png)
+
+---
+
+- 优化维度：
+    - Memory movement
+        - ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20230824100829.png)
+    - Mapping 
+        - ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20230824100923.png)
+        - ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20230824101201.png)
+        - 优化Mapping的工具： Timeloop & Accelergy：
+        - ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20230824101301.png)
+        
+---
+
+- 指标：
+    - ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20230824101402.png)
+    - Latency与Throughput：因为可以流水起来，latency表示第一个结果出来的时间，throughput表示出结果的速度
+        - ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20230824101525.png)
+    - ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20230824101917.png)
+    - ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20230824101619.png)
+    - 算子特性：memory/math-limited
+        - ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20230824102001.png)
+        - 4象限图：
+            - ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20230824102157.png)
+        - 解决问题方案：
+            - ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20230824102604.png)
+
+---
+
+- TensorRT：
+    - ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20230824102856.png)
+    - ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20230824102703.png)
+    - ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20230824102809.png)
+
+---
+
+- Nvidia Profiling：
+    - ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20230824102920.png)
+    - Nsys Command Template:
+        - ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20230824102932.png)
+        - ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20230824103012.png)
+    - Nsys Computs:
+        - ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20230824103047.png)
+    - NVTX Region:
+        - ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20230824103112.png)
+    - Tips:
+        - ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20230824103206.png)
+
+
+### [Eyeriss MIT Group] Tutorial on Hardware Accelerators for Deep Neural Networks
+
+> [Tutorial on Hardware Accelerators for Deep Neural Networks](http://eyeriss.mit.edu/tutorial.html)
+
+### 零散的知识
 
 - [AI框架的演进趋势和MindSpore的构想](https://zhuanlan.zhihu.com/p/225392622)
     - AI芯片的发展对AI框架的发展：1） 优化与硬件耦合度提升，计算图层面的优化已经收敛，需要和算子层进行联合优化。2）异构的编程
@@ -186,7 +213,6 @@ tags:                               #标签
         4. 硬件指令 Hardware Primitive： 专用硬件的硬件张量指令 （LLVM）
     - 目前的生态会在各个层面单独做Multi-stage Lowering，然后把问题丢给下一个层级继续优化
 
-
 - [Adi Fuchs的加速器系列文章](https://medium.com/@adi.fu7/ai-accelerators-part-i-intro-822c2cdb4ca4)
 - [Part2 处理器演变](https://zhuanlan.zhihu.com/p/465787742)
 - [Part3 架构基础](https://www.jiqizhixin.com/articles/2022-02-13-2)
@@ -200,7 +226,47 @@ tags:                               #标签
     - 内存管理：内存访问能耗比较多，比计算高处几个数量级，可以用近存的方式(Near-memory Computing,更激进的方案就是PIM)
 
 
-### TODO
 
-- more tvm 
-- read digest of DAC/Sysarch papers
+# 总结
+
+## 1. 算法(软件)层的加速
+
+> 我们熟悉的Pruning，Quantization，NAS等等都可以认为是该种方式，主要特征是：获得计算量或者存储的节省
+
+- 例子：我们熟悉的几乎所有Paper
+
+- 表现出来的指标： `FLOPs，Param Size，GPU end2end latency`
+
+- 部署实例：如TF，Torch自带的一些轻量化方式(如torch中的quantize)
+
+❓： 但是这里的一些计算存储的优化，并不能直接反应到硬件设计的效率，why？
+
+首先，一些软件层面的优化，不会直接反馈到硬件指标。举个例子，比如对于FPGA加速器，你减去了一半的Channel，纸面上减少了一半的显存和计算。但是实际上在部署时候，本身模型还是大到不能存到片上，
+所以只是多算了几个时钟周期，可能对端到端的Latency/吞吐量throughput有优化，但是对计算效率Energy Efficiency并没有提升。（以上两个部分分别代表了硬件加速器的两大指标：速度和能效）
+
+甚至，对于一些硬件设计上本身就不是瓶颈的case，优化某些操作对硬件效率完全不会有提升。比如对于某些层的剪枝，由于存在shortcut的结构，本身硬件上计算需要等待其他流程的数据done，卡在idle，对它做了优化，并不一定能够提升硬件效率。或者对于一个模型，降低了显存和计算之间的比例，但是这本身是一个计算bounded的任务，减少内存消耗并不能提升硬件效率。
+
+## 2. 软硬件协同优化
+
+> 硬件感知（Hardware-aware）的算法优化或者是协同优化（涉及到硬件架构中一些设计的优化，但是不是pure硬件优化）
+
+- 例子：[Hardware-aware Pruning/NAS的工作](https://arxiv.org/abs/2105.13258) [PIMNAS](http://nicsefc.ee.tsinghua.edu.cn/%2Fnics_file%2Fpdf%2Fb6a3130a-52cc-4896-9cb5-d34b56adc968.pdf)
+
+- 指标：(与硬件加速器指标类似且相关)
+    - 算法中的一些指标：FLOPs，Param
+    - High Speed：高throughput(IPS): 每s的inference次数（单位：s^{-1}）; 低Latency
+    - 能效： Energy Efficiency (GOP/J) Memory Efficiency（J/Byte）
+
+- 该层面优化的一些层次？
+
+## 3. 硬件层面的优化
+
+### 3.1: 针对特定硬件平台(GPU/FPGA)的优化
+
+> 其实也可以是软件层，主要因为针对GPU的优化，GPU有CUDA语言以及很多的Library
+
+- 例子： [torchsparse]()
+
+- 部署实例：如TensorRT，后端是平台代码(CUDA)，且包含了计算图以及编译的优化。
+
+### 3.2: DSA(Domain-specific Architecture)设计
