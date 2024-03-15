@@ -123,3 +123,11 @@ Ashta
 ```
 best quality, dark background, ink splashing, (cemetery), melody, tune, (bard), friendly smile, playing the harmonica, drinking beer, (solo, one middle-aged male zombie),  long white hair, (ragged  gown), magic the gathering, wizard of the coast, comic art   <lora:jim_lee:0.15> 
 ```
+
+# 表情包制作：
+
+```
+best quality, stickers, anime, emoji, 1boy, (astonish, shocked), golden hair, white hoody, simple background
+```
+
+- ControlNet, Reference-only (0.75)
