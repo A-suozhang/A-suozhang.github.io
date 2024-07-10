@@ -20,7 +20,7 @@ tags:                               #标签
 
 ![](https://github.com/A-suozhang/MyPicBed/raw/master/img/20240323170600.png)
 
-
+D
 # Music Theory
 
 > [Music Theory For Producers (This Is All You Need)](https://www.youtube.com/watch?v=KlAqx_8_7vU)
